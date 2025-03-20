@@ -1,0 +1,14 @@
+Started 31 July 2024
+By Lizzie
+
+Author: EM Wolkovich 
+
+Affiliation: Forest and Conservation Sciences, University of British Columbia, Vancouver, BC V6T 1Z4, Canada
+
+Paper type: Opinion
+
+Title: Closing the gap between statistical and scientific workflows for improved forecasts in ecology 
+
+Abstract: Increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Relevant datasets to meet these demands have also increased in size and complexity, including in their geographical, temporal and phylogenetic scales. While new research often suggests that accounting for these complexities variously increases, removes or otherwise alters major trends, I argue that the fundamental approach to model fitting in ecology makes it impossible to evaluate and compare models. These problems stem in part from continuing gaps between statistical workflows -- where the data processing and model development are often addressed separately from the ecological question and aim -- and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational, and new tools make it easier to share data, the opportunity to close this gap has never been greater. I outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights. Combining these changes with more open model and data sharing -- and developing new efforts to race the same data -- could be transformative for ecological forecasting. 
+
+
