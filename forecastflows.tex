@@ -28,6 +28,8 @@
 Increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Relevant datasets to meet these demands have also increased in size and complexity, including in their geographical, temporal and phylogenetic scales. While new research often suggests that accounting for these complexities variously increases, removes or otherwise alters major trends, I argue that the fundamental approach to model fitting in ecology makes it impossible to evaluate and compare models. These problems stem in part from continuing gaps between statistical workflows -- where the data processing and model development are often addressed separately from the ecological question and aim -- and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational, and new tools make it easier to share data, the opportunity to close this gap has never been greater. I outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights. Combining these changes with more open model and data sharing -- and developing new efforts to race the same data -- could be transformative for ecological forecasting. 
 \end{abstract}
 
+{\bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
+
 \begin{enumerate}
 \item Problem
 \begin{enumerate}
@@ -52,9 +54,50 @@ Increasing biodiversity loss and climate change have led to greater demands for 
 \item Better workflows to the rescue! 
 \begin{enumerate}
 \item General overview of new workflows
+\begin{enumerate}
+\item Step 0: Research Qs and hypotheses (with a mechanism) lets you ...
+\item Step 1: Build a model!
+\item Step 2: Simulate data (and priors or something like priors that forces you to put numbers on stuff)
+\item Step 3: Design experiments/data collection (maybe you go back to Step 1 here)
+\item Step 4: Simulate data from actual design/collection
+\item Step 5: Fit the model to empirical data
+\item Step 6: Retrodictive checks (feed back to 0 and 1)
+\end{enumerate}
 \item New vision of each workflow
 \end{enumerate}
 \item Conclusion: world is better
+\end{enumerate}
+
+Current workflows
+\begin{enumerate}
+\item 
+\end{enumerate}
+
+How much of forecasting do we cover?
+\begin{enumerate}
+\item PBMs
+\item Near-term iterative
+\item SDMs
+\item Machine learning
+\end{enumerate}
+
+
+Miscellaneous notes/points without a home
+\begin{enumerate}
+\item Ecologists need to race the same data to make progress for trends and for forecasting (point to make at end of paper maybe? And what is the workflow for this?) ... though LPI is used a lot, perhaps it is  sign that ecology is ready to start racing the same data, but then we need `analysis-ready' data so we're not all slightly differently cleaning the data etc..
+\item Machine learning threatens utility of PBMs
+\item We need more uncertainty propagation for trends and forecasting (uncertainty is esp. ignored in PBMs)
+\item This workflow should lead to less model comparison (AIC, stepwise)
+\item This workflow works for machine learning!
+\item PBM: workflow should require estimating all parameters together; data simulation should reduce parameter number and highlight non-biol results
+\item CUrrent trend workflow: SHould be research questi
+\end{enumerate}
+
+\end{document}
+
+
+\begin{enumerate}
+\item
 \end{enumerate}
 
 \citep{ospreebbms}
@@ -70,10 +113,3 @@ Increasing biodiversity loss and climate change have led to greater demands for 
 \caption{I am a caption.} 
 \label{fig:figname}
 \end{figure}
-
-\end{document}
-
-
-\begin{enumerate}
-\item
-\end{enumerate}
