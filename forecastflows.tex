@@ -4,19 +4,14 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{amsmath}
-\usepackage{parskip}
-\usepackage{todonotes}
-
-\def\labelitemi{--}
-\parindent=0pt
 
 \begin{document}
 \renewcommand{\refname}{\CHead{}}
 
 \title{Closing the gap between statistical and scientific workflows for improved forecasts in ecology } 
 \date{\today}
-\author{Victor Van der Meersch, J. Regetz, T. J. Davies$^*$ \& EM Wolkovich}\\
- \maketitle
+\author{Victor Van der Meersch, J. Regetz, T. J. Davies$^*$ \& EM Wolkovich}
+\maketitle
 $^*$ Says he is happy to help and give friendly review, but not sure he will reach level of co-author. 
 
 {\bf Deadline:} 1 May 2025 (was 1 April 2025)
@@ -30,86 +25,109 @@ Increasing biodiversity loss and climate change have led to greater demands for 
 \end{abstract}
 
 {\bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
+\vspace*{0.5cm}
 
-\begin{enumerate}
-\item Problem
-\begin{enumerate}
-\item Climate change, biodiversity crisis etc. has made it critical to understand trends to date and be able to forecast future trends (for policy)
-\item Current workflows in ecology are not up to the task
-\begin{enumerate}
-\item For trends: lots of different stuff reported for seemingly same data/question, makes people outside ecology wonder if we can even well document them, let alone understand them enough to suggest policy
-\item For forecasting: also high divergence between models, criticism against process-based approaches (supposedly the most robust?) for lack of transparency (in the model building and calibration) and increasing complexity, with many parameters not supported by data
-\end{enumerate}
-\item Here we outline the problem and provide a solution!
-\end{enumerate}
-\item What are current workflows and where are they limiting us?
-\begin{enumerate}
-\item For trends ...
-\begin{enumerate}
-\item easy to find different trends through small model tweaks to analyses and/or different data
-\item For example, right now many different papers report different biodiversity trends (LPI example?)
-\item New workflow would make ecologists understand uncertainty in their model data/combo (and perhaps not see/publish results as so divergent?)
-\end{enumerate}
-\item For forecasting ... (somehow jump to our focus on process-based models PBMs here? Something like, forecasting is big and there are diverse methods! Near-term iterative, correlative niche models, but PBMs are often considered the gold standard ... mention machine learning?)
-\begin{enumerate}
-\item as many models as researchers working on process-based models 
-\item + accumulation of successive layers in the development of models = significant challenge to scientific transparency, reproducibility, interpretability\\
-models often draw inspiration from each other, which is good (way to do science), but not always explicit... (some issues: arbitrarily established parameter value in one model then transmitted to multiple models)
-\item focus of researchers: always integrate new mechanisms, new parameters, to increase "realism"...  they intuitively "feel" what kinds of adjustments is needed... but opaque from an external perspective ("black box" of model building and calibration)
-\item models rarely fitted as a whole, dozens of parameters without explicitly quantifying parameter uncertainty, and often neglect to propagate this uncertainty
-\item simulations of models themselves became a subject of study to disentangle all the processes modelled and understand model sensitivity 
-\end{enumerate}
-\end{enumerate}
-\item Better workflows to the rescue! 
-\begin{enumerate}
-\item General overview of new workflows
-\begin{enumerate}
-\item Step 0: Research Qs and hypotheses (with a mechanism) lets you ...
-\item Step 1: Build a model!
-\item Step 2: Simulate data (and priors or something like priors that forces you to put numbers on stuff)
-\item Step 3: Design experiments/data collection (maybe you go back to Step 1 here)
-\item Step 4: Simulate data from actual design/collection
-\item Step 5: Fit the model to empirical data
-\item Step 6: Retrodictive checks (feed back to 0 and 1)
-\end{enumerate}
-\item New vision of each workflow
-\end{enumerate}
-\item Conclusion: world is better
-\end{enumerate}
+\textbf{Introduction}
 
-Current workflows
-\begin{enumerate}
-\item 
-\end{enumerate}
-
-How much of forecasting do we cover?
-\begin{enumerate}
-\item PBMs
-\item Near-term iterative
-\item SDMs
-\item Machine learning
-\end{enumerate}
+%\begin{itemize}
+%\item 
+%Increasing impact upon nature, facing multiple drivers of change, with a dominant influence of human activities (land-use, pollution, invasive species, climate change)\\
+%Biodiversity crisis etc. has made it critical to understand trends to date and be able to forecast future trends\\
+%\item Ecology thus has become super challenged to predict stuff for decision making, and meet multiple goals among the socioeconomic and environmental dimensions --- global sustainability more broadly (kind of a whole new world of relevance?)\\
+Nature is increasingly threatened by multiple drivers of change, with a largely dominant influence of human activities. This ongoing biodiversity crisis is expected to increase in the next decades, and will continue to alter ecosystem services and human well-being. To support implementation of sustainable policies among the socioeconomic and environmental dimensions, it is critical to understand trends to date and be able to forecast future dynamics. 
+% $\rightarrow$ Example of stuff to predict: population size and geographic distribution (terrestrial, freshwater, marine), extinction risk,...
 
 
-Miscellaneous notes/points without a home
-\begin{enumerate}
-\item Ecologists need to race the same data to make progress for trends and for forecasting (point to make at end of paper maybe? And what is the workflow for this?) ... though LPI is used a lot, perhaps it is  sign that ecology is ready to start racing the same data, but then we need `analysis-ready' data so we're not all slightly differently cleaning the data etc..
-\item Machine learning threatens utility of PBMs
-\item We need more uncertainty propagation for trends and forecasting (uncertainty is esp. ignored in PBMs)
-\item This workflow should lead to less model comparison (AIC, stepwise)
-\item This workflow works for machine learning!
-\item PBM: workflow should require estimating all parameters together; data simulation should reduce parameter number and highlight non-biol results
-\item Current trend workflow: Should be research question focused?
-\end{enumerate}
+%\item General way to do this so far... (bifurcated?)
+%\begin{itemize}
+%\item long term data (GBIF, Biotime...) for estimation of trends
+%\item PBMs, SDMs for plausible forecast
+%\end{itemize}
+Estimation of global biodiversity indicators and current trends depends on large-scale and long-term datasets, across terrestrial, freshwater, and marine ecosystems. These data, gathered opportunistically and from multiple sources, are often unbalanced and have geographic, temporal and taxonomic biases.
+Forecasting future changes---under different plausible scenarios---generally relies on either correlative models or process-based models. The latter, which focus on a mechanistic representation of ecosystem functioning, are often promoted as the most realistic approach.
 
-Miscellaneous notes/points from thinking over 22-23 March weekend ...
-\begin{enumerate}
-\item Workflows emphasize there is no easy fix to better science or better stats
-\item Maybe do a retrodictive check example with LPI? Including showing how even the Freckleton work could do more? 
-\item What's the pathway from model comparison of many covariates to something else? Sometimes it seems like it's just prediction shoved into a mechanistic study, but if the goal is mechanism, there needs to be more work that either models these covariates together in a useful way (sort of approaching process-models!) or gets down to the fewer extremely relevant ones. 
-\item When do we need to open up the black box? Something about we need better training for what science is and our goals; machine learning is not often helping with advancing \emph{science}
-\item Scott Collins point that forecasting is not science (he claims a bunch of economists, weather folks etc. came to an ecological forecasting meeting and tried to explain that forecasting is an outcome of science, but it's not something you do science ON)
-\end{enumerate}
+%$\rightarrow$ to meet these needs: proliferation of methods from all sides, developed by different researchers, without any coherence
+%\item Gap, problem: None of this is going well. Though there is no doubt nature is declining globally (IPBES), great deal of uncertainty 
+%\begin{itemize}
+%\item Debates over current trends, lots of different stuff reported (differ widely), including different trend directions! (makes people outside ecology wonder if we can even well document them, let alone understand them enough to suggest policy)
+%\item For forecasting: also high divergence between projections, predictive modeling is slowly becoming trapped in overly complex models (too many parameters not supported by data), hard to get new scientific insights ($\parallel$ GCMs?)
+%\end{itemize}
+The urgent need to answer policy-relevant questions has favored the proliferation of diverse methods developed by different researchers, and lacking an overall coherence. Though there is no doubt nature is declining globally, significant uncertainty thus remains. There is no consensus on current species trends, with ongoing debates driven by widely varying reports that sometimes show conflicting trend directions. Future projections also diverge considerably. Predictive modeling is increasingly relying on overly complex models (with a huge number of parameters), making it less adequate to generate new scientific insights.
+
+%\item Current workflows in ecology are not up to the task\\
+%Here we introduce a universal workflow to adress this (say more)
+%\end{itemize}
+
+
+
+%\item What are current workflows and where are they limiting us?
+%\begin{enumerate}
+%\item For trends ...
+%\begin{enumerate}
+%\item easy to find different trends through small model tweaks to analyses and/or different data
+%\item For example, right now many different papers report different biodiversity trends (LPI example?)
+%\item New workflow would make ecologists understand uncertainty in their model data/combo (and perhaps not see/publish results as so divergent?)
+%\end{enumerate}
+%\item For forecasting ... (somehow jump to our focus on process-based models PBMs here? Something like, forecasting is big and there are diverse methods! Near-term iterative, correlative niche models, but PBMs are often considered the gold standard ... mention machine learning?)
+%\begin{enumerate}
+%\item as many models as researchers working on process-based models 
+%\item + accumulation of successive layers in the development of models = significant challenge to scientific transparency, reproducibility, interpretability\\
+%models often draw inspiration from each other, which is good (way to do science), but not always explicit... (some issues: arbitrarily established parameter value in one model then transmitted to multiple models)
+%\item focus of researchers: always integrate new mechanisms, new parameters, to increase "realism"...  they intuitively "feel" what kinds of adjustments is needed... but opaque from an external perspective ("black box" of model building and calibration)
+%\item models rarely fitted as a whole, dozens of parameters without explicitly quantifying parameter uncertainty, and often neglect to propagate this uncertainty
+%\item simulations of models themselves became a subject of study to disentangle all the processes modelled and understand model sensitivity 
+%\end{enumerate}
+%\end{enumerate}
+%\item Better workflows to the rescue! 
+%\begin{enumerate}
+%\item General overview of new workflows
+%\begin{enumerate}
+%\item Step 0: Research Qs and hypotheses (with a mechanism) lets you ...
+%\item Step 1: Build a model!
+%\item Step 2: Simulate data (and priors or something like priors that forces you to put numbers on stuff)
+%\item Step 3: Design experiments/data collection (maybe you go back to Step 1 here)
+%\item Step 4: Simulate data from actual design/collection
+%\item Step 5: Fit the model to empirical data
+%\item Step 6: Retrodictive checks (feed back to 0 and 1)
+%\end{enumerate}
+%\item New vision of each workflow
+%\end{enumerate}
+%\item Conclusion: world is better
+%\end{enumerate}
+%
+%Current workflows
+%\begin{enumerate}
+%\item 
+%\end{enumerate}
+%
+%How much of forecasting do we cover?
+%\begin{enumerate}
+%\item PBMs
+%\item Near-term iterative
+%\item SDMs
+%\item Machine learning
+%\end{enumerate}
+%
+%
+%Miscellaneous notes/points without a home
+%\begin{enumerate}
+%\item Ecologists need to race the same data to make progress for trends and for forecasting (point to make at end of paper maybe? And what is the workflow for this?) ... though LPI is used a lot, perhaps it is  sign that ecology is ready to start racing the same data, but then we need `analysis-ready' data so we're not all slightly differently cleaning the data etc..
+%\item Machine learning threatens utility of PBMs
+%\item We need more uncertainty propagation for trends and forecasting (uncertainty is esp. ignored in PBMs)
+%\item This workflow should lead to less model comparison (AIC, stepwise)
+%\item This workflow works for machine learning!
+%\item PBM: workflow should require estimating all parameters together; data simulation should reduce parameter number and highlight non-biol results
+%\item Current trend workflow: Should be research question focused?
+%\end{enumerate}
+%
+%Miscellaneous notes/points from thinking over 22-23 March weekend ...
+%\begin{enumerate}
+%\item Workflows emphasize there is no easy fix to better science or better stats
+%\item Maybe do a retrodictive check example with LPI? Including showing how even the Freckleton work could do more? 
+%\item What's the pathway from model comparison of many covariates to something else? Sometimes it seems like it's just prediction shoved into a mechanistic study, but if the goal is mechanism, there needs to be more work that either models these covariates together in a useful way (sort of approaching process-models!) or gets down to the fewer extremely relevant ones. 
+%\item When do we need to open up the black box? Something about we need better training for what science is and our goals; machine learning is not often helping with advancing \emph{science}
+%\item Scott Collins point that forecasting is not science (he claims a bunch of economists, weather folks etc. came to an ecological forecasting meeting and tried to explain that forecasting is an outcome of science, but it's not something you do science ON)
+%\end{enumerate}
 
 \end{document}
 
