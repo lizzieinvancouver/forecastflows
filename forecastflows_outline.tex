@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage[top=1.00in, bottom=1.0in, left=1in, right=1in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\def\labelitemi{--}
+\parindent=0pt
+
+\begin{document}
+\renewcommand{\refname}{\CHead{}}
+
+\title{Closing the gap between statistical and scientific workflows for improved forecasts in ecology } 
+\date{\today}
+\author{Victor Van der Meersch, J. Regetz, T. J. Davies$^*$ \& EM Wolkovich}
+\maketitle
+$^*$ Says he is happy to help and give friendly review, but not sure he will reach level of co-author. 
+
+\begin{enumerate}
+\item Intro
+\begin{itemize}
+\item Ecology super challenged to predict stuff for decision making (kind of a whole new world of relevance?)
+$leftarrow$ Example of stuff to predict: populations, policy-relevant questions...
+\item General way to do this so far... (bifurcated?)
+\begin{itemize}
+\item long term data (GBIF, Biotime...) for estimation of trends
+\item PBM, SDMs for forecast
+\end{itemize}
+\item Gap, problem: None of this is going well
+\begin{itemize}
+\item debates over trends, not only on the significance but also the direction!
+\item predictive modeling trapped in overly complex models, hard to get scientific insights? (same as GCMs?)
+\end{itemize}
+\item Here we introduce a universal workflow to adress this (say more)
+\end{itemize}
+\item Overview
+\begin{itemize}
+\item General scientific method we all learn stresses: RQ $\rightarrow$ study design $\rightarrow$ collect data $\rightarrow$ build model $\rightarrow$ answer
+\item Divergences from this are common: 
+\begin{itemize}
+\item bad science (data lead to question)
+\item important question for which we cannot get data quickly, we have to use existing
+\item complexity makes this simple workflow hard/impossible
+\end{itemize}
+\item this workflow works across these realities by
+\begin{itemize}
+\item stressing the need to think about model before study design
+\item advancing data simulation
+% \item (outcome: spending more time in current rare quadrats will improve forecasts!)
+\end{itemize}
+\item More details on ideal workflow:  walk through the different steps
+\begin{itemize}
+\item spend more time in critical quadrat, post-model pre-data
+\item feedbacks
+\item uncertainty
+\end{itemize}
+\end{itemize}
+\item How to address current issues (two case studies)
+\begin{enumerate}
+\item Trends!
+\begin{itemize}
+\item Outline current problem: different answers from different analysis (and slightly different datasets?)\\
+$\rightarrow$ It is a problem because we can't make decisions on +/- debate... (and it degrades trust in science?)
+\item two big missing parts are data simulation steps:
+\begin{itemize}
+\item retrodictive check: would highlight missing pieces (speed up current process, because without this step each slightly different model is a paper... whereas each big iteration of the workflow---including multiple feedbacks---should be a paper)
+\item simulated data: you would know that you have low data sooner => the debate is actually not jus models but really limited data
+\end{itemize}
+\end{itemize}
+\item Forecasts!
+\begin{itemize}
+\item Outline current problem:
+\begin{itemize}
+\item black box: intrication between model build and data fitting (calibration), everything is mixed 
+\item complexity trap [mention uncertainty]
+\item developping a model has become the goal, whereas it should be a way to answer a research question!
+\end{itemize}
+\item We need the workflow to open the black box! Simulating data would allow to add a necessary step between model building and data fitting, which would highlight strong degeneracies
+\item Workflow would also force you to clearly express a research question, define a limited context in which the model should apply
+\end{itemize}
+\item Step back
+\begin{itemize}
+\item we need more data, and better question (relate this to both previous study cases)
+\item where can we best reduce uncertainties through new scientific insights?
+\item machine learning! If we do nothing, ML $>$ process-based without question, and ML $>$ trends without mechanisms
+\end{itemize}
+\end{enumerate}
+\item Wrap up: how to make it happen?
+\begin{itemize}
+\item usual issues: publication pressure, low standards (especially for models)\\
+"\emph{we allow far more hand-waving in the presentation of modeling results than we do for experimental data}" (\href{https://harvardforest1.fas.harvard.edu/publications/pdfs/Aber_BulletinEcoSocAmerica_1997.pdf}{J. Aber, 1997})
+\item growing concerns, leading to increase in reproducibility and data sharing practices [mention uncertainty]
+\item need a little more here...
+\item better training! on BOTH estimation AND prediction
+\begin{itemize}
+\item prediction: being aware of what is a parameter, and [mention uncertainty propagation]
+\item prediction: should be a natural outcome, not a finality
+\end{itemize}
+\item ML, benchmarking models are probably useful but should not be the core of our scientific practice, not the spirit!
+\end{itemize}
+\end{enumerate}
+
+\end{document}
+
