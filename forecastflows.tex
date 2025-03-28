@@ -24,7 +24,7 @@ $^*$ Says he is happy to help and give friendly review, but not sure he will rea
 Increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Relevant datasets to meet these demands have also increased in size and complexity, including in their geographical, temporal and phylogenetic scales. While new research often suggests that accounting for these complexities variously increases, removes or otherwise alters major trends, I argue that the fundamental approach to model fitting in ecology makes it impossible to evaluate and compare models. These problems stem in part from continuing gaps between statistical workflows -- where the data processing and model development are often addressed separately from the ecological question and aim -- and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational, and new tools make it easier to share data, the opportunity to close this gap has never been greater. I outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights. Combining these changes with more open model and data sharing -- and developing new efforts to race the same data -- could be transformative for ecological forecasting. 
 \end{abstract}
 
-{\bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
+{\noindent \bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
 \vspace*{0.5cm}
 
 \noindent \textbf{Introduction}
@@ -45,20 +45,53 @@ The urgent need to answer policy-relevant questions has favored the proliferatio
 % Here we introduce a universal workflow to adress this...
 Current controversies and focus on methodological aspects stem from the lack of coherence between current workflows in ecology \citep{Loreau2022, Talis2023, Johnson2024}. Each new model development is added as a separate layer, disconnected from the original research aim, the data stream and the previous scientific insights. Workflows should fully integrate all the steps required to build a model from an ecological question, evaluate its limitations and degeneracies, before estimating its parameters and making projections. Here, we introduce an universal workflow that proposes to iteratively build upon all these steps, harmonizing both trend estimation and forecasting, with the aim of refocusing the debate on ecological questions and increasing the speed of scientific progress.
 
-\vspace{0.2cm}
-\noindent \textbf{Scientific practice and current workflows}
+\vspace{0.5cm}
+\noindent \textbf{Scientific method and workflows}
 %  too much blah blah blah?
 
 % General scientific method we all learn
 Quantitative science rely on a model-based framework to confront hypothesis and data, making some approximations \citep{}. The general scientific method stresses out that the research question should guide both the design of the experiment and the corresponding model building. The experiment should then be conducted---according to this specific design. Finally, the resulting experimental data should be used to inform our model and differentiate between hypotheses---hopefully answering our initial question. However, this is often an idealized view and does not reflect the complexity of ecology \citep{}.
 
 % Divergences from this are common 
-Divergences from this scientific method are common. One explanation is the lack of rigor, leading to questionable practices, such as retrospectively crafting hypothesis to explain the results of a model rather than testing a clear pre-defined question (data-driven analysis, Fig. 1). But the reality of ecological research is also a major driver of the divergences from the ideal scientific method. Many important questions often cannot be addressed by conducting experiments and replications, and we must often rely on existing datasets to have a large-scale and long-term perspective. 
-% I'm not really satisfied by what I'm writing
-However, this does not explain the persistent flaws and lack of overall coherence in ecological modeling. Trend estimation still often relies on a one-way model fitting, and most of the time is spent fitting the model to empirical data (Fig. 1). For forecasting, researchers focus on making predictions with complex models, but the steps of model building and parameterization are not very transparent and not clearly delineated (Fig. 1). The different parts of the model are often calibrated separately rather than as a whole, and some parameter values are just fixed based on experiments and expert knowledge.
+Divergences from this scientific method are common. One explanation is the lack of rigor, leading to questionable practices, such as retrospectively crafting hypothesis to explain the results of a model rather than testing a clear pre-defined question (data-driven analysis, Fig. 1). But the reality of ecological research is also a major driver of the divergences from the ideal scientific method. Many important questions often cannot be addressed by conducting experiments and replications, and we must often rely on existing datasets to have a large-scale and long-term perspective. % I feel something is missing
+However, this does not explain the persistent flaws and lack of overall coherence in ecological modeling. Trend estimation still often relies on a one-way 'inference',  % need a better word? to stress out that there is no feedback, eah paper applied a slightly different model 
+and most of the time is spent fitting the model to empirical data (Fig. 1). For forecasting, researchers focus on making predictions with complex models, but the steps of model building and parameterization are not very transparent and not clearly delineated (Fig. 1). The different parts of the model are often calibrated separately rather than as a whole, and some parameter values are just fixed based on experiments and expert knowledge.
 
 % There is thus room for improvment, with a workflow that addresses theses flaws while taking account the reality of working with ecological data.
+% Moving along the data-model space
+% \item stressing the need to think about model before study design
+% \item advancing data simulation
+[...]
 
+% More details on the workflow:  walk through the different steps
+[...]
+
+\vspace{0.5cm}
+\noindent \textbf{The workflow in pratice}
+% How to address current issues (two case studies)
+
+% Trends - outline current problem
+[...]
+
+% Trends - improvements!
+[...]
+
+% Forecasting - outline current problem
+Forecasting is a broad field with a diverse range of methods. Here, we focus on process-based modeling, which is often considered the gold standard in ecology and beyond. Process-based models are built on explicit mathematical equations to describe (supposedly causal) relationships between environmental drivers and ecological responses. They also often incorporate empirical relationships, particularly when knowledge is incomplete or when some processes are intentionally omitted. Processes are often represented at different nested spatiotemporal scales, depending on the underlying assumptions. Model development is the central step, typically requiring several years, yet it often remains opaque from an external perspective. The step of designing the model---translating knowledge and hypotheses into mathematical equations and parameters---is often blurred with the step of model calibration, where parameter values are inferred. Models are often treated as an accumulation of multiple submodels, each governing one or several ecological processes. Rather than being fitted as a whole, submodels are calibrated separately against specific subsets of data, and some parameters are simply prescribed (i.e. fix to a value found in the literature).
+
+% Forecasting - potential improvments (do I say too much ideas)
+Applying the workflow to process-based models is a key for opening the black box. It would serve as a guide through the successive steps of model development. In particular, incorporating data simulation would introduce a crucial step between model building and data fitting, ensuring a clear delineation between the two and exposing strong degeneracies in the model design. This approach would force researchers to begin with a simpler version of the model, providing a clear pathway to support---or reject---the additional complexity and new parameters along the iterative development of the model.
+Data fitting would no longer be just a hidden aspect of model building but a step as crucial as forecasting to gain new ecological insights. The workflow could also refocus attention on the research question, defining a clear and limited context in which the model should apply.
+Process-based model would once again be a way to answer a research question---whereas today, model simulations have increasingly become a subject of study on their own. Finally, an universal workflow provides an opportunity to merge statistical and process-based approaches, integrating mechanistic knowledge and leveraging robust statistical approaches.
+
+% Step back
+%\item we need more data, and better question (relate this to both previous study cases)
+%\item where can we best reduce uncertainties through new scientific insights?
+%\item machine learning! If we change nothing, what's the point of not doing ML? ML $>$ process-based without question, and ML $>$ trends without mechanisms! Where theory is lacking, or where we are far from mechanistic understanding, you might as well do ML!
+%\item (ML has a way to collect and interpret large datasets...)
+
+\vspace{0.5cm}
+\noindent \textbf{Wrap up: how to make it happen?}
 
 
 %\item What are current workflows and where are they limiting us?
