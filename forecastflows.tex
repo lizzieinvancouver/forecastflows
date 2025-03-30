@@ -67,11 +67,29 @@ and most of the time is spent fitting the model to empirical data (Fig. 1). For 
 [...]
 
 \vspace{0.5cm}
-\noindent \textbf{The workflow in pratice}
+\noindent \textbf{The workflow in practice}
 % How to address current issues (two case studies)
 
 % Trends - outline current problem
-[...]
+%  Evidence of declining populations of vertebrate species in the 20th century gave rise a new subfield within ecology---conservation biology---now an entire discipline of its own that drives much of the policy-relevant science in ecology. 
+Evidence of declining populations of vertebrate species in the latter half of the 20th century, alongside increasing concerns of how pollution affects ecosystems and their services gave rise to a growing public concern about protecting and maintaining the environment, and made ecology as a field more relevant \cite{soule1999conserving,soule1991conservation}. The idea that important taxa were declining was clear from data from certain species and their populations, such as elephants and rhinos \citep{soule1979benign,leader1990illegal}. Such trends drove number of new subfields within ecology---some of which are now complete disciplines within themselves, such as conservation biology \citep{soule1985conservation}---focused on these problems, and potential ecological solutions to them CITES. Yet as the magnitude and number of threats to these and other species have increased, with rates of habitat loss, overhavesting, pollution only increase, and anthropogenic climate change now clearly driving species loss (CITE bramble cay meomys), so has the data and its complexity. 
+
+% \cite{loh2005living} is first LPI paper as best I know
+% \cite{collen2009monitoring,ledger2023past,leung2022reply,puurtinen2022living,toszogyova2024mathematical} to review!
+As ecologists have now amassed data on populations and species over the globe, they have also engaged in an increasing number of debates on regional and global trends, with arguments over the magnitude and even direction (CITES). The Living Planet Index (LPI), which aims to include long-term data on populations of species across the globe is emblematic of these debates (which also include whether insects are declining and ... CITES). With updated data released semi-annually (??) alongside new estimates of decline, a growing number of high-profile papers have challenged how strong the evidence is for population decline (CITES), with each paper taking a slightly different analytical approach. For example, \citet{Leung2020} published a mixture model that suggested most populations were not significantly declining, followed by \citet{Buschke2021} who focused on adding random population variation. Recently, \citep{Johnson2024} suggested a basic analysis of the dataset should always include three sources of autocorrelation, finding trends that encompassed most previous results. These apparently conflicting results have made it hard for policy-makers to do advance initiatives aimed at slowing declines, and has led to a debates within ecology about whether such analyses undermine public confidence in science  \citep{gonzalez2016estimating}. While shifting estimates are part of the process of science---refining our approaches and thus estimates over time---we argue much of the work underlying these debates stems from a poor workflow. In the current workflow for estimating trends over time a new model with a new estimate often leads to a paper (see Fig.) because ecologists spend far too little time interrogating their model with simulated data, or their model performance fit to empirical data. 
+% While this debate captures part of the process of science---refining our approaches and thus estimates over time---it also makes it hard for policy-makers to do (?? something) and has led to a debates within ecology about whether such analyses undermine public confidence in science  (CITES Biodiversity debate). 
+
+We argue than an improved workflow that required retrodictive checks and data simulation would lead to larger model advances and highlight consistency in estimates across models, which could better aid policy. This is because the workflow would make uncertainty in each trend estimate from each unique model more obvious. This would make what now appear as major discrepancies  more obviously shifts in point estimates that are generally all in the same uncertainty space---and because it would challenge modelers to show major predictive advances, which is not currently part of the process. Explanatory power in most models of observational data is usually very low (CITES) and thus tests of models' predictions rarely expected. But the workflow highlights that predictions from the model---what we call retrodictive checks (or whatever we call them)--are part of the process of science, and critical to testing for what may be missing in a model. We expect retrodictive checks on most published trend analyses would highlight major missing components in these models (expand here?? ADD example?), and drive changes both in the models themselves and in the simulated data to check the models. 
+% Mention how low R2 are in ecology?
+
+% Note to self for Lizzie: START HERE! And no reading/reviewing papers until more text is written...
+Simulating data to verify and test models in trend analyses is currently rarely reported, which we believe makes it easier for ecologists to fit poor models 
+% Mention elephants rebounding...
+Indeed, entire papers are devoted to what we consider this one step (data simulation) ....
+% I need to review these papers! \cite{hourdin2023toward,mcrae2025utility} ... also \cite{Buschke2021} uses some simulations
+
+
+
 
 % Trends - improvements!
 [...]
@@ -92,6 +110,11 @@ Process-based model would once again be a way to answer a research question---wh
 Across the different fields of ecology---for both parameter estimation and forecasting---a systematic application of a coherent workflow holds the promise to highlight the opportunities to best reduce uncertainties through new scientific insights, toward the most critical steps. This will help refocus the debate on designing new hypothesis, formulating new questions---and guiding efforts to collect new data. 
 In a world where machine learning is rapidly advancing, there is no point of sticking to traditional methods if no changes are made. Machine learning may surpass process-based models if the latter lack a robust estimation of their parameters and fall in a complexity trap, at the cost of their interpretability. Similarly, trend analysis, when the focus is on methodological controversies (due to the lack of an iterative workflow) rather than on a robust mechanistic foundation, offers no clear advantage over machine learning.
 % If we do not take care to apply this workflow, machine learning might be the more pragmatic approach...
+
+% Misc possibly useful citations -- the GCM people seem to talk a lot about their issues lately on tuning etc. Maybe worth citing?
+% \cite{balaji2022general}mAre general circulation models obsolete? -- covers a lot and good citations within I think
+% \cite{simpson2025confronting} this is the 'Confronting Earth System Model trends with observations' which I have not fully read but Table 1 is interesting to me and something maybe the PBM and NTIF (near-term iterative) people should be doing if they are not doing?
+% \cite{rounce2020quantifying} 'Quantifying parameter uncertainty in a large-scale glacier evolution model using Bayesian inference: application to High Mountain Asia' talks about identifablity problems and uses Bayesian, again I have not fully read, but may be interesting example?
 
 \vspace{0.5cm}
 \noindent \textbf{Wrap up: how to make it happen?}
