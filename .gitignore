@@ -21,3 +21,5 @@ analyses/.Rhistory
 *Rplots.pdf
 *.DS_Store
 /notposting
+
+/analyses/thermal_perf
