@@ -1,0 +1,41 @@
+\documentclass[11pt]{article}
+\usepackage[top=1.00in, bottom=1.0in, left=1in, right=1in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\bibliographystyle{besjournals}
+
+\begin{document}
+
+\title{Closing the gap between statistical and scientific workflows for improved forecasts in ecology } 
+\date{\today}
+\author{Victor Van der Meersch, J. Regetz, T. J. Davies$^*$ \& EM Wolkovich}
+\maketitle
+$^*$ Says he is happy to help and give friendly review, but not sure he will reach level of co-author. 
+
+{\bf Deadline:} 1 May 2025 (was 1 April 2025)
+
+\emph{For:} Scientific and Statistical Workflow theme issue for \emph{Phil Trans A} as an \emph{Opinion}
+% They mention a tex template here: https://royalsocietypublishing.org/rsta/for-authors#question4
+% Word length: I should check what they emailed but they say no more than 13 printed pages with 650 per page (whoa, we should be well below that! I am thinking 3-5K would be good)
+% Already 5K! 
+
+% To do:
+% Fix the abstract so it matches the paper better (I think mainly the last few sentences need work, or we just need to say more about data sharing in the text)
+% Add in Figures
+% Delete out unnecessary comments so easier for co-authors to read?
+
+{\noindent \bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
+\vspace*{0.5cm}
+
+\section{Introduction}
+
+% Cut from the paragraph: We argue a workflow that moves along the data-model space in a coherent sequence of steps with repeated data simulation [...]
+%emw6Apr: I wonder if we can see how it goes to just cut this? We can see what co-authors say and add it back in later ... I sometimes start a file to toss this type of text (e.g., forecastflows_extras.tex) in case I need it but keep this file cleaner for co-authors. 
+% In particular, more efforts should be placed on model evaluation before incorporating any real data. This would force the modeler to acknowledge that some parameters might be non-identifiable and to reconsider the model structure. Similarly, it is essential to assess whether model predictions---once parameters are informed by data---are consistent with observations. The strength of such workflow lies in its flexibility, making it applicable to a wide range of modeling approaches, from simple trend analyses to more complex process-based models. At each step, the modeler need to critically examine its understanding of ecological processes, questioning previous assumptions, and explicitly acknowledge sources of uncertainty. This approach has the potential to enhance model interpretability and allow for a more transparent evaluation of model strengths and limitations. It also replace parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. 
+
+\clearpage
+\bibliography{forecastflows}
+
+\end{document}

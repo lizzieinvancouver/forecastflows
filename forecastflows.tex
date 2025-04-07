@@ -4,6 +4,10 @@
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+\usepackage{capt-of}
+
 \bibliographystyle{besjournals}
 
 \begin{document}
@@ -68,20 +72,21 @@ Trend estimation has focused mostly on fitting the model to empirical data in a 
 % There is thus room for improvment, with a workflow that addresses these flaws while taking account the reality of working with ecological data.
 % foreshadow stuf about simulation and feedback loops
 We argue a workflow that moves along the data-model space in a coherent sequence of steps with repeated data simulation (Fig 1) could reduce many of these problems and thus improve ecological science.
-%emw6Apr: I wonder if we can see how it goes to just cut this? We can see what co-authors say and add it back in later ... I sometimes start a file to toss this type of text (e.g., forecastflows_extras.tex) in case I need it but keep this file cleaner for co-authors. 
-% In particular, more efforts should be placed on model evaluation before incorporating any real data. This would force the modeler to acknowledge that some parameters might be non-identifiable and to reconsider the model structure. Similarly, it is essential to assess whether model predictions---once parameters are informed by data---are consistent with observations. The strength of such workflow lies in its flexibility, making it applicable to a wide range of modeling approaches, from simple trend analyses to more complex process-based models. At each step, the modeler need to critically examine its understanding of ecological processes, questioning previous assumptions, and explicitly acknowledge sources of uncertainty. This approach has the potential to enhance model interpretability and allow for a more transparent evaluation of model strengths and limitations. It also replace parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. 
 The first step of the workflow is to define an explicit research question and formulate hypotheses (Fig 2). This involves making clear assumptions about the most influential drivers, within the specific context of our study. This step help us to think about the mechanisms that could generate the data we observe, including the observational error. Naturally, this leads to the development of a model---an ensemble of mathematical equations that encapsulates our knowledge and designed to answer our research question. The general idea is to start with a relatively simple model, that we could refine later. At this stage, prioritizing biologically meaningful parameters is crucial, as it allows us to have a sense of plausible parameter values. 
 
 With a model in place the next step focuses on testing and understanding it via data simulation. `Fake' or `test' data are generated directly from the model by fixing parameters to some values (which is straightforward if the parameters are interpretable) and from fake predictor data. This simulated data should reflect the full model assumptions, and could begin to include complexities in our data structure and biases, which may in turn lead to adjusting the model. For example, if a researcher realizes their empirical is geographically biased, that should be built into the model and thus then into this data simulation step. 
 We then fit our model to this simulated dataset and evaluate its ability to recover the prescribed values. 
 Once we are confident about our model structure, we can incorporate real data. This way, we obtain parameter estimates constrained by observations. Here, difficulty in fitting the model might indicate an inherent need for more data to address our initial question. This could lead us to either simplify our research question or---ideally---launch new data collection efforts. This leads to the second data simulation step, this time using our fitted model parameters to generate predictions. This retrodictive check allows model output to be compared to observations. 
-% adding something about parameters
+The workflow replaces parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. Any parameter (such as a trend estimate) must be carefully interpreted alongside others. %such as the  global mean or intercept and the estimate variance
 Within such a workflow, forecasting emerges as a natural outcome: rather than being a final goal, it only involves jointly modeling new circumstances along with the original data.
 
 % More details, what's special! Feedbacks!
 %emw6Apr: I think there's more than just degeneracy here, often people build in more complexity to their simulated data than their model allows, but this means they should change the model (or the question). This needs to be clearer above and below. I think this is the first point (since it's a little more obvious to readers and it relates to trends, which we always handle first), and the next one could be about structural degeneracies  but I think we need to be careful here in what we mean and explain it more to readers who will not get it. 
-A key feature of this workflow is the central role of data simulation, which introduces two feedback loops. The first feedback arises when we evaluate the model on simulated data: structural degeneracies in the model might become apparent, revealing that some parameters are highly non-identifiable. If the model fails to recover known parameter values, this flags % not sure about this word
-the need to reconsider its structure---before incorporating real observations. 
+A key feature of this workflow is the central role of data simulation, which introduces two feedback loops. The first feedback arises when we evaluate the model on simulated data.
+The failure of the model to handle the complexity of the simulated data should prompt a reconsideration of the model, or even a reformulation of the research question.
+Further, % structural degeneracies in the model might become apparent, 
+this step might reveal that some parameters are highly non-identifiable, % If the model fails to recover known parameter values, this flags % not sure about this word
+flagging the need to change the model structure---before incorporating real observations. 
 The second feedback loop comes from the retrodictive check. 
 Discrepancies may indicate a missing key driver---perhaps an expected outcome if we known our initial model was too simplistic. We can refine the model to integrate the missing process and restart the workflow. Insights from the retrodictive check can also lead us to introduce additional complexity when simulating fake data, such as phylogenetic structure or observational biases (e.g. unbalanced data). This iterative evaluation of the model moves beyond a simple reliance on goodness-of-fit metrics. At each iteration, we are able to evaluate the model behavior, both with simulated and real data, taking into account our expert knowledge of the ecological processes. 
 
@@ -89,7 +94,7 @@ Discrepancies may indicate a missing key driver---perhaps an expected outcome if
 
 % How to address current issues (two case studies)
 % Need an introduction here
-%emw6Apr: I like the shift to 'parameter estimation' instead of trend estimation, but I wonder if we could make that shift clearer above. Maybe somewhere we say that the workflow would  encourage a focus on the full model and its parameters: For trend estimates, the trend becomes just one parameter that must be carefully interpreted alongside others such as the  global mean or intercept and the estimate variance. 
+%emw6Apr: I like the shift to 'parameter estimation' instead of trend estimation, but I wonder if we could make that shift clearer above. Maybe somewhere we say that the workflow would  encourage a focus on the full model and its parameters: For trend estimates, the trend becomes just one parameter that must be carefully interpreted alongside others . 
 Across the different fields of ecology---for both parameter estimation and forecasting---a systematic application of a coherent workflow could highlight the best opportunities to reduce uncertainties through new scientific insights, toward the most critical steps. This will help refocus the debate on designing new hypothesis, formulating new questions---and guiding efforts to collect new data. Here, we illustrate how such a workflow could lead to significant improvements in two case studies: (i) estimating global biodiversity trends and (ii) forecasting future species and ecosystem dynamics using process-based models.
 
 \subsection{Trends}
@@ -119,8 +124,7 @@ Applying the workflow to current trend estimates could importantly highlight the
 
 % Forecasting - outline current problem
 % emw03april: move also this to a box?
-Ecological forecasting is a broad field with a diverse range of methods. Process-based modeling is often considered the gold standard in ecology \citep{Urban2016, Pilowsky2022} and beyond. Process-based models are built on explicit mathematical equations to describe (supposedly causal) relationships between environmental drivers and ecological responses. They also often incorporate empirical relationships, particularly when knowledge is incomplete or when some processes are intentionally omitted. Processes are often represented at different nested spatiotemporal scales, depending on the underlying assumptions. Model development is the central step, typically requiring several years, yet it often remains opaque from an external perspective. The step of designing the model---translating knowledge and hypotheses into mathematical equations and parameters---is often blurred with the step of model calibration (or tuning), where parameter values are inferred. Models are often treated as an accumulation of multiple submodels, each governing one or several ecological processes. Rather than being fitted as a whole, submodels are calibrated separately against specific subsets of data, and some parameters are simply prescribed (i.e. fix to a value found in the literature) or tuned to reproduce some observations or theory. The way models are currently calibrated is not a coincidence, % is coincidence the right word? 
-but rather an inappropriate way to accommodate their complexity, where many parameters compensate for one another.
+Ecological forecasting is a broad field with a diverse range of methods. Process-based modeling is often considered the gold standard in ecology \citep{Urban2016, Pilowsky2022} and beyond. [...]
 
 These limitations are central to current debates. In climate modeling, increasing model complexity has not necessarily led to reduced uncertainty. For instance, the uncertainty range on the effect of increasing CO2 concentration on temperature have remained largely unchanged \citep{Zelinka2020}. This has driven calls for more rigorous and transparent calibration processes \citep{balaji2022general}. Similar concerns arise in ecology, where strong disagreements exist about the effect of climate change on future species distributions \citep{Cheaib2012} and ecosystem dynamics \citep{Lovenduski2017}.
 These uncertainties have large implications beyond ecology, as they influence simulations of biosphere-atmosphere interactions and, ultimately, future climate projections \citep{Bonan2018, simpson2025confronting}.
@@ -140,6 +144,58 @@ Ideally, applying the workflow would help to move away from the traditional proc
 % \cite{balaji2022general}mAre general circulation models obsolete? -- covers a lot and good citations within I think
 % \cite{simpson2025confronting} this is the 'Confronting Earth System Model trends with observations' which I have not fully read but Table 1 is interesting to me and something maybe the PBM and NTIF (near-term iterative) people should be doing if they are not doing?
 % \cite{rounce2020quantifying} 'Quantifying parameter uncertainty in a large-scale glacier evolution model using Bayesian inference: application to High Mountain Asia' talks about identifablity problems and uses Bayesian, again I have not fully read, but may be interesting example?
+
+% \setlength{\columnseprule}{0.1pt}
+
+\begin{tcolorbox}[
+sharp corners=all,
+colback=white,
+colframe=black,
+size=tight,
+boxrule=0.1mm,
+left=3mm,right=3mm, top = 2mm, bottom = 2mm,
+fontupper=\small
+]
+{\begin{multicols}{2}
+
+\centerline{\bf Trend estimation}
+
+\begin{minipage}[t]{\linewidth}
+    \includegraphics[width=\linewidth]{figures/trendestimation_details}
+
+    \vspace{-0.6cm}\captionof{figure}{Caption}\label{fig:trends}
+\end{minipage}
+\vspace{0.1cm}
+
+\noindent Blabla \newline
+Blabla \newline
+ \ \newline
+Blabla \newline
+\vfill
+
+\columnbreak
+
+\centerline{\bf Mechanistic forecasting}
+\bigskip
+
+\noindent Process-based models are built on explicit mathematical equations to describe (supposedly causal) relationships between environmental drivers and ecological responses. They also often incorporate empirical relationships, particularly when knowledge is incomplete or when some processes are intentionally omitted. Processes are often represented at different nested spatiotemporal scales, depending on the underlying assumptions. Model development is the central step, typically requiring several years, yet it often remains opaque from an external perspective. The step of designing the model---translating knowledge and hypotheses into mathematical equations and parameters---is often blurred with the step of model calibration (or tuning), where parameter values are inferred. Models are often treated as an accumulation of multiple submodels, each governing one or several ecological processes. Rather than being fitted as a whole, submodels are calibrated separately against specific subsets of data, and some parameters are simply prescribed (i.e. fix to a value found in the literature) or tuned to reproduce some observations or theory. The way models are currently calibrated is not a coincidence, % is coincidence the right word? 
+but rather an inappropriate way to accommodate their complexity, where many parameters compensate for one another.
+
+\vfill
+
+\end{multicols}}
+
+\centerline{\bf Common solution!}
+\vspace{0.2cm}
+\begin{minipage}[t]{\linewidth}
+    \includegraphics[width=\linewidth]{figures/iterativeworkflow_details}
+
+    \vspace{-0.6cm}\captionof{figure}{Caption}\label{fig:trends}
+\end{minipage}
+
+\end{tcolorbox}
+
+
 
 \section{Barriers and opportunities}
 
