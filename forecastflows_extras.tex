@@ -35,6 +35,48 @@ $^*$ Says he is happy to help and give friendly review, but not sure he will rea
 %emw6Apr: I wonder if we can see how it goes to just cut this? We can see what co-authors say and add it back in later ... I sometimes start a file to toss this type of text (e.g., forecastflows_extras.tex) in case I need it but keep this file cleaner for co-authors. 
 % In particular, more efforts should be placed on model evaluation before incorporating any real data. This would force the modeler to acknowledge that some parameters might be non-identifiable and to reconsider the model structure. Similarly, it is essential to assess whether model predictions---once parameters are informed by data---are consistent with observations. The strength of such workflow lies in its flexibility, making it applicable to a wide range of modeling approaches, from simple trend analyses to more complex process-based models. At each step, the modeler need to critically examine its understanding of ecological processes, questioning previous assumptions, and explicitly acknowledge sources of uncertainty. This approach has the potential to enhance model interpretability and allow for a more transparent evaluation of model strengths and limitations. It also replace parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. 
 
+
+
+%\item What are current workflows and where are they limiting us?
+%\begin{enumerate}
+%\item For trends ...
+%\begin{enumerate}
+%\item easy to find different trends through small model tweaks to analyses and/or different data
+%\item For example, right now many different papers report different biodiversity trends (LPI example?)
+%\item New workflow would make ecologists understand uncertainty in their model data/combo (and perhaps not see/publish results as so divergent?)
+%\end{enumerate}
+%\item For forecasting ... (somehow jump to our focus on process-based models PBMs here? Something like, forecasting is big and there are diverse methods! Near-term iterative, correlative niche models, but PBMs are often considered the gold standard ... mention machine learning?)
+%\begin{enumerate}
+%\item as many models as researchers working on process-based models 
+%\item + accumulation of successive layers in the development of models = significant challenge to scientific transparency, reproducibility, interpretability\\
+%models often draw inspiration from each other, which is good (way to do science), but not always explicit... (some issues: arbitrarily established parameter value in one model then transmitted to multiple models)
+%\item focus of researchers: always integrate new mechanisms, new parameters, to increase "realism"...  they intuitively "feel" what kinds of adjustments is needed... but opaque from an external perspective ("black box" of model building and calibration)
+%\item models rarely fitted as a whole, dozens of parameters without explicitly quantifying parameter uncertainty, and often neglect to propagate this uncertainty
+%\item simulations of models themselves became a subject of study to disentangle all the processes modelled and understand model sensitivity 
+%\end{enumerate}
+%\end{enumerate}
+
+%Miscellaneous notes/points without a home
+%\begin{enumerate}
+%\item Ecologists need to race the same data to make progress for trends and for forecasting (point to make at end of paper maybe? And what is the workflow for this?) ... though LPI is used a lot, perhaps it is  sign that ecology is ready to start racing the same data, but then we need `analysis-ready' data so we're not all slightly differently cleaning the data etc..
+%\item Machine learning threatens utility of PBMs
+%\item We need more uncertainty propagation for trends and forecasting (uncertainty is esp. ignored in PBMs)
+%\item This workflow should lead to less model comparison (AIC, stepwise)
+%\item This workflow works for machine learning!
+%\item PBM: workflow should require estimating all parameters together; data simulation should reduce parameter number and highlight non-biol results
+%\item Current trend workflow: Should be research question focused?
+%\end{enumerate}
+%
+%Miscellaneous notes/points from thinking over 22-23 March weekend ...
+%\begin{enumerate}
+%\item Workflows emphasize there is no easy fix to better science or better stats
+%\item Maybe do a retrodictive check example with LPI? Including showing how even the Freckleton work could do more? 
+%\item What's the pathway from model comparison of many covariates to something else? Sometimes it seems like it's just prediction shoved into a mechanistic study, but if the goal is mechanism, there needs to be more work that either models these covariates together in a useful way (sort of approaching process-models!) or gets down to the fewer extremely relevant ones. 
+%\item When do we need to open up the black box? Something about we need better training for what science is and our goals; machine learning is not often helping with advancing \emph{science}
+%\item Scott Collins point that forecasting is not science (he claims a bunch of economists, weather folks etc. came to an ecological forecasting meeting and tried to explain that forecasting is an outcome of science, but it's not something you do science ON)
+%\end{enumerate}
+
+
 \clearpage
 \bibliography{forecastflows}
 
