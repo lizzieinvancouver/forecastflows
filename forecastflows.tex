@@ -25,11 +25,6 @@ $^*$ Says he is happy to help and give friendly review, but not sure he will rea
 % Word length: I should check what they emailed but they say no more than 13 printed pages with 650 per page (whoa, we should be well below that! I am thinking 3-5K would be good)
 % Already 5K! 
 
-% To do:
-% Fix the abstract so it matches the paper better (I think mainly the last few sentences need work, or we just need to say more about data sharing in the text)
-% Add in Figures
-% Delete out unnecessary comments so easier for co-authors to read?
-
 \begin{abstract}
 Increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Relevant datasets to meet these demands have also increased in size and complexity, including in their geographical, temporal and phylogenetic scales. While new research often suggests that accounting for these complexities variously increases, removes or otherwise alters major trends, we argue that the fundamental approach to model fitting in ecology makes it impossible to evaluate and compare models. These problems stem in part from continuing gaps between statistical workflows---where the data processing and model development are often addressed separately from the ecological question and aim---and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational the opportunity to close this gap has never been greater. We outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights for both trend estimation and forecasting.
 %Combining these changes with more open model and data sharing---and developing new efforts to race the same data---could be transformative for ecological forecasting. 
@@ -61,7 +56,7 @@ Trend estimation has focused mostly on fitting a model to empirical data in a un
 \begin{figure}[h]
 	\centering
 	\includegraphics{figures/modeldataspaces}
-	\caption{} 
+	\caption{Here the caption could explain a bit more the pre-model pre-data to the post-model post-data...} 
 	\label{fig:modeldata}
 \end{figure}
 
@@ -83,7 +78,6 @@ Within such a workflow, forecasting emerges as a natural outcome: rather than be
 \end{figure}
 
 % More details, what's special! Feedbacks!
-%emw6Apr: I think there's more than just degeneracy here, often people build in more complexity to their simulated data than their model allows, but this means they should change the model (or the question). This needs to be clearer above and below. I think this is the first point (since it's a little more obvious to readers and it relates to trends, which we always handle first), and the next one could be about structural degeneracies  but I think we need to be careful here in what we mean and explain it more to readers who will not get it. 
 A key feature of this workflow is the central role of data simulation, which introduces two feedback loops. The first feedback arises when we evaluate the model on simulated data.
 The failure of the model to recover known parameter values and handle the complexity of the simulated data should prompt a reconsideration of the model, or even a reformulation of the research question.
 Further, % structural degeneracies in the model might become apparent, 
@@ -101,7 +95,6 @@ Across the different fields of ecology---for both parameter estimation and forec
 \subsection{Trends}
 
 Ecologists today have amassed data on populations and species across the globe; they have also engaged in an increasing number of debates on regional and global trends, with arguments over the magnitude and even direction of population and biodiversity metrics \citep{Dornelas2014,Leung2020,terry2022no,muller2024weather}. While shifting estimates are part of the process of science---refining our approaches and thus estimates over time---we believe these debates would be much reduced through use of an improved workflow. % Further, an improved workflow could give more rapid and coherent estimates, which could make it easier for  policy-makers to develop and advance initiatives aimed at slowing declines.
-% Apparently conflicting results have made it harder for policy-makers to advance initiatives aimed at slowing declines \citep{gonzalez2016estimating}. While shifting estimates are part of the process of science---refining our approaches and thus estimates over time---we argue much of the work underlying these debates stems from a poor workflow. 
 
 An improved workflow that required data simulation and retrodictive checks would lead to larger model advances and a greater recognition of uncertainty---thus highlighting likely consistency in estimates across models---that could better aid policy.  Using the workflow would make what now appear as major discrepancies more obviously shifts in point estimates that are generally all in the same uncertainty space \citep{Johnson2024}---and it would challenge modelers to show major predictive advances, which is not currently part of the process. Explanatory power in most models of observational data is usually very low \citep{low2014rising,moller2002much} and thus tests of models' predictions rarely expected. But the workflow highlights that predictions from the model---what we call retrodictive checks---are part of the process of science, and critical to testing for what may be missing in a model. We expect retrodictive checks on most published trend analyses would highlight major missing components in these models, and drive changes both in the models themselves and in the simulated data to check the models. While ecologists have started to use simulated data more to understand potential limitations of their models and data combined, this is still extremely rare, and efforts to date often treat simulations as separate from the statistical model \citep{Buschke2021,dove2023quantifying}, short-circuiting their full utility.
 % expand on 'highlight major missing components in these models'? ADD example?
@@ -224,12 +217,10 @@ Training all ecologists in our proposed workflow would break down barriers betwe
 % Perhaps the only drawback would be to those focused on statistical models, whose gate-keeping would suddenly fail them and they would have to do more that just say how amazing they are... 
 Those focused on learning complex statistical models may find many of the field now share their excitement and interest in more generative models, and could focus on adapting approaches to better forecasts or something.
 
-% \subsection{Tractable models with mechanistic understanding as an alternative to machine learning} % not a good subheader title
 \subsection{A tractable alternative to machine learning}
 
 In a world where machine learning is rapidly advancing, there is no point of sticking to traditional methods if no changes are made. Machine learning will likely surpass process-based models if the latter lack a robust estimation of their parameters and fall in a complexity trap, at the cost of their interpretability. Similarly, trend analysis, when the focus is on methodological controversies (due to the lack of an iterative workflow) rather than on a robust mechanistic foundation, offers no clear advantage over machine learning.
 
-% emw03april: move this somewhere else?
 Today model development in ecology is rarely transparent, which limits how easily the research community can understand modes, and thus identify potential issues. Instead of broad inclusive conversations about how to improve models to advance our ecological understanding, a significant portion of scientific debate today has become lost in methodological considerations, but we believe our workflow provides an tractable step to fixing this. By focusing on model development more tightly tied to ecological expertise, we ague this workflow should broader the community that contributes to model development. As ecologists are increasingly expanding their computational toolkits, many field, and lab and other forms of `empirical' ecologists have the basic tools to follow this workflow to build models that better represent their ecological, and---most importantly---to interrogate them.
 
 \clearpage
