@@ -71,7 +71,7 @@ The first step of this workflow is to define an explicit research question and f
 With a model in place the next step focuses on testing and understanding it via data simulation. `Fake' or `test' data are generated directly from the model by fixing parameters to some values (which is straightforward if the parameters are interpretable) and from fake predictor data (Fig. \ref{fig:workflowy}). This simulated data should reflect the full model assumptions, and could begin to include complexities in our data structure and biases, which may in turn lead to adjusting the model. For example, if a researcher realizes their empirical data is geographically biased, then this bias should be built into the model and thus then into this data simulation step. We then fit our model to this simulated dataset and evaluate its ability to recover the prescribed values. 
 
 Once we are confident about our model structure, we can incorporate real data. This way, we obtain parameter estimates constrained by observations. Here, difficulty in fitting the model might indicate an inherent need for more data to address our initial question. This could lead us to either simplify our research question or---ideally---launch new data collection efforts. This leads to the second data simulation step, this time using our fitted model parameters to generate predictions. This retrodictive check allows model output to be compared to observations. 
-The workflow replaces parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. Any parameter (such as a trend estimate) must be carefully interpreted alongside others. %such as the  global mean or intercept and the estimate variance
+The workflow encourages a focus on the full model, and replaces parameters at the core of the modeling process, as fundamental components that shape both inference and forecasting. Any parameter (such as a trend estimate) must be carefully interpreted alongside others. %such as the  global mean or intercept and the estimate variance
 Within such a workflow, forecasting emerges as a natural outcome: rather than being a final goal, it only involves jointly modeling new circumstances along with the original data.
 
 \begin{figure}[h]
@@ -116,7 +116,6 @@ Applying the workflow to current trend estimates could importantly highlight the
 % vvdm07april: need to work on a better intro paragraph
 Ecological forecasting is a broad field with a diverse range of methods. Process-based modeling is often considered the gold standard in ecology \citep{Urban2016, Pilowsky2022} and beyond. Newer models generally incorporate greater complexity and an ever-growing number of parameters, making it more difficult to increase scientific understanding \citep{Franklin2020}, and suggest or model potential policies. 
 
-% vvdm07april: need a topic sentence
 Increasing model complexity can be beneficial, especially when it reduces uncertainty; however, this is not always the outcome. In climate modeling, the uncertainty range on the effect of increasing CO$_{2}$ concentration on temperature have remained largely unchanged \citep{Zelinka2020}. This has driven calls for more rigorous and transparent calibration processes \citep{balaji2022general}. Similar concerns arise in ecology, where strong disagreements exist about the effect of climate change on future species distributions \citep{Cheaib2012} and ecosystem dynamics \citep{Lovenduski2017}.
 These uncertainties have large implications beyond ecology, as they influence simulations of biosphere-atmosphere interactions and, ultimately, future climate projections \citep{Bonan2018, simpson2025confronting}.
 Some researchers now advocate for the simplification of models, to avoid over-parametrization when the data provide little information to constrain some parameters \citep{Wang2017, Harrison2021}. If a model becomes too complex, understanding the sources of uncertainty and how they propagate through the model may become nearly impossible.
@@ -202,14 +201,13 @@ but rather an inappropriate way to accommodate their complexity, where many para
 
 \columnbreak
 \vspace*{1mm}
-Blabla \\
-We say here briefly how great the new approach is or something.
+Blabla... \\
+% We say here briefly how great the new approach is or something.
+An universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge. And it would also be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community.
 
 \end{multicols}}
 
 \end{tcolorbox}
-
-
 
 \section{Barriers and opportunities}
 
@@ -229,58 +227,10 @@ Those focused on learning complex statistical models may find many of the field 
 % \subsection{Tractable models with mechanistic understanding as an alternative to machine learning} % not a good subheader title
 \subsection{A tractable alternative to machine learning}
 
-An universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge. And it would also be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community.
 In a world where machine learning is rapidly advancing, there is no point of sticking to traditional methods if no changes are made. Machine learning will likely surpass process-based models if the latter lack a robust estimation of their parameters and fall in a complexity trap, at the cost of their interpretability. Similarly, trend analysis, when the focus is on methodological controversies (due to the lack of an iterative workflow) rather than on a robust mechanistic foundation, offers no clear advantage over machine learning.
 
 % emw03april: move this somewhere else?
 Today model development in ecology is rarely transparent, which limits how easily the research community can understand modes, and thus identify potential issues. Instead of broad inclusive conversations about how to improve models to advance our ecological understanding, a significant portion of scientific debate today has become lost in methodological considerations, but we believe our workflow provides an tractable step to fixing this. By focusing on model development more tightly tied to ecological expertise, we ague this workflow should broader the community that contributes to model development. As ecologists are increasingly expanding their computational toolkits, many field, and lab and other forms of `empirical' ecologists have the basic tools to follow this workflow to build models that better represent their ecological, and---most importantly---to interrogate them.
-
-
-
-
-
-% This type of workflow-focused training would make forecasting from models far more tractable ... 
-
-
-
-%\item What are current workflows and where are they limiting us?
-%\begin{enumerate}
-%\item For trends ...
-%\begin{enumerate}
-%\item easy to find different trends through small model tweaks to analyses and/or different data
-%\item For example, right now many different papers report different biodiversity trends (LPI example?)
-%\item New workflow would make ecologists understand uncertainty in their model data/combo (and perhaps not see/publish results as so divergent?)
-%\end{enumerate}
-%\item For forecasting ... (somehow jump to our focus on process-based models PBMs here? Something like, forecasting is big and there are diverse methods! Near-term iterative, correlative niche models, but PBMs are often considered the gold standard ... mention machine learning?)
-%\begin{enumerate}
-%\item as many models as researchers working on process-based models 
-%\item + accumulation of successive layers in the development of models = significant challenge to scientific transparency, reproducibility, interpretability\\
-%models often draw inspiration from each other, which is good (way to do science), but not always explicit... (some issues: arbitrarily established parameter value in one model then transmitted to multiple models)
-%\item focus of researchers: always integrate new mechanisms, new parameters, to increase "realism"...  they intuitively "feel" what kinds of adjustments is needed... but opaque from an external perspective ("black box" of model building and calibration)
-%\item models rarely fitted as a whole, dozens of parameters without explicitly quantifying parameter uncertainty, and often neglect to propagate this uncertainty
-%\item simulations of models themselves became a subject of study to disentangle all the processes modelled and understand model sensitivity 
-%\end{enumerate}
-%\end{enumerate}
-
-%Miscellaneous notes/points without a home
-%\begin{enumerate}
-%\item Ecologists need to race the same data to make progress for trends and for forecasting (point to make at end of paper maybe? And what is the workflow for this?) ... though LPI is used a lot, perhaps it is  sign that ecology is ready to start racing the same data, but then we need `analysis-ready' data so we're not all slightly differently cleaning the data etc..
-%\item Machine learning threatens utility of PBMs
-%\item We need more uncertainty propagation for trends and forecasting (uncertainty is esp. ignored in PBMs)
-%\item This workflow should lead to less model comparison (AIC, stepwise)
-%\item This workflow works for machine learning!
-%\item PBM: workflow should require estimating all parameters together; data simulation should reduce parameter number and highlight non-biol results
-%\item Current trend workflow: Should be research question focused?
-%\end{enumerate}
-%
-%Miscellaneous notes/points from thinking over 22-23 March weekend ...
-%\begin{enumerate}
-%\item Workflows emphasize there is no easy fix to better science or better stats
-%\item Maybe do a retrodictive check example with LPI? Including showing how even the Freckleton work could do more? 
-%\item What's the pathway from model comparison of many covariates to something else? Sometimes it seems like it's just prediction shoved into a mechanistic study, but if the goal is mechanism, there needs to be more work that either models these covariates together in a useful way (sort of approaching process-models!) or gets down to the fewer extremely relevant ones. 
-%\item When do we need to open up the black box? Something about we need better training for what science is and our goals; machine learning is not often helping with advancing \emph{science}
-%\item Scott Collins point that forecasting is not science (he claims a bunch of economists, weather folks etc. came to an ecological forecasting meeting and tried to explain that forecasting is an outcome of science, but it's not something you do science ON)
-%\end{enumerate}
 
 \clearpage
 \bibliography{forecastflows}
