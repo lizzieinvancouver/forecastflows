@@ -61,4 +61,6 @@ At this point, we would have a lot of ideas of ways to improve this model that w
 
 And then we would likely add in more countries and species.... 
 
+I might also add a short paragraph about moving away from linear regression and towards models for species abudance (via mixtures I think? I suspect the articles I posted for class have some good ideas) and thinking more about linking to demography models.
+
 And then we would realize we really don't have great data for this question and we would ... 
