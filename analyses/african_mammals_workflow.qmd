@@ -1,4 +1,38 @@
-# A sample workflow 
+---
+title: "A sample workflow"
+authors: "Lizzie, Victor"
+date: "April 2025"
+date-format: "MMMM YYYY"
+toc: true
+number-sections: true
+highlight: pygments
+execute:
+  enabled: true
+format:
+  html:
+    html-math-method: katex
+    theme:
+      - lux
+    embed-resources: true
+    code-overflow: wrap
+    linkcolor: "#B97C7C"
+    page-layout: full
+    fig-width: 8
+    fig-height: 4
+  pdf:
+    keep-tex: true
+    fig-width: 5.5
+    fig-height: 5.5
+    code-overflow: wrap
+    monofontoptions:
+      - Scale=0.5
+knitr:
+  opts_chunk:
+    comment: ''
+  opts_knit:
+    global.par: TRUE
+format-links: false
+---
 
 *Hi Victor, it's Lizzie. I will just put my notes to you in italics. You really should remove them. In general, I suggest you focus on getting some code/plots and basic text done that you then share next week with everyone.*
 
@@ -14,10 +48,13 @@ Here we need to focus on exactly what question we are trying to answer, which wi
 
 What is global trend in vertebrate species population numbers, both overall and how does it vary acrosss species and populations? 
 
-**Note**: we will actually focus on African mammals with 10+ populations with 5+ observations per population.
-
 ```{r}
-1 + 1
+set.seed(20012029)
+
+library(ggplot2)
+
+lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
+
 ```
 
 
@@ -42,14 +79,101 @@ Here we would likely feedback one to two steps. We could step back to Step 2 and
 *Obviously we can charge forward with the full model if you want, I just thought this would be (a) easier for us, (b) way better to show as it's how you should do it and (c) related to a, I suspect JD can be more help, though any country with a good amount of data could work.* 
 So here we refine our question to:
 
-What is trend in terrestrial vertebrate species population numbers in South Africa, both overall and how does it vary acrosss species and populations? 
+What is trend in mammal species population numbers in Africa, both overall and how does it vary acrosss species and populations? 
+**Note**: we will actually focus on African mammals with 10+ populations with 5+ observations per population.
 
-Now we start to simulate! 
+### Simulating data
+Now we start to simulate!
 *Sorry, I did not have time to do this, but I would simulate from the above model or some other simple one you come up with. I would simulate really NICE data, not realistic data.* 
 ```{r}
 
+nspecies <- 9
+npops_persp <- round(runif(nspecies, 1, 3)) # no. of different populations per species
+npops <- sum(npops_persp) # total no. of different populations
+nobs_perpop <- round(runif(npops, 5, 15)) # no. of different observations per population
+
+spid_perpop <- rep(1:nspecies, times = npops_persp)
+spid_perobs <- rep(spid_perpop, times = nobs_perpop)
+popid_perobs <- rep(1:npops, times = nobs_perpop)
+
+years <- c()
+for(np in nobs_perpop){
+  years_p <- sample(1960:2020, size = np, replace = FALSE)
+  years <- c(years, years_p)
+}
+
+
+# nested intercepts
+mu_species_alpha <- rnorm(n = nspecies, mean = 200, sd = 25)
+sig_species_alpha <- rnorm(n = nspecies, mean = 5, sd = 2)
+mu_pop_alpha <- rnorm(n = npops, mean = mu_species_alpha[spid_perpop])
+sig_pop_alpha <- abs(rnorm(n = npops))
+alpha <- rnorm(n = npops, mean = mu_pop_alpha, sd = sig_pop_alpha)
+
+# nested slopes
+mu_species_beta <- rnorm(n = nspecies, mean = 0, sd = 0.1)
+sig_species_beta <- rnorm(n = nspecies, mean =0, sd = 0.5)
+mu_pop_beta <- rnorm(n = npops, mean = mu_species_beta[spid_perpop], sd = 0.2)
+sig_pop_beta <- abs(rnorm(n = npops))
+beta <- rnorm(n = npops, mean = mu_pop_beta, sd = sig_pop_beta)
+
+sigma_obs <- abs(rnorm(1, mean = 10, sd = 1))
+
+y <- c()
+for(p in 1:npops){
+  nobs_p <- nobs_perpop[p]
+  alpha_p <- alpha[p]
+  beta_p <- beta[p]
+  
+  years_p <- years[popid_perobs == p] 
+  
+  yhat_p <- alpha_p + beta_p * (years_p - 1980)
+  # yhat_p <- alpha_p
+  y_p <- rnorm(n = nobs_p, mean = yhat_p, sd = sigma_obs)
+  y <- c(y, y_p)
+}
+
+
+dataplot <- data.frame(
+  y,
+  year = years - 1980,
+  species = as.character(spid_perobs),
+  population = as.character(popid_perobs)
+)
+
+ggplot(data = dataplot) +
+  geom_line(aes(x = year+1980, y = y, 
+                group = paste0(species, population),
+                color = species)) +
+  theme_bw()
+
+
+nestlm <- lm(y ~ year * species/population, data = dataplot)
+coefs <- summary(nestlm)$coefficients
+
+species_intercept <- c(coefs["(Intercept)", "Estimate"], sapply(2:nspecies, function(sp){coefs["(Intercept)", "Estimate"] + coefs[paste0("species", sp), "Estimate"]}))
+species_intercept_sd <- c(coefs["(Intercept)", "Std. Error"], sapply(2:nspecies, function(sp){coefs[paste0("species", sp), "Std. Error"]}))
+
+species_slope <- c(coefs["year", "Estimate"], sapply(2:nspecies, function(sp){coefs["year", "Estimate"] + coefs[paste0("year:species", sp), "Estimate"]}))
+species_slope_sd <- c(coefs["year", "Std. Error"], sapply(2:nspecies, function(sp){coefs[paste0("year:species", sp), "Std. Error"]}))
+
+intercepts <- data.frame(obs=mu_species_alpha, est=species_intercept, est.sd=species_intercept_sd, species = as.character(1:nspecies))
+ggplot(data = intercepts) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") + 
+  geom_pointrange(aes(ymin = est-est.sd, ymax = est+est.sd, x = obs, y = est, color = species)) +
+  theme_bw()
+
+slopes <- data.frame(obs=mu_species_beta, est=species_slope, est.sd=species_slope_sd, species = as.character(1:nspecies))
+ggplot(data = slopes) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") + 
+  geom_pointrange(aes(ymin = est-est.sd, ymax = est+est.sd, x = obs, y = est, color = species)) +
+  theme_bw()
+
+
+  
+
 ```
-*Add some text here showing the model output returning paramaters.* 
+*Add some text here showing the model output returning parameters.* 
 
 ## Step 4: Fit model to empirical data
 
@@ -73,3 +197,4 @@ And then we would likely add in more countries and species....
 I might also add a short paragraph about moving away from linear regression and towards models for species abudance (via mixtures I think? I suspect the articles I posted for class have some good ideas) and thinking more about linking to demography models.
 
 And then we would realize we really don't have great data for this question and we would ... 
+
