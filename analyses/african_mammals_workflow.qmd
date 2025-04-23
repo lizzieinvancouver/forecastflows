@@ -55,6 +55,14 @@ library(ggplot2)
 
 lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
 
+lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Units", paste0("X", 1950:2020))]
+lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
+
+lpi_subset_rsh <- 
+  reshape(lpi_subset, direction = "long", idvar = "ID",
+          varying =  paste0("X", 1950:2020), v.names = c("value"), timevar = "year", times = 1950:2020)
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
+
 ```
 
 
@@ -177,6 +185,55 @@ ggplot(data = slopes) +
 
 ## Step 4: Fit model to empirical data
 
+```{r}
+
+lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
+
+lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Units", paste0("X", 1950:2020))]
+lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
+
+lpi_subset_rsh <- 
+  reshape(lpi_subset, direction = "long", idvar = "ID",
+          varying =  paste0("X", 1950:2020), v.names = c("value"), timevar = "year", times = 1950:2020)
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
+lpi_subset_rsh$value <- as.numeric(lpi_subset_rsh$value)
+
+units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)",
+                   "Individual", "individuals", "Individuals", "Number of adults", "number of individuals",
+                   "Number of individuals", "Number of Individuals", "Number of rhinos", "numbers of indviduals",
+                   "population estimate", "Population estimate", "Population estimate (individuals)", 
+                   "Population estimates", "Total population size")
+
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$Units %in% units_to_keep,]
+
+ggplot(data = lpi_subset_rsh) +
+  geom_line(aes(x = year, y = value, 
+                group = paste0(genus_species, ID),
+                color = genus_species)) +
+  theme_bw()
+
+```
+
+```{r}
+
+lpi_subset_rsh$year <- lpi_subset_rsh$year-1980
+nestlm <- lm(value ~ year * genus_species/ID, data = lpi_subset_rsh)
+coefs <- summary(nestlm)$coefficients
+
+species <- unique(lpi_subset_rsh$genus_species)[order(unique(lpi_subset_rsh$genus_species))]
+
+species_intercept <- c(coefs["(Intercept)", "Estimate"], sapply(species[2:length(species)], function(sp){coefs["(Intercept)", "Estimate"] + coefs[paste0("genus_species", sp), "Estimate"]}))
+species_intercept_sd <- c(coefs["(Intercept)", "Std. Error"], sapply(species[2:length(species)], function(sp){coefs[paste0("genus_species", sp), "Std. Error"]}))
+
+intercepts <- data.frame(est=species_intercept, est.sd=species_intercept_sd, species)
+
+species_slope <- c(coefs["year", "Estimate"], sapply(species[2:length(species)], function(sp){coefs["year", "Estimate"] + coefs[paste0("year:genus_species", sp), "Estimate"]}))
+species_slope_sd <- c(coefs["year", "Std. Error"], sapply(species[2:length(species)], function(sp){coefs[paste0("year:genus_species", sp), "Std. Error"]}))
+
+slopes <- data.frame(est=species_slope, est.sd=species_slope_sd, species)
+
+```
+
 Here we finally get to see how our model performs on the empirical data and are a step closer to answering our question, but we also start to notice some differences in our empirical data from our simulated data. In preparing our data for the model, we realize we have major gaps in sampling years and ... something else? 
 
 Here, we might step back and adjust our model (re-doing Step 2-3 again), but in this case we go ahead.
@@ -186,7 +243,21 @@ Here, we might step back and adjust our model (re-doing Step 2-3 again), but in 
 
 ## Step 5: Retrodictive check 
 
-Now we check how well our model predicts our data ... 
+```{r}
+#| fig-height: 10
+#| fig-width: 12
+
+retrodata <- data.frame(obs = lpi_subset_rsh$value, pred = predict(nestlm),
+                        species = lpi_subset_rsh$genus_species, id = lpi_subset_rsh$ID)
+
+ggplot(data = retrodata) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") +
+  facet_wrap(~ species, scales = "free") +
+  geom_point(aes(x = obs, y = pred, group = id, color = as.character(id)),
+             size = 0.5) + 
+  theme_bw() + theme(legend.position = 'none')
+
+```
 
 ## Feedbacks
 
