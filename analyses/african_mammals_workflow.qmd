@@ -296,7 +296,11 @@ lpi_subset_rsh <-
           varying =  paste0("X", 1950:2020), v.names = c("value"), timevar = "year", times = 1950:2020)
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 lpi_subset_rsh$value <- as.numeric(lpi_subset_rsh$value)
+```
 
+The values in the database are not necessarily in the same unit, so I imagine we need to take a decision here..?
+
+```{r units}
 units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)",
                    "Individual", "individuals", "Individuals", "Number of adults", "number of individuals",
                    "Number of individuals", "Number of Individuals", "Number of rhinos", "numbers of indviduals",
@@ -338,17 +342,28 @@ if(runmodel){
   nestlm <- readRDS(file.path(wd, "output/fit/nestmodel1.rds"))
 }
 
+```
+
+Here we finally get to see how our model performs on the empirical data and are a step closer to answering our question, but we also start to notice some differences in our empirical data from our simulated data. In preparing our data for the model, we realize we have quite different amplitudes of variations across populations and species (on a log-scale).
+
+```{r}
+#| fig-height: 4
+#| fig-width: 5
+
+ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0 & lpi_subset_rsh$genus_species == "Connochaetes taurinus",]) +
+  geom_line(aes(x = year, y = log(value), 
+                group = paste0(genus_species, ID),
+                color = genus_species)) +
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Year', y = 'Observed counts (log-scale)')
 
 ```
 
-Here we finally get to see how our model performs on the empirical data and are a step closer to answering our question, but we also start to notice some differences in our empirical data from our simulated data. In preparing our data for the model, we realize we have major gaps in sampling years and ... something else? 
-
 Here, we might step back and adjust our model (re-doing Step 2-3 again), but in this case we go ahead.
 
-*See starterLPI.R for what I have so far with the data...* 
-
-
 ## Step 5: Retrodictive check 
+
+Now we use our fitted model parameters to generate predictions, and compare them to observations.
 
 ```{r}
 #| fig-height: 10
@@ -371,13 +386,15 @@ ggplot(data = retrodata) +
 
 ```
 
+We might examine species separately, e.g. here the African bush elephant.
+
 ```{r}
-#| fig-height: 8
-#| fig-width: 10
+#| fig-height: 7
+#| fig-width: 9
 #| eval: true
 
 ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
-  facet_wrap(~ country, scales = "free") +
+  facet_wrap(~ country, scales = "free_y") +
   geom_point(aes(x = year + 1980, y = obs, group = id, color = id),
              size = 1) + 
   geom_line(aes(x = year + 1980, y = pred, group = id, color = id)) +
@@ -386,7 +403,7 @@ ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
 
 
 ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
-  facet_wrap(~ country, scales = "free") +
+  facet_wrap(~ country, scales = "free_y") +
   geom_point(aes(x = year + 1980, y = exp(obs), group = id, color = id),
              size = 1) + 
   geom_line(aes(x = year + 1980, y = exp(pred), group = id, color = id)) +
@@ -395,10 +412,97 @@ ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
 
 ```
 
+We can focus on populations in South Africa.
+
+```{r}
+#| fig-height: 3
+#| fig-width: 9
+#| eval: true
+
+ggplot(data = retrodata[retrodata$species == "Loxodonta africana" & retrodata$country == "South Africa", ]) +
+  facet_wrap( ~ id, scales = "free_y") +
+  geom_point(aes(x = year + 1980, y = obs, group = id, color = units),
+             size = 0.7) + 
+  geom_line(aes(x = year + 1980, y = obs, group = id, color = units),
+             linewidth = 0.3) + 
+  geom_line(aes(x = year + 1980, y = pred, group = id),
+            linewidth = 0.5) +
+  theme_bw() + 
+  labs(y = 'Counts (log-scale)', x = 'Year', color = 'Units')
+
+```
+
+```{r}
+#| fig-height: 3
+#| fig-width: 9
+#| eval: true
+
+ggplot(data = retrodata[retrodata$species == "Loxodonta africana" & retrodata$country == "South Africa", ]) +
+  facet_wrap( ~ id, scales = "free_y") +
+  geom_point(aes(x = year + 1980, y = exp(obs), group = id, color = units),
+             size = 0.7) + 
+  geom_line(aes(x = year + 1980, y = exp(obs), group = id, color = units),
+             linewidth = 0.3) + 
+  geom_line(aes(x = year + 1980, y = exp(pred), group = id),
+            linewidth = 0.5) +
+  theme_bw() + 
+  labs(y = 'Counts', x = 'Year', color = 'Units')
+
+```
+
+The three populations are measured in the same units, but likely represent different spatial scales (ranging from a few hundred individuals to more than 10000).
+
+The same holds for other species and other countries, e.g. the blue wildebeest in Tanzania.
+
+```{r}
+#| fig-height: 5
+#| fig-width: 9
+#| eval: true
+
+ggplot(data = retrodata[retrodata$species == "Connochaetes taurinus" & retrodata$country == "Tanzania, United Republic Of", ]) +
+  facet_wrap( ~ id, scales = "free_y") +
+  geom_point(aes(x = year + 1980, y = exp(obs), group = id, color = units),
+             size = 0.7) + 
+  geom_line(aes(x = year + 1980, y = exp(obs), group = id, color = units),
+             linewidth = 0.3) + 
+  geom_line(aes(x = year + 1980, y = exp(pred), group = id),
+            linewidth = 0.5) +
+  theme_bw() + 
+  labs(y = 'Counts', x = 'Year', color = 'Units')
+
+```
+The four populations are also measured in the same units (I guess?!), but represents different scales (so the blue one is likely a population, while the others represent region/country level?).
 
 ## Feedbacks
 
-At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including questioning our assumption of one sigma for all populations and potentially our linearity assumption. We also may want to add predictors for the slope such as  ... We would do this, returning to Steps 2-5 likely several times until we have a model that is good enough for our purposes here. 
+At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including questioning our assumption of one sigma for all populations and potentially our linearity assumption. 
+One possibility would be to move to a non-linear regression, and use a more flexible model
+Quick example for one of the wildbeest dataset in Tanzania:
+
+```{r}
+#| fig-height: 2.5
+#| fig-width: 3.5
+
+gompodel <- nls(logvalue ~ SSgompertz(year, Asym, b2, b3), data=lpi_subset_rsh[lpi_subset_rsh$ID == 5589,])
+fit <-data.frame(pred = predict(gompodel, newdata = data.frame(year = seq(-25,30,1))), year = seq(-25,30,1))
+
+ggplot(data = lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]) +
+  facet_wrap( ~ ID, scales = "free_y") +
+  geom_point(aes(x = year + 1980, y = value),
+             size = 0.7, color = "#F8766D") + 
+  geom_line(aes(x = year + 1980, y = value),
+             linewidth = 0.3, color = "#F8766D") + 
+  geom_line(aes(x = year + 1980, y = exp(pred)),
+            linewidth = 0.5, data = fit) +
+  theme_bw() + 
+  labs(y = 'Counts', x = 'Year', color = 'Units')
+
+
+
+
+```
+
+We also may want to add predictors for the slope such as  ... We would do this, returning to Steps 2-5 likely several times until we have a model that is good enough for our purposes here. 
 
 And then we would likely add in more countries and species.... 
 
