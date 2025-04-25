@@ -95,6 +95,7 @@ What is trend in mammal species population numbers in Africa, both overall and h
 ### Simulating data
 Now we start to simulate!
 *Sorry, I did not have time to do this, but I would simulate from the above model or some other simple one you come up with. I would simulate really NICE data, not realistic data.* 
+
 ```{r sim data}
 
 nspecies <- 9
@@ -112,7 +113,6 @@ for(np in nobs_perpop){
   years <- c(years, years_p)
 }
 
-
 # nested intercepts
 mu_species_alpha <- rnorm(n = nspecies, mean = log(200), sd = log(5))
 sig_species_alpha <- rnorm(n = nspecies, mean = 5, sd = 5)
@@ -126,6 +126,18 @@ sig_species_beta <- rnorm(n = nspecies, mean = 0, sd = 0.05)
 mu_pop_beta <- rnorm(n = npops, mean = mu_species_beta[spid_perpop], sd = 0.05)
 sig_pop_beta <- abs(rnorm(n = npops, mean = 0, sd = 0.01))
 beta <- rnorm(n = npops, mean = mu_pop_beta, sd = sig_pop_beta)
+
+# save simulated intercepts and slopes
+pops_fit <- data.frame()
+pid <- 1
+for(sp in 1:nspecies){
+  for(p in 1:npops_persp[sp]){
+    pops_fit <- rbind(pops_fit, data.frame(species = sp, pop = pid))
+    pid <- pid + 1
+  }
+}
+pops_fit$int <- mu_pop_alpha
+pops_fit$slp <- mu_pop_beta
 
 sigma_obs <- abs(rnorm(1, mean = 0.25, sd = 0.25))
 
@@ -144,26 +156,28 @@ for(p in 1:npops){
 }
 
 
-dataplot <- data.frame(
+datasim <- data.frame(
   y, 
   year = years - 1980,
   species = as.character(spid_perobs),
   population = paste0(spid_perobs,popid_perobs)
 )
 
-dataplot$logy <- log(dataplot$y)
+datasim$logy <- log(datasim$y)
 
-ggplot(data = dataplot) +
+ggplot(data = datasim) +
   geom_line(aes(x = year+1980, y = y, 
-                group = paste0(species, population),
+                group = population,
                 color = species)) +
-  theme_bw()
+  theme_bw() +
+  labs(x = 'Year', y = 'Simulated counts', colour = 'Species')
 
-ggplot(data = dataplot) +
+ggplot(data = datasim) +
   geom_line(aes(x = year+1980, y = logy, 
-                group = paste0(species, population),
+                group = population,
                 color = species)) +
-  theme_bw()
+  theme_bw() +
+  labs(x = 'Year', y = 'Simulated counts (log-scale)', colour = 'Species')
 
 ```
 
@@ -171,7 +185,7 @@ ggplot(data = dataplot) +
 
 ```{r fit sim data}
 
-nestlm <- lm(logy ~ species/population + year * species/population, data = dataplot)
+nestlm <- lm(logy ~ species/population + year * species/population, data = datasim)
 coefs <- summary(nestlm)$coefficients
 
 ```
@@ -182,39 +196,44 @@ coefs <- summary(nestlm)$coefficients
 #| fig-height: 6
 #| fig-width: 8
 
-retrodata <- data.frame(obs = dataplot$logy, pred = predict(nestlm),
-                        year = dataplot$year,
-                        species = dataplot$species, id = dataplot$population)
+retrodata <- data.frame(obs = datasim$logy, pred = predict(nestlm),
+                        year = datasim$year,
+                        species = datasim$species, id = datasim$population)
 
 ggplot(data = retrodata) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") +
-  facet_wrap(~ species, scales = "free") +
+  facet_wrap(~ paste0("Species ", species), scales = "free") +
   geom_point(aes(x = obs, y = pred, group = id, color = as.character(id)),
              size = 0.5) + 
-  theme_bw() + theme(legend.position = 'none')
-
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Simulated counts (log-scale)', y = 'Estimated counts (log-scale)')
 
 ggplot(data = retrodata) +
   facet_wrap(~ paste0("Species ", species), scales = "free") +
   geom_point(aes(x = year, y = obs, group = id, color = as.character(id)),
              size = 1) + 
   geom_line(aes(x = year, y = pred, group = id, color = as.character(id))) +
-  theme_bw() + theme(legend.position = 'none')
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Year', y = 'Counts (log-scale)')
   
 ggplot(data = retrodata) +
   facet_wrap(~ paste0("Species ", species), scales = "free") +
   geom_point(aes(x = year, y = exp(obs), group = id, color = as.character(id)),
              size = 1) + 
   geom_line(aes(x = year, y = exp(pred), group = id, color = as.character(id))) +
-  theme_bw() + theme(legend.position = 'none')
+  theme_bw() + theme(legend.position = 'none') +
+   labs(x = 'Year', y = 'Counts')
 
 ```
 
 #### Inference with model fitted on simulated data
 
-The model does a poor job at recovering species-level parameters.
+The model does a fair job at recovering population-level parameters.
 
 ```{r inference sim data}
+#| eval: false
+#| echo: false
+#| 
 species_intercept <- c(coefs["(Intercept)", "Estimate"], sapply(2:nspecies, function(sp){coefs["(Intercept)", "Estimate"] + coefs[paste0("species", sp), "Estimate"]}))
 species_intercept_sd <- c(coefs["(Intercept)", "Std. Error"], sapply(2:nspecies, function(sp){coefs[paste0("species", sp), "Std. Error"]}))
 
@@ -232,11 +251,38 @@ ggplot(data = slopes) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") + 
   geom_pointrange(aes(ymin = est-est.sd, ymax = est+est.sd, x = obs, y = est, color = species)) +
   theme_bw()
+
+```
+
+```{r inference pop sim data}
+
+em <- data.frame(emmeans::emmeans(nestlm, ~ species/population))
+pops_fit$int_fit <- em$emmean
+pops_fit$int_fit.lcl <- em$lower.CL
+pops_fit$int_fit.ucl <- em$upper.CL
+
+em <- data.frame(emmeans::emtrends(nestlm,  ~ species/population, var = 'year'))
+pops_fit$slp_fit <- em$year.trend
+pops_fit$slp_fit.lcl <- em$lower.CL
+pops_fit$slp_fit.ucl <- em$upper.CL
+
+ggplot(data = pops_fit) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") + 
+  geom_pointrange(aes(ymin = int_fit.lcl, ymax = int_fit.ucl, x = int, y = int_fit, color = as.character(species))) +
+  theme_bw() +
+  labs(x = 'Simulated intercepts', y = 'Estimated intercepts', colour = 'Species')
+
+ggplot(data = pops_fit) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") + 
+  geom_pointrange(aes(ymin = slp_fit.lcl, ymax = slp_fit.ucl, x = slp, y = slp_fit, color = as.character(species))) +
+  theme_bw() +
+  labs(x = 'Simulated slopes', y = 'Estimated slopes', colour = 'Species')
+
 ```
 
 ## Step 4: Fit model to empirical data
 
-```{r fitdata}
+```{r lookdata}
 #| eval: true
 
 lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
@@ -272,15 +318,15 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0,]) +
 
 ```
 
-```{r}
-#| eval: false
+```{r fitdata}
+#| eval: true
 
 runmodel <- TRUE
 
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,]
 lpi_subset_rsh$year <- lpi_subset_rsh$year-1980
 lpi_subset_rsh$logvalue <- log(lpi_subset_rsh$value)
-lpi_subset_rsh$ID <- as.character(lpi_subset_rsh$ID)
+lpi_subset_rsh$ID <- as>character(lpi_subset_rsh$ID)
 
 if(runmodel){
   nestlm <- lm(logvalue ~ genus_species/ID + year * genus_species/ID, data = lpi_subset_rsh)
