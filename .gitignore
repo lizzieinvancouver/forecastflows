@@ -23,3 +23,7 @@ analyses/.Rhistory
 /notposting
 
 /analyses/thermal_perf
+
+# Quarto Detritus
+*_files
+*_cache
