@@ -34,8 +34,6 @@ knitr:
 format-links: false
 ---
 
-*Hi Victor, it's Lizzie. I will just put my notes to you in italics. You really should remove them. In general, I suggest you focus on getting some code/plots and basic text done that you then share next week with everyone.*
-
 To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD2022_public.csv, that we use below). For more information on the LPI, check out the main text and www.livingplanetindex.org/. 
 
 **Note**: data from Jonathan comes from *LivingPlanetIndexDatabase_2025-02-01_19.19.51*.
@@ -67,16 +65,21 @@ lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 
 ```
 
-
 ## Step 2: Model building
 
 Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There is a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. That gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. Our resulting model might then be:
 
-y_i ~ normal(mu, sigma)
+$$\log(y_i) \sim \text{normal}(\mu_i, \sigma)$$
 
-mu = alpha[sp[pop]] + beta[sp[pop]]*year 
+$$\mu_i = \alpha_{\text{sp}[i],\text{pop}[i]} + \beta_{\text{sp}[i],\text{pop}[i]} * \text{year}_i$$
 
-*Need to finish the notation as I always have to look up the nesting notation.* 
+$$\alpha_{\text{sp}[i],\text{pop}[i]} \sim \text{normal}(\mu_{\text{pop}[i]}^\alpha, \sigma_{\text{pop}[i]}^\alpha) \\
+\mu_{\text{pop}[i]}^\alpha \sim \text{normal}(\mu_{\text{sp}[i]}^\alpha, \sigma_{\text{sp}[i]}^\alpha)$$
+
+$$\beta{\text{sp}[i],\text{pop}[i]} \sim \text{normal}(\mu_{\text{pop}[i]}^\beta, \sigma_{\text{pop}[i]}^\beta) \\
+\mu_{\text{pop}[i]}^\beta \sim \text{normal}(\mu_{\text{sp}[i]}^\beta, \sigma_{\text{sp}[i]}^\beta)$$
+
+*I'm not 100% sure with the notation here.*
 
 ## Step 3: Model evaluation 
 
@@ -86,19 +89,17 @@ Now we need to simulate data to test our model. As we start to think about how t
 
 Here we would likely feedback one to two steps. We could step back to Step 2 and consider adding a phylogeny or other structure from which we could then simulate data from, or we could step back to Step 1 and narrow the question (before potentially building it back up.) We believe the latter approach is often better as working on a small scale first can point out more fundamental problems versus starting big and then spending much longer to identify fundamental problems. 
 
-*Obviously we can charge forward with the full model if you want, I just thought this would be (a) easier for us, (b) way better to show as it's how you should do it and (c) related to a, I suspect JD can be more help, though any country with a good amount of data could work.* 
 So here we refine our question to:
 
-What is trend in mammal species population numbers in Africa, both overall and how does it vary acrosss species and populations? 
-**Note**: we will actually focus on African mammals with 10+ populations with 5+ observations per population.
+What is trend in mammal species population numbers in Africa, both overall and how does it vary across species and populations? 
 
 ### Simulating data
+
 Now we start to simulate!
-*Sorry, I did not have time to do this, but I would simulate from the above model or some other simple one you come up with. I would simulate really NICE data, not realistic data.* 
 
 ```{r sim data}
 
-nspecies <- 9
+nspecies <- 9 # no. of species
 npops_persp <- round(runif(nspecies, 2, 15)) # no. of different populations per species
 npops <- sum(npops_persp) # total no. of different populations
 nobs_perpop <- round(runif(npops, 10, 40)) # no. of different observations per population
@@ -114,16 +115,16 @@ for(np in nobs_perpop){
 }
 
 # nested intercepts
-mu_species_alpha <- rnorm(n = nspecies, mean = log(200), sd = log(5))
-sig_species_alpha <- rnorm(n = nspecies, mean = 5, sd = 5)
-mu_pop_alpha <- rnorm(n = npops, mean = mu_species_alpha[spid_perpop])
+mu_species_alpha <- rnorm(n = nspecies, mean = log(200), sd = log(5)) # simulate some species intercepts
+sig_species_alpha <- abs(rnorm(n = nspecies, mean = 0, sd = 2))
+mu_pop_alpha <- rnorm(n = npops, mean = mu_species_alpha[spid_perpop], sd = sig_species_alpha[spid_perpop]) # population intercepts, nested in species
 sig_pop_alpha <- abs(rnorm(n = npops))
 alpha <- rnorm(n = npops, mean = mu_pop_alpha, sd = sig_pop_alpha)
 
 # nested slopes
-mu_species_beta <- rnorm(n = nspecies, mean = 0, sd = 0.01)
-sig_species_beta <- rnorm(n = nspecies, mean = 0, sd = 0.05)
-mu_pop_beta <- rnorm(n = npops, mean = mu_species_beta[spid_perpop], sd = 0.05)
+mu_species_beta <- rnorm(n = nspecies, mean = 0, sd = 0.01) # simulate some species slopes
+sig_species_beta <- abs(rnorm(n = nspecies, mean = 0, sd = 0.05))
+mu_pop_beta <- rnorm(n = npops, mean = mu_species_beta[spid_perpop], sd = sig_species_beta[spid_perpop]) # population slopes, nested in species
 sig_pop_beta <- abs(rnorm(n = npops, mean = 0, sd = 0.01))
 beta <- rnorm(n = npops, mean = mu_pop_beta, sd = sig_pop_beta)
 
@@ -139,7 +140,7 @@ for(sp in 1:nspecies){
 pops_fit$int <- mu_pop_alpha
 pops_fit$slp <- mu_pop_beta
 
-sigma_obs <- abs(rnorm(1, mean = 0.25, sd = 0.25))
+sigma_obs <- abs(rnorm(1, mean = 0.25, sd = 0.25)) # common observational error
 
 y <- c()
 for(p in 1:npops){
@@ -233,7 +234,7 @@ The model does a fair job at recovering population-level parameters.
 ```{r inference sim data}
 #| eval: false
 #| echo: false
-#| 
+
 species_intercept <- c(coefs["(Intercept)", "Estimate"], sapply(2:nspecies, function(sp){coefs["(Intercept)", "Estimate"] + coefs[paste0("species", sp), "Estimate"]}))
 species_intercept_sd <- c(coefs["(Intercept)", "Std. Error"], sapply(2:nspecies, function(sp){coefs[paste0("species", sp), "Std. Error"]}))
 
@@ -287,7 +288,7 @@ ggplot(data = pops_fit) +
 
 lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
 
-lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Units", paste0("X", 1950:2020))]
+lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Country", "Units", paste0("X", 1950:2020))]
 lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
 
 lpi_subset_rsh <- 
@@ -308,48 +309,35 @@ ggplot(data = lpi_subset_rsh) +
   geom_line(aes(x = year, y = value, 
                 group = paste0(genus_species, ID),
                 color = genus_species)) +
-  theme_bw()
+  theme_bw() +
+  labs(x = 'Year', y = 'Observed counts')
 
 ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0,]) +
   geom_line(aes(x = year, y = log(value), 
                 group = paste0(genus_species, ID),
                 color = genus_species)) +
-  theme_bw()
+  theme_bw() +
+  labs(x = 'Year', y = 'Observed counts (log-scale)')
 
 ```
 
 ```{r fitdata}
 #| eval: true
 
-runmodel <- TRUE
+runmodel <- FALSE
 
-lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,]
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,] # poor way to avoid log(0)
 lpi_subset_rsh$year <- lpi_subset_rsh$year-1980
 lpi_subset_rsh$logvalue <- log(lpi_subset_rsh$value)
 lpi_subset_rsh$ID <- as.character(lpi_subset_rsh$ID)
 
 if(runmodel){
   nestlm <- lm(logvalue ~ genus_species/ID + year * genus_species/ID, data = lpi_subset_rsh)
-  
   saveRDS(nestlm, file = file.path(wd, "output/fit/nestmodel1.rds"))
 }else{
   nestlm <- readRDS(file.path(wd, "output/fit/nestmodel1.rds"))
 }
 
-
-coefs <- summary(nestlm)$coefficients
-
-species <- unique(lpi_subset_rsh$genus_species)[order(unique(lpi_subset_rsh$genus_species))]
-
-species_intercept <- c(coefs["(Intercept)", "Estimate"], sapply(species[2:length(species)], function(sp){coefs["(Intercept)", "Estimate"] + coefs[paste0("genus_species", sp), "Estimate"]}))
-species_intercept_sd <- c(coefs["(Intercept)", "Std. Error"], sapply(species[2:length(species)], function(sp){coefs[paste0("genus_species", sp), "Std. Error"]}))
-
-intercepts <- data.frame(est=species_intercept, est.sd=species_intercept_sd, species)
-
-species_slope <- c(coefs["year", "Estimate"], sapply(species[2:length(species)], function(sp){coefs["year", "Estimate"] + coefs[paste0("year:genus_species", sp), "Estimate"]}))
-species_slope_sd <- c(coefs["year", "Std. Error"], sapply(species[2:length(species)], function(sp){coefs[paste0("year:genus_species", sp), "Std. Error"]}))
-
-slopes <- data.frame(est=species_slope, est.sd=species_slope_sd, species)
 
 ```
 
@@ -365,34 +353,45 @@ Here, we might step back and adjust our model (re-doing Step 2-3 again), but in 
 ```{r}
 #| fig-height: 10
 #| fig-width: 12
-#| eval: false
+#| eval: true
 
 retrodata <- data.frame(obs = lpi_subset_rsh$logvalue, pred = predict(nestlm),
                         year = lpi_subset_rsh$year, units = lpi_subset_rsh$Units,
-                        species = lpi_subset_rsh$genus_species, id = lpi_subset_rsh$ID)
+                        species = lpi_subset_rsh$genus_species, id = lpi_subset_rsh$ID,
+                        country = lpi_subset_rsh$Country)
 
 ggplot(data = retrodata) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") +
   facet_wrap(~ species, scales = "free") +
   geom_point(aes(x = obs, y = pred, group = id, color = as.character(id)),
              size = 0.5) + 
-  theme_bw() + theme(legend.position = 'none')
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Observed counts (log-scale)', y = 'Estimated counts (log-scale)')
 
 
 ```
 
 ```{r}
 #| fig-height: 8
-#| fig-width: 8
-#| eval: false
+#| fig-width: 10
+#| eval: true
+
+ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
+  facet_wrap(~ country, scales = "free") +
+  geom_point(aes(x = year + 1980, y = obs, group = id, color = id),
+             size = 1) + 
+  geom_line(aes(x = year + 1980, y = pred, group = id, color = id)) +
+  theme_bw() + theme(legend.position = 'none') +
+  labs(y = 'Counts (log-scale)', x = 'Year')
 
 
 ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
-  facet_wrap(~ id, scales = "free") +
-  geom_point(aes(x = year, y = obs, group = id, color = id),
+  facet_wrap(~ country, scales = "free") +
+  geom_point(aes(x = year + 1980, y = exp(obs), group = id, color = id),
              size = 1) + 
-  geom_line(aes(x = year, y = pred, group = id, color = id)) +
-  theme_bw() + theme(legend.position = 'none')
+  geom_line(aes(x = year + 1980, y = exp(pred), group = id, color = id)) +
+  theme_bw() + theme(legend.position = 'none') +
+  labs(y = 'Counts', x = 'Year')
 
 ```
 
