@@ -34,6 +34,9 @@ knitr:
 format-links: false
 ---
 
+
+
+
 *Hi Victor, it's Lizzie. I will just put my notes to you in italics. You really should remove them. In general, I suggest you focus on getting some code/plots and basic text done that you then share next week with everyone.*
 
 To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD2022_public.csv, that we use below). For more information on the LPI, check out the main text and www.livingplanetindex.org/. 
@@ -47,6 +50,9 @@ To show our workflow in action, we examine a subset of the Living Planet Index (
 Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. We might start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we might realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
 
 What is global trend in vertebrate species population numbers, both overall and how does it vary acrosss species and populations? 
+
+
+
 
 ```{r}
 wd <- "/home/victor/projects/forecastflows/analyses"
@@ -66,6 +72,9 @@ lpi_subset_rsh <-
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 
 ```
+
+
+
 
 
 ## Step 2: Model building
@@ -95,6 +104,9 @@ What is trend in mammal species population numbers in Africa, both overall and h
 ### Simulating data
 Now we start to simulate!
 *Sorry, I did not have time to do this, but I would simulate from the above model or some other simple one you come up with. I would simulate really NICE data, not realistic data.* 
+
+
+
 
 ```{r sim data}
 
@@ -181,7 +193,13 @@ ggplot(data = datasim) +
 
 ```
 
+
+
+
 ### Fit model on simulated data!
+
+
+
 
 ```{r fit sim data}
 
@@ -190,7 +208,13 @@ coefs <- summary(nestlm)$coefficients
 
 ```
 
+
+
+
 #### Retrodictive check with model fitted on simulated data
+
+
+
 
 ```{r retro sim data}
 #| fig-height: 6
@@ -226,9 +250,15 @@ ggplot(data = retrodata) +
 
 ```
 
+
+
+
 #### Inference with model fitted on simulated data
 
 The model does a fair job at recovering population-level parameters.
+
+
+
 
 ```{r inference sim data}
 #| eval: false
@@ -280,7 +310,13 @@ ggplot(data = pops_fit) +
 
 ```
 
+
+
+
 ## Step 4: Fit model to empirical data
+
+
+
 
 ```{r lookdata}
 #| eval: true
@@ -353,6 +389,9 @@ slopes <- data.frame(est=species_slope, est.sd=species_slope_sd, species)
 
 ```
 
+
+
+
 Here we finally get to see how our model performs on the empirical data and are a step closer to answering our question, but we also start to notice some differences in our empirical data from our simulated data. In preparing our data for the model, we realize we have major gaps in sampling years and ... something else? 
 
 Here, we might step back and adjust our model (re-doing Step 2-3 again), but in this case we go ahead.
@@ -361,6 +400,9 @@ Here, we might step back and adjust our model (re-doing Step 2-3 again), but in 
 
 
 ## Step 5: Retrodictive check 
+
+
+
 
 ```{r}
 #| fig-height: 10
@@ -397,6 +439,9 @@ ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
 ```
 
 
+
+
+
 ## Feedbacks
 
 At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including questioning our assumption of one sigma for all populations and potentially our linearity assumption. We also may want to add predictors for the slope such as  ... We would do this, returning to Steps 2-5 likely several times until we have a model that is good enough for our purposes here. 
@@ -406,4 +451,5 @@ And then we would likely add in more countries and species....
 I might also add a short paragraph about moving away from linear regression and towards models for species abudance (via mixtures I think? I suspect the articles I posted for class have some good ideas) and thinking more about linking to demography models.
 
 And then we would realize we really don't have great data for this question and we would ... 
+
 
