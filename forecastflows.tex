@@ -144,11 +144,6 @@ Uncovering identifiability issues would likely force researchers to begin with a
 which is currently hidden within opaque `model building', making it easy to hide non-identifiability in the model. Through the workflow non-identifiable parts of models could be addressed by reformulating the mathematical structure of certain processes, or finding ways to apply additional constraints (e.g., narrower ranges for certain parameters or developing new hypotheses that target the appropriate level of complexity). The resulting process-based models would likely be simpler and thus more tractable for quantifying parameter uncertainty and propagating it through projections. 
 
 \todo[inline, size=\tiny]{For below: jdavies15april: might be better grouped together in concluding section. Reply: if we want to put this in the concluding section, we would need to talk also about the "opportunities to bridge statistical and process-based", rather than keeping it in the box? So, what should we put in the box?}
-Beyond improving the model building, the workflow also has the potential to shift how process-based models are perceived, particularly by those unfamiliar with them. The workflow could refocus attention on the research question, highlighting the ecological hypotheses that justify the use and design of the model. It would thus define a clear and limited context in which the model should apply, without always arguing about the necessity of adding more and more complexity.  % or something like : "rather than driving a constant push for increasing complexity" --- my idea is that people are always like : "oww, your model is nice, but you should add [whatever they are working on]" (classical example I heard few times: mycorrhiza! disease! pathogens!)... or "rather than constantly expanding models by adding ever more processes"? 
-Process-based model would once again be a way to answer a research question---whereas today, model simulations have increasingly become a subject of study on their own.
-Ideally, applying the workflow would help to move away from the traditional process-based model paradigm, where parameters are typically assigned fixed values without properly accounting for their uncertainty. Instead, it would guide a step-by-step model fitting, parameter estimation, and uncertainty quantification. 
-
-This shift would present a significant challenge---as it would likely reveal many issues related to non-identifiability in models and data limitations before achieving robust inference. But ultimately, it would prevent modelers from making biased inferences and unfounded assumptions beyond what the data can support. 
 
 
 % Box
@@ -208,17 +203,16 @@ Model development is the central step of the process-based workflow, typically r
 \vspace*{-3mm}
 {\begin{multicols}{2}
 \begin{minipage}[t]{\linewidth}
+	\vfill
 \includegraphics[width=\linewidth]{figures/iterativeworkflow_details}
-    
+\vfill
 % \vspace{-0.5cm}\captionsetup{font=footnotesize}\captionof{figure}{Caption}\label{fig:trends}
-\vspace*{1mm}
+\vspace*{3mm}
 \end{minipage}
 
 \columnbreak
 \vspace*{1mm}
-Blabla... \\
-% We say here briefly how great the new approach is or something.
-A universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge. And it would also be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community, potentially improving trend estimations.
+A universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge. It would be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community, potentially improving trend estimations. For both trend estimation and forecasting, the workflow would refocus attention on the research question, highlighting the ecological hypotheses that justify the use and design of the model.
 
 \end{multicols}}
 
@@ -247,9 +241,17 @@ Those focused on learning complex statistical models may find many others in the
 
 In a world where machine learning is rapidly advancing, there is no point of sticking to traditional methods if no changes are made. Machine learning will likely surpass process-based models if the latter lack a robust estimation of their parameters and fall in a complexity trap, at the cost of their interpretability. Similarly, engaging in statistical trend analysis, especially when the focus is on methodological controversies (due to the lack of an iterative workflow) rather than on a robust mechanistic foundation, offers no clear advantage over machine learning. % jdavies15april: nothing intrinsically bad about ML, but sometimes the goal is just to understand the system, not make predictions or forecasts.
 
+Beyond improving the model building, the workflow also has the potential to shift how process-based models are perceived, particularly by those unfamiliar with them.
+Process-based model would once again be a way to answer a research question---whereas today, model simulations have increasingly become a subject of study on their own.
+Ideally, applying the workflow would help to move away from the traditional process-based model paradigm, where parameters are typically assigned fixed values without properly accounting for their uncertainty. Instead, it would guide a step-by-step model fitting, parameter estimation, and uncertainty quantification. It would thus define a clear and limited context in which the model should apply, without always arguing about the necessity of adding more and more complexity. 
+
 % jdavies15april: This could be the Concluding section highlighting the general advances provided by adopting your framework (and perhaps a better place for text currently at end of section 3.2).
 Today model development in ecology is rarely transparent, which limits how easily the research community can understand models, and thus identify potential issues. Instead of broad inclusive conversations about how to improve models to advance our ecological understanding, a significant portion of scientific debate today has become lost in methodological considerations. However, we believe our workflow provides a tractable step to fixing this. By focusing on model development more tightly tied to ecological expertise, we argue this workflow should broaden the community that contributes to model development. It may also help resolve apparent conflicts by identifying where divergences in model predictions emerge, whether from differences in assumptions, model structures, or other aspects of the modeling process.
 As ecologists are increasingly expanding their computational toolkits, many field, and lab, and other forms of `empirical' ecologists have the basic tools to follow this workflow to build models that better represent their ecological domains of interest, and---most importantly---to interrogate those models.
+
+This shift would present a significant challenge---as it would likely reveal many issues related to non-identifiability in models and data limitations before achieving robust inference. But ultimately, it would prevent modelers from making biased inferences and unfounded assumptions beyond what the data can support.
+
+
 
 \clearpage
 \bibliography{forecastflows}
