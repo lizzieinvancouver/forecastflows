@@ -197,14 +197,14 @@ coefs <- summary(nestlm)$coefficients
 
 #### Checking model fitted on simulated data
 
-Our first goal with simulated data is a simple check of our code (both the model and simulated data code), given a high enough sample size relative to our effect sizes and error, the model should return our paramaters. So our first step is to check this. 
+Our first goal with simulated data is a simple check of our code (both the model code and simulated data code), given a high enough sample size relative to our effect sizes and error, the model should return our paramaters. So our first step is to check this. 
 
-First, we start with the parameters, which include an overall estimate of the trend across species (and thus would address our question):
+First, we start with the parameters, which include an overall estimate of the trend across species (this parameter would address our question that we decided on above):
 
 ```{r inference sim data params}
 ```
 
-We find the model does a fair job at recovering population-level parameters (hyperparameters).
+Now we check additional parameters. We find the model does a fair job at recovering population-level parameters (aka hyperparameters).
 
 ```{r inference sim data hyperparams}
 #| eval: false
@@ -258,7 +258,7 @@ ggplot(data = pops_fit) +
 
 What if the model did not do a good job at recovering our parameters? Then we should likely adjust our sample size up and/or our error lower to make sure it is can (as a basic code test). 
 
-But what if the model can recover parameters only at sample sizes much higher than our data (or at error sizes much lower than our data)? Then we would need to take this important information forward in our analysis and be careful in how we intepret estimates from our model fit to empirical data (as we have a hint at this stage that getting robust estimates from our data and model together may be difficult). 
+But what if the model can recover parameters only at sample sizes much higher than our data (or at error sizes much lower than our data)? Then we would need to take this important information forward in our analysis and be careful in how we intepret estimates from our model fit to empirical data (as we have a hint at this stage that getting robust estimates from our data and model together may be difficult, but we do not know the actual values of our parameters -- including error and variance parameters -- from our empirical data so we cannot be sure of whether we may have these issues yet). 
 
 For now, we also take a look at how model fits look against the simulated data:
 
@@ -301,6 +301,8 @@ These look pretty good, so we move onto the next step.
 
 ## Step 4: Fit model to empirical data
 
+Now that we have designed our question, built our model for it, and tested our model on simulated data, we can fit the model to our empirical data. We start by some basic clean-up of the dataframe so we have years in one column. 
+
 ```{r lookdata}
 #| eval: true
 
@@ -316,7 +318,7 @@ lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 lpi_subset_rsh$value <- as.numeric(lpi_subset_rsh$value)
 ```
 
-The values in the database are not necessarily in the same unit, so I imagine we need to take a decision here..?
+The values in the database are not necessarily in the same units, so we subset to units related to absolute population sizes, which is what we have mostly been thinking of (some units are in density and we would need to build our model to incorporate those, but here we start first with a simpler model and can build up later). We take a quick look at the data to make sure it looks reasonable based on our domaine knowledge. 
 
 ```{r units}
 units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)",
@@ -342,6 +344,8 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0,]) +
   labs(x = 'Year', y = 'Observed counts (log-scale)')
 
 ```
+
+Now, we make a few final adjustments and fit the model:
 
 ```{r fitdata}
 #| eval: true
@@ -379,9 +383,13 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0 & lpi_subset_rsh$genus_sp
 
 Here, we might step back and adjust our model (re-doing Step 2-3 again), but in this case we go ahead.
 
-## Step 5: Retrodictive check 
+## Step 5: Retrodictive and related checks
 
-Now we use our fitted model parameters to generate predictions, and compare them to observations.
+Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data above, but differs in two major ways: (1) we simulate from the paramaters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
+
+Here we start by examining how well predictions from the mean estimated values from the model compare to the observed data; this is similar to many plots where we simply want to see how well the model seems to predict the data. 
+
+To do this, we start by extracting the model parameter estimates:
 
 ```{r}
 #| fig-height: 10
@@ -403,8 +411,7 @@ ggplot(data = retrodata) +
 
 
 ```
-
-We might examine species separately, e.g. here the African bush elephant.
+ADD HERE (and adjust code above): Something about what the overall trends appears to be, but that to see if that might be a good estimate we need to check how the model predicts the data on finer scales. So we start by examining some species separately, e.g. here the African bush elephant:
 
 ```{r}
 #| fig-height: 7
@@ -430,7 +437,7 @@ ggplot(data = retrodata[retrodata$species == "Loxodonta africana", ]) +
 
 ```
 
-We can focus on populations in South Africa.
+Focusing on populations in South Africa, we see some places where the linear model apears well (ID 7673), but also two other populations where it does not appear as a very good fit. 
 
 ```{r}
 #| fig-height: 3
@@ -468,9 +475,9 @@ ggplot(data = retrodata[retrodata$species == "Loxodonta africana" & retrodata$co
 
 ```
 
-The three populations are measured in the same units, but likely represent different spatial scales (ranging from a few hundred individuals to more than 10000).
+The three populations are measured in the same units, but are very different in their sizses (ranging from a few hundred individuals to more than 10000), thus they likely represent populations measured across different spatial scales.
 
-The same holds for other species and other countries, e.g. the blue wildebeest in Tanzania.
+The same holds for other species and other countries, e.g. the blue wildebeest in Tanzania:
 
 ```{r}
 #| fig-height: 5
@@ -489,13 +496,11 @@ ggplot(data = retrodata[retrodata$species == "Connochaetes taurinus" & retrodata
   labs(y = 'Counts', x = 'Year', color = 'Units')
 
 ```
-The four populations are also measured in the same units (I guess?!), but represents different scales (so the blue one is likely a population, while the others represent region/country level?).
+The four populations are also measured in the same basic units, but represent likely represent very different populations, spanning ones in small parks that cannot migrate to the large migrating herds (e.g., Serengeti Masai-Mara), though gathering additional metadata to fully check this would be another important component to add to our workflow for these data. 
 
 ## Feedbacks
 
-At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including questioning our assumption of one sigma for all populations and potentially our linearity assumption. 
-One possibility would be to move to a non-linear regression, and use a more flexible model
-Quick example for one of the wildbeest dataset in Tanzania:
+At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one sigma for all populations (CHECK HERE: do we really use one sigma for all populations?) and potentially our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a Gompertz model for the wildbeest dataset in Tanzania:
 
 ```{r}
 #| fig-height: 2.5
@@ -520,9 +525,9 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]) +
 
 ```
 
-We also may want to add predictors for the slope such as  ... We would do this, returning to Steps 2-5 likely several times until we have a model that is good enough for our purposes here. 
+We also have seen variability in population trends within species (e.g., two apparently increasing populations and two apparently decreasing populations in Tanzania), so we would want to think a lot more about how we scale up from population to species to capture this variation in a way that is most useful to our question. Here we might realize we want to try to understand the drivers of this variability -- for this we would need to return to Step 1 and reformulate our question, then go through the workflow again, likely adding in potential predictors such as some metric of conservation efforts for that species and or population (e.g., stopping the Ivory trade for elephants, metrics of poaching in different parks) and possibly also country, which may capture differences in efforts related to conservation that are not yet measured. We would do this, returning to Steps 2-5 likely several times until we have a model that is good enough for our purposes here. And then we would likely add in more countries and species.
 
-And then we would likely add in more countries and species.... 
+Alternatively, we may feel this model is good enough for our question and think about how to robustly add in the species and geography we originally excluded. 
 
 I might also add a short paragraph about moving away from linear regression and towards models for species abudance (via mixtures I think? I suspect the articles I posted for class have some good ideas) and thinking more about linking to demography models.
 
