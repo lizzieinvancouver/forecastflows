@@ -34,17 +34,15 @@ knitr:
 format-links: false
 ---
 
-To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD2022_public.csv, that we use below). For more information on the LPI, check out the main text and www.livingplanetindex.org/. 
+To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD2022_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out: www.livingplanetindex.org/. 
 
 **Note**: data from Jonathan comes from *LivingPlanetIndexDatabase_2025-02-01_19.19.51*.
 
 ## Step 1: Research question
 
-*I started this, but it would be perfect for JD to fix/add to, so I did not finish it. (As mentioned above, I suggest you focus on getting some code/plots and basic text done that you then share next week with everyone.)*
+Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
 
-Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. We might start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we might realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
-
-What is global trend in vertebrate species population numbers, both overall and how does it vary acrosss species and populations? 
+What is global trend over time in vertebrate species population numbers, both overall and how does it vary acrosss species and populations? 
 
 ```{r}
 wd <- "/home/victor/projects/forecastflows/analyses"
@@ -67,7 +65,9 @@ lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 
 ## Step 2: Model building
 
-Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There is a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. That gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. Our resulting model might then be:
+Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There is a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. 
+
+Using a simple linear gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. We also need to make sure our model yields one global estimate, so for this we decide to model species trends over time as part of larger distribution. Our resulting model would then be:
 
 $$\log(y_i) \sim \text{normal}(\mu_i, \sigma)$$
 
@@ -83,19 +83,21 @@ $$\beta{\text{sp}[i],\text{pop}[i]} \sim \text{normal}(\mu_{\text{pop}[i]}^\beta
 
 ## Step 3: Model evaluation 
 
-Now we need to simulate data to test our model. As we start to think about how to do this, we may become overwhelmed with the scale of the question we started with. We likely would not feel immediately sure how to simulate for all different vertebrate species. 
+Now we need to simulate data to test our model. As we start to think about how to do this, we may become overwhelmed with the scale of the question we started with. We likely would not feel immediately sure how to simulate for all different vertebrate species. For example, what are reasonable starting population sizes (intercepts) for different groups? As we start to answer this we likely would realize different clades should have different starting population sizes. We could thus try to build in increasing complexity immediately, but then we will likely struggle to see how our model is performing at the scales we care about -- for each population in each species. It is almost always better to scale back the question (and potentially dataset) when confronted with these sorts of problems. 
 
 ### Stepping backward...
 
-Here we would likely feedback one to two steps. We could step back to Step 2 and consider adding a phylogeny or other structure from which we could then simulate data from, or we could step back to Step 1 and narrow the question (before potentially building it back up.) We believe the latter approach is often better as working on a small scale first can point out more fundamental problems versus starting big and then spending much longer to identify fundamental problems. 
+Here we would likely feedback (step back) one to two steps. We could step back to Step 2 and consider adding a phylogeny or other structure from which we could then simulate data from, or we could step back to Step 1 and narrow the question (before potentially building it back up.) As mentioned above, we believe the latter approach is usually better as working on a small scale first can point out more fundamental problems versus starting big and then spending much longer to identify fundamental problems (or potentially missing them). 
 
 So here we refine our question to:
 
-What is trend in mammal species population numbers in Africa, both overall and how does it vary across species and populations? 
+What is trend in mammal species population numbers in southern Africa, both overall and how does it vary across species and populations? 
+
+We chose this because mammals are a well studied group compared to other clades/groups in the dataset, so we will have a better idea of how to simulate data, and whether our model makes sense. 
 
 ### Simulating data
 
-Now we start to simulate!
+Now we start to simulate! We follow the mathematical model we built above and simulate data from it. 
 
 ```{r sim data}
 
@@ -182,7 +184,9 @@ ggplot(data = datasim) +
 
 ```
 
-### Fit model on simulated data!
+### Fit and check model on simulated data!
+
+Now we code the model from our mathematical notation (above) and fit it to our simulated data (also built from our mathematical model). 
 
 ```{r fit sim data}
 
@@ -191,47 +195,18 @@ coefs <- summary(nestlm)$coefficients
 
 ```
 
-#### Retrodictive check with model fitted on simulated data
+#### Checking model fitted on simulated data
 
-```{r retro sim data}
-#| fig-height: 6
-#| fig-width: 8
+Our first goal with simulated data is a simple check of our code (both the model and simulated data code), given a high enough sample size relative to our effect sizes and error, the model should return our paramaters. So our first step is to check this. 
 
-retrodata <- data.frame(obs = datasim$logy, pred = predict(nestlm),
-                        year = datasim$year,
-                        species = datasim$species, id = datasim$population)
+First, we start with the parameters, which include an overall estimate of the trend across species (and thus would address our question):
 
-ggplot(data = retrodata) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") +
-  facet_wrap(~ paste0("Species ", species), scales = "free") +
-  geom_point(aes(x = obs, y = pred, group = id, color = as.character(id)),
-             size = 0.5) + 
-  theme_bw() + theme(legend.position = 'none') +
-  labs(x = 'Simulated counts (log-scale)', y = 'Estimated counts (log-scale)')
-
-ggplot(data = retrodata) +
-  facet_wrap(~ paste0("Species ", species), scales = "free") +
-  geom_point(aes(x = year, y = obs, group = id, color = as.character(id)),
-             size = 1) + 
-  geom_line(aes(x = year, y = pred, group = id, color = as.character(id))) +
-  theme_bw() + theme(legend.position = 'none') +
-  labs(x = 'Year', y = 'Counts (log-scale)')
-  
-ggplot(data = retrodata) +
-  facet_wrap(~ paste0("Species ", species), scales = "free") +
-  geom_point(aes(x = year, y = exp(obs), group = id, color = as.character(id)),
-             size = 1) + 
-  geom_line(aes(x = year, y = exp(pred), group = id, color = as.character(id))) +
-  theme_bw() + theme(legend.position = 'none') +
-   labs(x = 'Year', y = 'Counts')
-
+```{r inference sim data params}
 ```
 
-#### Inference with model fitted on simulated data
+We find the model does a fair job at recovering population-level parameters (hyperparameters).
 
-The model does a fair job at recovering population-level parameters.
-
-```{r inference sim data}
+```{r inference sim data hyperparams}
 #| eval: false
 #| echo: false
 
@@ -280,6 +255,49 @@ ggplot(data = pops_fit) +
   labs(x = 'Simulated slopes', y = 'Estimated slopes', colour = 'Species')
 
 ```
+
+What if the model did not do a good job at recovering our parameters? Then we should likely adjust our sample size up and/or our error lower to make sure it is can (as a basic code test). 
+
+But what if the model can recover parameters only at sample sizes much higher than our data (or at error sizes much lower than our data)? Then we would need to take this important information forward in our analysis and be careful in how we intepret estimates from our model fit to empirical data (as we have a hint at this stage that getting robust estimates from our data and model together may be difficult). 
+
+For now, we also take a look at how model fits look against the simulated data:
+
+```{r retro sim data}
+#| fig-height: 6
+#| fig-width: 8
+
+retrodata <- data.frame(obs = datasim$logy, pred = predict(nestlm),
+                        year = datasim$year,
+                        species = datasim$species, id = datasim$population)
+
+ggplot(data = retrodata) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey") +
+  facet_wrap(~ paste0("Species ", species), scales = "free") +
+  geom_point(aes(x = obs, y = pred, group = id, color = as.character(id)),
+             size = 0.5) + 
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Simulated counts (log-scale)', y = 'Estimated counts (log-scale)')
+
+ggplot(data = retrodata) +
+  facet_wrap(~ paste0("Species ", species), scales = "free") +
+  geom_point(aes(x = year, y = obs, group = id, color = as.character(id)),
+             size = 1) + 
+  geom_line(aes(x = year, y = pred, group = id, color = as.character(id))) +
+  theme_bw() + theme(legend.position = 'none') +
+  labs(x = 'Year', y = 'Counts (log-scale)')
+  
+ggplot(data = retrodata) +
+  facet_wrap(~ paste0("Species ", species), scales = "free") +
+  geom_point(aes(x = year, y = exp(obs), group = id, color = as.character(id)),
+             size = 1) + 
+  geom_line(aes(x = year, y = exp(pred), group = id, color = as.character(id))) +
+  theme_bw() + theme(legend.position = 'none') +
+   labs(x = 'Year', y = 'Counts')
+
+```
+
+These look pretty good, so we move onto the next step. 
+
 
 ## Step 4: Fit model to empirical data
 
