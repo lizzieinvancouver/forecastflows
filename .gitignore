@@ -22,7 +22,7 @@ analyses/.Rhistory
 *.DS_Store
 /notposting
 
-/analyses/thermal_perf
+/analyses/archive
 
 # Quarto Detritus
 *_files
