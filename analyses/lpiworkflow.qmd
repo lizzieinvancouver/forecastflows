@@ -42,7 +42,7 @@ To show our workflow in action, we examine a subset of the Living Planet Index (
 
 Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
 
-What is global trend over time in vertebrate species population numbers, both overall and how does it vary acrosss species and populations? 
+What is global trend over time in vertebrate species population numbers, both overall and how does it vary across species and populations? 
 
 ```{r}
 wd <- "/home/victor/projects/forecastflows/analyses"
@@ -52,15 +52,7 @@ set.seed(20012029)
 library(rstan)
 library(ggplot2)
 
-lpi_subset <- read.table(file.path(wd, "jdavies/African_mammals.txt"))
-
-lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Units", paste0("X", 1950:2020))]
-lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
-
-lpi_subset_rsh <- 
-  reshape(lpi_subset, direction = "long", idvar = "ID",
-          varying =  paste0("X", 1950:2020), v.names = c("value"), timevar = "year", times = 1950:2020)
-lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
+lpi_data <- read.csv(file.path(wd, "input", "LPD_2024_public.csv"), header=T)
 
 ```
 
@@ -95,6 +87,29 @@ So here we refine our question to:
 What is trend in mammal species population numbers in southern Africa, both overall and how does it vary across species and populations? 
 
 We chose this because mammals are a well studied group compared to other clades/groups in the dataset, so we will have a better idea of how to simulate data, and whether our model makes sense. 
+
+```{r}
+
+lpi_subset <-subset(lpi_data, Region == "Africa" & Class == "Mammalia" & Included.in.LPR2024 == 1 )
+
+# subset 5+ counts
+obs.cnt<-NULL
+for (n in 1:dim(lpi_subset)[1]){
+  obs.cnt[n]<-sum(lpi_subset[n, 31:101]!="NULL")
+}
+lpi_subset<-lpi_subset[obs.cnt>4,]
+
+# subset species 10+ populations
+sp <- unique(lpi_subset$Binomial)
+sp.cnt<-NULL
+for(x in 1:length(sp)){
+  Af.tmp<-subset(lpi_subset, Binomial == sp[x])
+  sp.cnt[x]<-dim(Af.tmp)[1]
+}
+keep.sp<-sp[sp.cnt>9]
+lpi_subset<-lpi_subset[lpi_subset$Binomial %in% keep.sp,]
+
+```
 
 ### Simulating data
 
@@ -221,7 +236,7 @@ if(runmodel){
 
 Our first goal with simulated data is a simple check of our code (both the model code and simulated data code), given a high enough sample size relative to our effect sizes and error, the model should return our parameters. So our first step is to check this. 
 
-First, we start with the parameters, which include an overall estimate of the trend across species (this parameter would address our question that we decided on above):
+First, we start with the parameters, which include an overall estimate of the trend across species (this parameter would address our question that we decided on above). The red dashed line represents the true simulated value:
 
 ```{r inference sim data params}
 #| echo: false
@@ -332,8 +347,6 @@ Now that we have designed our question, built our model for it, and tested our m
 
 ```{r lookdata}
 #| eval: true
-
-lpi_subset <- read.table("/home/victor/projects/forecastflows/analyses/jdavies/African_mammals.txt")
 
 lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Country", "Units", paste0("X", 1950:2020))]
 lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
@@ -623,7 +636,7 @@ The four populations are also measured in the same basic units, but represent li
 
 ## Feedbacks
 
-At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one sigma for all populations (CHECK HERE: do we really use one sigma for all populations?), how we model population trends (e.g., there are many ways to model abundance) and (relatedly) our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a logistic model for one wildbeest population in Tanzania:
+At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one observational error $\sigma$ for all populations, how we model population trends (e.g., there are many ways to model abundance) and (relatedly) our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a logistic model for one wildbeest population in Tanzania:
 
 ```{r}
 #| fig-height: 2.5
@@ -644,7 +657,6 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]) +
             linewidth = 0.5, data = logisfit, linetype = 'dashed') +
   theme_bw() + 
   labs(y = 'Counts', x = 'Year')
-
 
 ```
 
