@@ -8,6 +8,7 @@
 \usepackage{tcolorbox}
 \usepackage{caption}
 \usepackage{todonotes}
+\usepackage[font=sf]{caption}
 
 \bibliographystyle{besjournals}
 
@@ -30,9 +31,9 @@ Concerns about increasing biodiversity loss and climate change have led to great
 
 
 % jdavies15april: I feel this could be a critical step somehow - sharing simulations could allow cross-validation between models or perhaps cross-calibration ...
-These problems stem in part from continuing gaps between statistical workflows---where the data processing and model development are often addressed separately from the ecological question and aim---and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational the opportunity to close this gap has never been greater. We outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights for both trend estimation and forecasting.
+% These problems stem in part from continuing gaps between statistical workflows---where the data processing and model development are often addressed separately from the ecological question and aim---and scientific workflows, where all steps are integrated. Yet, as ecologists become increasingly computational the opportunity to close this gap has never been greater. We outline how increased data simulation at multiple steps in the scientific workflow could revolutionize our understanding of ecological systems, yielding new insights for both trend estimation and forecasting.
 %Combining these changes with more open model and data sharing---and developing new efforts to race the same data---could be transformative for ecological forecasting. 
-A shift toward universal training in a more robust model building could bridge the gap between process-based and statistical approaches and be transformative for ecological modeling.
+%A shift toward universal training in a more robust model building could bridge the gap between process-based and statistical approaches and be transformative for ecological modeling.
 \end{abstract}
 
 {\noindent \bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
@@ -40,7 +41,7 @@ A shift toward universal training in a more robust model building could bridge t
 
 \section{Introduction}
 
-Anthropogenic drivers are reshaping natural systems \citep{Diaz2019}. Impacts are projected to increase in coming decades, as climate change accelerates biodiversity loss, altering ecosystem services and human well-being \citep{IPBES2019}. % jdavies15april: not sure what models you are referring to here, but perhaps look up models of 'mean species abundance'.
+Anthropogenic drivers are reshaping natural systems \citep{Diaz2019}. Impacts are projected to increase in coming decades, as climate change accelerates biodiversity loss, altering ecosystem services and human well-being \citep{IPBES2019}.
 Implementing sustainable policies to mitigate these impacts is thus a global priority, but designing the best policies requires estimating and understanding biodiversity and ecosystem trends to date alongside the skill to forecast future dynamics. % These requirements in turn have created a growing need for more global ecological data, and the types of models that can robustly handle such data. 
 
 Meeting these policy needs has led often to two separate paths: one focused on estimating trends from new global datasets, and another focused on forecasting from generally distinct datasets or mechanistic models based on less data. Newly available large-scale, long-term datasets have provided our first `global' estimates of biodiversity trends \citep[e.g.][]{loh2005living,Dornelas2018}, but these data---gathered opportunistically from multiple sources---are unbalanced and suffer from massive geographic, temporal and taxonomic biases. Models to date have failed to fully address these challenges and, perhaps because of these limitations, are rarely if ever used for forecasting.
@@ -55,17 +56,19 @@ Workflows that fully integrate all the steps required to build a model from an e
 Quantitative science relies on a model-based framework to confront hypothesis with data \citep{Chamberlin:1965cd}. In an idealized scientific method, we would formulate a research question and hypotheses, design an experiment accordingly, build a model, collect data, and use this data to inform our model and differentiate between hypotheses. This method underlies much of the recent pre-registration movement, where hypotheses and methodology are defined prior to data collection. %add cites for prereg?
 But this idealized method often does not apply to the reality of ecological research. Many important questions cannot be addressed through controlled experiments and replications. In such cases, we must rely on existing, heterogeneous datasets alongside uncertain and incomplete theory to provide a large-scale and long-term perspective \citep{Hilborn1997}. Indeed, most macroecological insights have emerged from exploring patterns in these datasets (exploratory data analysis).
 
-This reality should drive researchers to use more robust and coherent methods. But the current workflows combined with the challenges ecologists are facing---both in term of data complexity and societal needs---instead may lead to persistent problems. % jdavies15april: what challenges? forecasting from imperfect data or the urgent need to generate forecasts?
-Trend estimation has focused mostly on fitting a model to empirical data in a uni-directional way---without the checks and likely feedbacks that often highlight uncertainty and related limitations in the model and/or data (Fig. \ref{fig:modeldata}). For forecasting, researchers have focused on making predictions with increasingly complex mechanistic models, frequently obscuring the steps underlying model building and parameterization (Fig. \ref{fig:modeldata}). Researchers often calibrate the different parts of these models separately, and fix some parameter values based on experiments and expert knowledge, to avoid problems when trying to fit the model as a whole. % jdavies15april: is this particularly specific to process based models? 
-Addressing these problems while accounting for the realities of working with ecological data requires a more comprehensive workflow.
-% mention the disconnection between trends and forecasts?
-
 \begin{figure}[h]
 	\centering
 	\includegraphics{figures/modeldataspaces_rotation}
-	\caption{Here the caption could explain a bit more the pre-model pre-data to the post-model post-data...} 
+	\caption{Different trajectories through model-data space during model development. Ideally, this begins in the pre-model/pre-data quadrant, where the research question is defined. The next step moves to the post-model/pre-data quadrant, where a model is build---independently of the data. This is where we should spent most of the time, evaluating model behavior using simulated data. Once we are satisfied with our model, we can move to the post-model/post-data quadrant, where the model is fitted to real data. Then, we perform retrodictive checks to compare model predictions to observations, which likely give us some feedbacks to refine our model.} 
 	\label{fig:modeldata}
 \end{figure}
+
+This reality should drive researchers to use more robust and coherent methods. But the current workflows combined with the challenges ecologists are facing---both in term of data complexity and societal needs---instead may lead to persistent problems. % jdavies15april: what challenges? forecasting from imperfect data or the urgent need to generate forecasts?
+Trend estimation has focused mostly on fitting a model to empirical data in a uni-directional way---without the checks and likely feedbacks that often highlight uncertainty and related limitations in the model and/or data (Fig. \ref{fig:modeldata}a). For forecasting, researchers have focused on making predictions with increasingly complex mechanistic models, frequently obscuring the steps underlying model building and parameterization (Fig. \ref{fig:modeldata}b). Researchers often calibrate the different parts of these models separately, and fix some parameter values based on experiments and expert knowledge, to avoid problems when trying to fit the model as a whole. % jdavies15april: is this particularly specific to process based models? 
+Addressing these problems while accounting for the realities of working with ecological data requires a more comprehensive workflow.
+% mention the disconnection between trends and forecasts?
+
+
 % jdavies15april: Could the bottom right be where exploratory data analysis fits in, generating hypotheses that inform the research question?
 
 We argue a workflow that moves along the data-model space in a coherent sequence of steps % with repeated data simulation % jregetz16april: Maybe “data simulation” needs to appear in the figure? Or wait to mention simulation until referencing Fig 2? [FLAG: what do you think? I agree you should choose on of the two options]
