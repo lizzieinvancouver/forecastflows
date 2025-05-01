@@ -11,6 +11,10 @@
 \usepackage[font=sf]{caption}
 \usepackage{hyperref}
 
+\usepackage{lineno}
+\renewcommand\linenumberfont{\normalfont\tiny\color{gray}}
+
+
 \bibliographystyle{besjournals}
 
 \begin{document}
@@ -30,9 +34,7 @@ $^{*}$ \url{mailto:victor.vandermeersch@ubc.ca}\\
 % Already 5K! 
 
 \begin{abstract}
-Concerns about increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Datasets relevant for developing these models and forecasts have also increased in size and complexity, including in their geographical, temporal and phylogenetic dimensions. New research often suggests that models accounting for these complexities can yield more accurate trends and predictions. We argue, however, that the usual workflows for model fitting in ecology make it difficult to evaluate and compare most current models for several reasons. First, the research community is split between two disconnected paradigms: either using data to fit simple, trend-like models with one or few parameters, or developing forecasting models that include complex, mechanistic, and/or black box submodels only indirectly informed by data. Second, in both cases, models tend to be developed not only in isolation of one another, but also without a coherent framework for linking scientific questions and understanding to statistical and modeling decisions, throughout the entire modeling process. We propose a unified, principled workflow for end-to-end empirical model development that bridges the gap between process-based and statistical approaches, integrates sound statistical and scientific practices, and especially relies on data simulation to inform decisions at multiple steps in the process. We argue that this approach, coupled with a shift toward universal training, more open model sharing, and alignment on common datasets, could transform for ecological modeling.
-
-
+% Concerns about increasing biodiversity loss and climate change have led to greater demands for useful ecological models and forecasts. Datasets relevant for developing these models and forecasts have also increased in size and complexity, including in their geographical, temporal and phylogenetic dimensions. New research often suggests that models accounting for these complexities can yield more accurate trends and predictions. We argue, however, that the usual workflows for model fitting in ecology make it difficult to evaluate and compare most current models for several reasons. First, the research community is split between two disconnected paradigms: either using data to fit simple, trend-like models with one or few parameters, or developing forecasting models that include complex, mechanistic, and/or black box submodels only indirectly informed by data. Second, in both cases, models tend to be developed not only in isolation of one another, but also without a coherent framework for linking scientific questions and understanding to statistical and modeling decisions, throughout the entire modeling process. We propose a unified, principled workflow for end-to-end empirical model development that bridges the gap between process-based and statistical approaches, integrates sound statistical and scientific practices, and especially relies on data simulation to inform decisions at multiple steps in the process. We argue that this approach, coupled with a shift toward universal training, more open model sharing, and alignment on common datasets, could transform for ecological modeling.
 Concerns about increasing biodiversity loss and climate change have led to greater demands for useful ecological models. Datasets relevant for developing these models have also increased in size and complexity, including in their geographical, temporal and phylogenetic dimensions. New research often suggests that models accounting for these complexities can yield more accurate trends and predictions. We argue, however, that the usual workflows for model fitting in ecology make it difficult to evaluate and compare current models for several reasons. First, the research community is split between two disconnected paradigms: using data to fit simple, trend-like models with few parameters, or developing forecasting models that include complex, mechanistic submodels only indirectly informed by data. Second, in both cases, models tend to be developed not only in isolation of one another, but also without a coherent framework for linking scientific questions and understanding to statistical and modeling decisions, throughout the entire modeling process. We propose a unified, principled workflow for end-to-end empirical model development that bridges the gap between process-based and statistical approaches, integrates sound statistical and scientific practices, and especially relies on data simulation to inform decisions at multiple steps in the process. We argue that this approach, coupled with a shift toward universal training, more open model sharing, and alignment on common datasets, could transform for ecological modeling.
 
 
@@ -43,6 +45,7 @@ Concerns about increasing biodiversity loss and climate change have led to great
 \end{abstract}
 
 % {\noindent \bf Goal:} Increase awareness of how we can merge statistical and scientific workflows in ecology (especially forecasting) and what we would get out of it.
+\linenumbers
 
 \section{Introduction}
 
