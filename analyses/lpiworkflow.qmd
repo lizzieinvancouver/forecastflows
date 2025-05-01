@@ -1,6 +1,7 @@
+
 ---
 title: "A sample workflow"
-authors: "Lizzie, Victor"
+authors: "Victor, Lizzie"
 date: "April 2025"
 date-format: "MMMM YYYY"
 toc: true
@@ -34,11 +35,11 @@ knitr:
 format-links: false
 ---
 
-To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD_2024_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out: www.livingplanetindex.org/. 
+To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD_2024_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out [their website](www.livingplanetindex.org/). 
 
 ## Step 1: Research question
 
-Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
+Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however, might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also have a global estimate. So we might refine the question to:  
 
 ::: {.callout-tip appearance="simple" icon=false}
 
@@ -62,9 +63,9 @@ lpi_data <- read.csv(file.path(wd, "input", "LPD_2024_public.csv"), header=T)
 
 ## Step 2: Model building
 
-Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There is a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. 
+Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There are a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. 
 
-Using a simple linear gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. We also need to make sure our model yields one global estimate, so for this we decide to model species trends over time as part of larger distribution. Our resulting model would then be:
+Using a simple linear gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. We also need to make sure our model yields one global estimate; for this we decide to model species trends over time as part of larger distribution. Our resulting model would then be:
 
 $$\log(y_i) \sim \text{normal}(\mu_i, \sigma)$$
 
@@ -303,7 +304,7 @@ What if the model did not do a good job at recovering our parameters? Then we sh
 
 But what if the model can recover parameters only at sample sizes much higher than our data (or at error sizes much lower than our data)? Then we would need to take this important information forward in our analysis and be careful in how we interpret estimates from our model fit to empirical data (as we have a hint at this stage that getting robust estimates from our data and model together may be difficult, but we do not know the actual values of our parameters -- including error and variance parameters -- from our empirical data so we cannot be sure of whether we may have these issues yet). 
 
-For now, we also take a look at how model fits look against the simulated data (error bars and ribbon represent the 95% credible intervals):
+For now, we also take a look at how model fits look against the simulated data (error bars and ribbon represent the 95% uncertainty intervals):
 
 ```{r retro sim data}
 #| fig-height: 6
@@ -367,7 +368,7 @@ lpi_subset_rsh$value <- as.numeric(lpi_subset_rsh$value)
 
 ```
 
-The values in the database are not necessarily in the same units, so we subset to units related to absolute population sizes, which is what we have mostly been thinking of (some units are in density and we would need to build our model to incorporate those, but here we start first with a simpler model and can build up later). We take a quick look at the data to make sure it looks reasonable based on our domaine knowledge. 
+The values in the database are not necessarily in the same units, so we subset to units related to absolute population sizes, which is what we have mostly been thinking of (some units are in density and we would need to build our model to incorporate those, but here we start first with a simpler model and can build up later). We take a quick look at the data to make sure it looks reasonable based on our domain knowledge. 
 
 ```{r units}
 #| eval: true
@@ -404,7 +405,7 @@ Now, we make a few final adjustments and fit the model:
 
 runmodel <- FALSE
 
-lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,] # poor way to avoid log(0)
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,] # We now also find we have counts of 0, which is tricky for our approach (as we cannot evaluate log(0)), we would also flag this to return. As we iteratively improve the model, we would need to consider what processes generate these zeroes, and include them in our model.
 
 popids <- data.frame(ID = unique(lpi_subset_rsh$ID), popid_num = 1:length(unique(lpi_subset_rsh$ID)))
 spids <- data.frame(genus_species = unique(lpi_subset_rsh$genus_species), spid_num = 1:length(unique(lpi_subset_rsh$genus_species)))
@@ -451,11 +452,11 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0 & lpi_subset_rsh$genus_sp
 
 ```
 
-Here, we might step back and adjust our model (re-doing Step 2-3 again), but in this case we go ahead.
+Our model may accommodate this, as we have allowed different populations to have different intercepts (starting population sizes), but the scale of this variation is much larger than we simulated so we would again want to flag this and check how our model performs with these data.
 
 ## Step 5: Retrodictive and related checks
 
-Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
+Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data step above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
 
 Here we start by visually comparing the posterior predictive distribution (red line) to observed data (black dashed line):
 ```{r}
@@ -573,7 +574,7 @@ ggplot(data = retrodata_elephant) +
 
 ```
 
-Focusing on populations in South Africa, we see some places where the linear model appears well (ID 7673), but also two other populations where it does not appear as a very good fit. 
+Focusing on populations in South Africa, we see some places where the linear model appears to fit reasonably well (ID 7673), but also one population where it does not appear as a very good fit (ID 10010). 
 
 ```{r}
 #| fig-height: 3
@@ -640,7 +641,7 @@ The four populations are also measured in the same basic units, but represent li
 
 ## Feedbacks
 
-At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one observational error $\sigma$ for all populations, how we model population trends (e.g., there are many ways to model abundance) and (relatedly) our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a logistic model for one wildbeest population in Tanzania:
+At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one observational error $\sigma$ for all populations, how we model population trends (e.g., there are many ways to model abundance), and (relatedly) our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a logistic model for one wildbeest population in Tanzania:
 
 ```{r}
 #| fig-height: 2.5
@@ -664,13 +665,12 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]) +
 
 ```
 
-We also have seen variability in population trends within species (e.g., two apparently increasing populations and two apparently decreasing populations in Tanzania), so we would want to think a lot more about how we scale up from population to species to capture this variation in a way that is most useful to our question. For example, may want to think about adding country, which may capture differences in efforts related to conservation and thus predict trends (or we may have better metrics of what drives these trends, but given our global aim, we would need it for most/all populations) and we may want to think about how or if we partially pool species and populations within species (potentially using models other than a normal distribution for pooling). As we address these potential problems, we would likely begin to add in more countries, species, and populations. 
+We also have seen variability in population trends within species (e.g., two apparently increasing populations and two apparently decreasing populations in Tanzania), so we would want to think a lot more about how we scale up from population to species to capture this variation in a way that is most useful to our question. For example, may want to think about adding country, which may capture differences in efforts related to conservation and thus predict trends (or we may have better metrics of what drives these trends, but given our global aim, we would ideally need the predictor for most/all populations) and we may want to think about how or if we partially pool species and populations within species (potentially using models other than a normal distribution for pooling). As we address these potential problems, we would likely begin to add in more countries, species, and populations. 
 
-We expect scaling up to more countries, species and populations may cause us to think carefully about the data we have in hand versus the question we aimed to answer. While many recent papers treat the LPI data as (effectively) a well stratified and randomized sample or even a good census, the LPI data is clearly neither. Thus, models that try to deal with such uneven sampling and build in the more of the structure of data, would be more appropriate. For example, most models for election forecasts now include regularization via partial pooling, post-stratification and other methods designed to adjust for the fact that many polls are 'non-representative.' Such non-representative polls may be very similar to LPI data. Our model includes some regularization via partial pooling, but we may need much more of an observational model added to our population demography model to accommodate the uneven sampling. Estimates from such a model may be more uncertain, but likely also more correct given our combination of question and data. 
+We expect scaling up to more countries, species and populations may cause us to think carefully about the data we have in hand and our approach versus the question we aimed to answer. While many recent papers treat the LPI data as (effectively) a well stratified and randomized sample or even a good census, the LPI data is clearly neither. Thus, models that try to deal with such uneven sampling and build in more of the structure of data would be more appropriate. For example, most models for election forecasts now include regularization via partial pooling, post-stratification and other methods designed to adjust for the fact that many polls are 'non-representative.' Such non-representative polls may be very similar to LPI data. Our model includes some regularization via partial pooling, but we may need much more of an observational model added to our population demography model to accommodate the uneven sampling. Estimates from such a model may be more uncertain, but likely also more correct given our combination of question and data. 
 
 This may lead us to realize we really don't have great data for this question and we would then need to prioritize better data collection efforts if we want good estimates to answer this question. 
 
 ## The full process
 
-The small workflow we show here may seem like extra work to those who have used it, and it is compared to many ecological workflows in practice. We argue that the extra effort is worth it given the critical questions we are addressing, and also that the process becomes much quicker with practice. The first time may be slow, but the resulting model will be better for it (even if it is still arguably simple, as the one we show here is), but the following uses of this iterative workflow will go faster with likely improved models. 
-
+The small workflow we show here may seem like extra work to those who have not used it, and it is compared to many ecological workflows in practice. We argue that the extra effort is worth it given the critical questions we are addressing, and also that the process becomes much quicker with practice. The first time may be slow, but the resulting model will be better for it (even if it is still arguably simple, as the one we show here is), but the following uses of this iterative workflow will go faster and very likely yield improved models. 
