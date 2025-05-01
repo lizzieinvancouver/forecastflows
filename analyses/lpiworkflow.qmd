@@ -34,17 +34,21 @@ knitr:
 format-links: false
 ---
 
-To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD2022_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out: www.livingplanetindex.org/. 
-
-**Note**: data from Jonathan comes from *LivingPlanetIndexDatabase_2025-02-01_19.19.51*.
+To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD_2024_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out: www.livingplanetindex.org/. 
 
 ## Step 1: Research question
 
 Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also a global estimate. So we might refine the question to:  
 
-What is global trend over time in vertebrate species population numbers, both overall and how does it vary across species and populations? 
+::: {.callout-tip appearance="simple" icon=false}
+
+What is global trend over time in vertebrate species population numbers, both overall and how does it vary across species and populations?
+
+:::
+
 
 ```{r}
+
 wd <- "/home/victor/projects/forecastflows/analyses"
 
 set.seed(20012029)
@@ -84,7 +88,11 @@ Here we would likely feedback (step back) one to two steps. We could step back t
 
 So here we refine our question to:
 
-What is trend in mammal species population numbers in southern Africa, both overall and how does it vary across species and populations? 
+::: {.callout-tip appearance="simple" icon=false}
+
+What is trend in mammal species population numbers in southern Africa, both overall and how does it vary across species and populations?
+
+:::
 
 We chose this because mammals are a well studied group compared to other clades/groups in the dataset, so we will have a better idea of how to simulate data, and whether our model makes sense. 
 
@@ -295,7 +303,7 @@ What if the model did not do a good job at recovering our parameters? Then we sh
 
 But what if the model can recover parameters only at sample sizes much higher than our data (or at error sizes much lower than our data)? Then we would need to take this important information forward in our analysis and be careful in how we interpret estimates from our model fit to empirical data (as we have a hint at this stage that getting robust estimates from our data and model together may be difficult, but we do not know the actual values of our parameters -- including error and variance parameters -- from our empirical data so we cannot be sure of whether we may have these issues yet). 
 
-For now, we also take a look at how model fits look against the simulated data:
+For now, we also take a look at how model fits look against the simulated data (error bars and ribbon represent the 95% credible intervals):
 
 ```{r retro sim data}
 #| fig-height: 6
@@ -365,11 +373,7 @@ The values in the database are not necessarily in the same units, so we subset t
 #| eval: true
 #| layout-nrow: 2
 
-units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)",
-                   "Individual", "individuals", "Individuals", "Number of adults", "number of individuals",
-                   "Number of individuals", "Number of Individuals", "Number of rhinos", "numbers of indviduals",
-                   "population estimate", "Population estimate", "Population estimate (individuals)", 
-                   "Population estimates", "Total population size")
+units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)", "Individual", "individuals", "Individuals", "Number of adults", "number of individuals", "Number of individuals", "Number of Individuals", "Number of rhinos", "numbers of indviduals", "population estimate", "Population estimate", "Population estimate (individuals)", "Population estimates", "Total population size")
 
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$Units %in% units_to_keep,]
 
