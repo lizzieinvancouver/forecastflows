@@ -1,7 +1,10 @@
 
 ---
 title: "A sample workflow"
-authors: "Victor, Lizzie"
+author:   
+  - Victor
+  - Jonathan
+  - Lizzie
 date: "April 2025"
 date-format: "MMMM YYYY"
 toc: true
@@ -54,7 +57,7 @@ wd <- "/home/victor/projects/forecastflows/analyses"
 
 set.seed(20012029)
 
-library(rstan)
+suppressPackageStartupMessages(library(rstan))
 library(ggplot2)
 
 lpi_data <- read.csv(file.path(wd, "input", "LPD_2024_public.csv"), header=T)
@@ -268,7 +271,7 @@ ggplot() +
 
 ```
 
-Now we check additional parameters. We find the model does a fair job at recovering population-level parameters (aka hyperparameters).
+Now we check additional parameters. We find the model does a fair job at recovering population-level parameters.
 
 ```{r inference pop sim data}
 #| echo: false
@@ -506,40 +509,7 @@ ggplot(data = retrodata) +
 
 ```
 
-We may want to check what the overall and species trends appear to be:
-
-```{r}
-#| echo: false
-#| fig-height: 4
-#| fig-width: 5
-
-species_trends <- summ_fit[paste0("mu_beta_sp[",1:data$Nsp,"]"), c('X50.', 'X2.5.', 'X97.5.')]
-species_trends$spid_num <- 1:data$Nsp
-species_trends <- merge(species_trends, spids)
-
-ggplot() +
-  geom_pointrange(data = summ_fit["mu_beta1", c('X50.', 'X2.5.', 'X97.5.')],
-                  aes(xmin = X2.5., xmax = X97.5., x = X50., y = "Z"), size = 0.25) +
-  geom_text(data = summ_fit["mu_beta1", c('X50.', 'X2.5.', 'X97.5.')],
-                  aes(x = -0.045, y = "Z", label = "Overall"), size = 3) +
-  geom_pointrange(data = species_trends,
-                  aes(xmin = X2.5., xmax = X97.5., x = X50., y = genus_species, color = genus_species), 
-                  size = 0.25) +
-  scale_color_manual(values = hcl.colors(14, palette = "Dark2"),
-                     breaks = unique(lpi_subset_rsh$genus_species)[order(unique(lpi_subset_rsh$genus_species))]) +
-  lims(x = c(-0.1,0.1)) +
-  labs(x = "Trends", color = "Species") +
-  theme_bw() +
-  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-        panel.grid.minor.y = element_blank(), panel.grid.major.y = element_blank())
-
-
-
-  
-
-```
-
-To see if that might be a good estimate, we need to check how the model predicts the data on finer scales. So we start by examining some species separately, e.g. here the African bush elephant (each color within a country represents a different population):
+To evaluate our model more precisely, we need to check how the model predicts the data on finer scales. So we start by examining some species separately, e.g. here the African bush elephant (each color within a country represents a different population):
 
 ```{r}
 #| fig-height: 7
@@ -638,6 +608,39 @@ ggplot(data = retrodata_wildebeest) +
 
 ```
 The four populations are also measured in the same basic units, but represent likely represent very different populations, spanning ones in small parks that cannot migrate to the large migrating herds (e.g., Serengeti Masai-Mara), though gathering additional metadata to fully check this would be another important component to add to our workflow for these data. 
+
+## Inference
+
+Once we are confident with our model (which is not truly the case here), we can look at the parameter values and check what the overall and species trends appear to be:
+
+```{r}
+#| echo: false
+#| fig-height: 4
+#| fig-width: 5
+
+species_trends <- summ_fit[paste0("mu_beta_sp[",1:data$Nsp,"]"), c('X50.', 'X2.5.', 'X97.5.')]
+species_trends$spid_num <- 1:data$Nsp
+species_trends <- merge(species_trends, spids)
+
+ggplot() +
+  geom_pointrange(data = summ_fit["mu_beta1", c('X50.', 'X2.5.', 'X97.5.')],
+                  aes(xmin = X2.5., xmax = X97.5., x = X50., y = "Z"), size = 0.25) +
+  geom_text(data = summ_fit["mu_beta1", c('X50.', 'X2.5.', 'X97.5.')],
+                  aes(x = -0.045, y = "Z", label = "Overall"), size = 3) +
+  geom_pointrange(data = species_trends,
+                  aes(xmin = X2.5., xmax = X97.5., x = X50., y = genus_species, color = genus_species), 
+                  size = 0.25) +
+  scale_color_manual(values = hcl.colors(14, palette = "Dark2"),
+                     breaks = unique(lpi_subset_rsh$genus_species)[order(unique(lpi_subset_rsh$genus_species))]) +
+  scale_y_discrete(limits=rev) +
+  lims(x = c(-0.1,0.1)) +
+  labs(x = "Trends", color = "Species") +
+  theme_bw() +
+  theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        panel.grid.minor.y = element_blank(), panel.grid.major.y = element_blank())
+
+
+```
 
 ## Feedbacks
 
