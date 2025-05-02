@@ -89,6 +89,13 @@ The workflow encourages a focus on the full model, where any parameter (such as 
 
 Within such a workflow, forecasting emerges as a natural outcome: rather than being a final goal, it only involves jointly modeling new circumstances along with the original data. The adoption of the workflow in macroecological studies---where model building is often informed by patterns in the data---would also make the exploratory analysis more transparent (as an explicit preliminary step for entering the workflow) and would compel researchers to more clearly develop a research question before extensive model fitting. 
 
+A key feature of this workflow is the central role of data simulation, which introduces two feedback loops. The first feedback arises when we evaluate the model on simulated data.
+The failure of the model to recover known parameter values and handle the complexity of the simulated data should prompt reconsidering the model, or even reformulating the research question.
+Further, this step might reveal that some parameters are highly non-identifiable (meaning the parameter(s) cannot be uniquely estimated),
+flagging the need to change the model structure---before incorporating empirical observations. 
+The second feedback loop comes from the retrodictive check. 
+Discrepancies here may indicate a missing key driver, and suggest the current model is too simplistic. We can refine the model to integrate the missing process(es) (if we can identify them) and return to the start of the workflow. Insights from the retrodictive check can also lead us to introduce additional complexity when simulating fake data, such as phylogenetic structure or observational biases (e.g. unbalanced data). For example, if a researcher realizes their empirical data is geographically biased, then this bias should be built into the model and thus then into this data simulation step. This iterative evaluation of the model moves beyond a simple reliance on goodness-of-fit metrics. At each iteration, we are able to evaluate the model behavior, both with simulated and real data, taking into account our expert knowledge of the ecological processes. 
+
 \begin{figure}[h]
 	\centering
 	\vspace*{-0.1cm}
@@ -98,15 +105,6 @@ Within such a workflow, forecasting emerges as a natural outcome: rather than be
 	\vspace*{-0.5cm}
 	\label{fig:workflow}
 \end{figure}
-
-A key feature of this workflow is the central role of data simulation, which introduces two feedback loops. The first feedback arises when we evaluate the model on simulated data.
-The failure of the model to recover known parameter values and handle the complexity of the simulated data should prompt reconsidering the model, or even reformulating the research question.
-Further, this step might reveal that some parameters are highly non-identifiable (meaning the parameter(s) cannot be uniquely estimated),
-flagging the need to change the model structure---before incorporating empirical observations. 
-The second feedback loop comes from the retrodictive check. 
-Discrepancies here may indicate a missing key driver, and suggest the current model is too simplistic. We can refine the model to integrate the missing process(es) (if we can identify them) and return to the start of the workflow. Insights from the retrodictive check can also lead us to introduce additional complexity when simulating fake data, such as phylogenetic structure or observational biases (e.g. unbalanced data). For example, if a researcher realizes their empirical data is geographically biased, then this bias should be built into the model and thus then into this data simulation step. This iterative evaluation of the model moves beyond a simple reliance on goodness-of-fit metrics. At each iteration, we are able to evaluate the model behavior, both with simulated and real data, taking into account our expert knowledge of the ecological processes. 
-
-
 
 \section{The workflow in practice}
 

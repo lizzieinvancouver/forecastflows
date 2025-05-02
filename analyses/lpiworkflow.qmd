@@ -40,7 +40,7 @@ format-links: false
 
 To show our workflow in action, we examine a subset of the Living Planet Index (LPI, download at: https://www.livingplanetindex.org/data_portal. This download should include a csv file, here: LPD_2024_public.csv, that we use below). We discuss the LPI in the main text; for more information, check out [their website](www.livingplanetindex.org/). 
 
-## Step 1: Research question
+# Step 1: Research question
 
 Here we need to focus on exactly what question we are trying to answer, which will guide us in the next steps. This step is sometimes skipped over or moved through so quickly that the exact question is not clear, but is critical for developing a useful model. Many early papers on the LPI seem focused on something similar to: Are vertebrate species overall declining on average? And, if so, by how much? We, however, might want to have a question that more clearly allows any directionality, so we could start with: What is the global trend for biodiversity in vetebrate species? This is rather broad and might mean we should develop a model that will yield one global estimate. In thinking about this, we would likely realize we don't want just that, we actually want to understand the variation across different species and perhaps populations and also have a global estimate. So we might refine the question to:  
 
@@ -64,7 +64,7 @@ lpi_data <- read.csv(file.path(wd, "input", "LPD_2024_public.csv"), header=T)
 
 ```
 
-## Step 2: Model building
+# Step 2: Model building
 
 Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There are a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. 
 
@@ -82,11 +82,11 @@ $$\beta_{\text{pop}[\text{sp}]}  \sim \text{normal}(\mu_{\beta, \text{sp}} \ , \
 \mu_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_1} \ , \ \sigma_{\beta_1}) \\
 \sigma_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_2} \ , \ \sigma_{\beta_2}) $$
 
-## Step 3: Model evaluation 
+# Step 3: Model evaluation 
 
 Now we need to simulate data to test our model. As we start to think about how to do this, we may become overwhelmed with the scale of the question we started with. We likely would not feel immediately sure how to simulate for all different vertebrate species. For example, what are reasonable starting population sizes (intercepts) for different groups? As we start to answer this we likely would realize different clades should have different starting population sizes. We could thus try to build in increasing complexity immediately, but then we will likely struggle to see how our model is performing at the scales we care about -- for each population in each species. It is almost always better to scale back the question (and potentially dataset) when confronted with these sorts of problems. 
 
-### Stepping backward...
+## Stepping backward...
 
 Here we would likely feedback (step back) one to two steps. We could step back to Step 2 and consider adding a phylogeny or other structure from which we could then simulate data from, or we could step back to Step 1 and narrow the question (before potentially building it back up.) As mentioned above, we believe the latter approach is usually better as working on a small scale first can point out more fundamental problems versus starting big and then spending much longer to identify fundamental problems (or potentially missing them). 
 
@@ -102,7 +102,8 @@ We chose this because mammals are a well studied group compared to other clades/
 
 ```{r}
 
-lpi_subset <-subset(lpi_data, Region == "Africa" & Class == "Mammalia" & Included.in.LPR2024 == 1 )
+lpi_subset <-subset(lpi_data, Region == "Africa" & Class == "Mammalia" & 
+                      Included.in.LPR2024 == 1 )
 
 # subset 5+ counts
 obs.cnt<-NULL
@@ -123,11 +124,13 @@ lpi_subset<-lpi_subset[lpi_subset$Binomial %in% keep.sp,]
 
 ```
 
-### Simulating data
+## Simulating data
 
 Now we start to simulate! We follow the mathematical model we built above and simulate data from it. 
 
 ```{r sim data}
+#| fig-height: 4
+#| fig-width: 7
 
 nspecies <- 9 # no. of species
 npops_persp <- round(runif(nspecies, 2, 15)) # no. of different populations per species
@@ -150,8 +153,10 @@ sigma_alpha1 <-  log(50)/2.57
 mu_alpha_sp <- rnorm(n = nspecies, mean = mu_alpha1, sd = sigma_alpha1)
 mu_alpha2 <- log(20)
 sigma_alpha2 <- log(50)/2.57
-sig_species_alpha <- abs(rnorm(n = nspecies, mean = mu_alpha2, sd = sigma_alpha2))
-alpha_pop_sp <- rnorm(n = npops, mean = mu_alpha_sp[spid_perpop], sd = sig_species_alpha[spid_perpop]) 
+sig_species_alpha <- abs(rnorm(n = nspecies, mean = mu_alpha2, 
+                               sd = sigma_alpha2))
+alpha_pop_sp <- rnorm(n = npops, mean = mu_alpha_sp[spid_perpop], 
+                      sd = sig_species_alpha[spid_perpop]) 
 
 # nested slopes
 mu_beta1 <- 0.05
@@ -159,8 +164,10 @@ sigma_beta1 <- 0.25/2.57
 mu_beta_sp <- rnorm(n = nspecies, mean = mu_beta1, sd = sigma_beta1)
 mu_beta2 <- 0
 sigma_beta2 <- 0.05/2.57
-sig_species_beta <- abs(rnorm(n = nspecies, mean = mu_beta2, sd = sigma_beta2))
-beta_pop_sp <- rnorm(n = npops, mean = mu_beta_sp[spid_perpop], sd = sig_species_beta[spid_perpop]) 
+sig_species_beta <- abs(rnorm(n = nspecies, mean = mu_beta2, 
+                              sd = sigma_beta2))
+beta_pop_sp <- rnorm(n = npops, mean = mu_beta_sp[spid_perpop], 
+                     sd = sig_species_beta[spid_perpop]) 
 
 # save simulated intercepts and slopes
 pops_fit <- data.frame()
@@ -216,7 +223,7 @@ ggplot(data = datasim) +
 
 ```
 
-### Fit and check model on simulated data!
+## Fit and check model on simulated data!
 
 Now we code the model from our mathematical notation (above) and fit it to our simulated data (also built from our mathematical model). 
 
@@ -243,8 +250,6 @@ if(runmodel){
 }
 
 ```
-
-#### Checking model fitted on simulated data
 
 Our first goal with simulated data is a simple check of our code (both the model code and simulated data code), given a high enough sample size relative to our effect sizes and error, the model should return our parameters. So our first step is to check this. 
 
@@ -353,19 +358,21 @@ ggplot(data = retrodata) +
 
 These look pretty good, so we move onto the next step. 
 
-## Step 4: Fit model to empirical data
+# Step 4: Fit model to empirical data
 
 Now that we have designed our question, built our model for it, and tested our model on simulated data, we can fit the model to our empirical data. We start by some basic clean-up of the dataframe so we have years in one column. 
 
 ```{r lookdata}
 #| eval: true
 
-lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Country", "Units", paste0("X", 1950:2020))]
+lpi_subset <- lpi_subset[, c("ID", "Genus", "Species", "Country", "Units", 
+                             paste0("X", 1950:2020))]
 lpi_subset$genus_species <- paste(lpi_subset$Genus, lpi_subset$Species)
 
 lpi_subset_rsh <- 
   reshape(lpi_subset, direction = "long", idvar = "ID",
-          varying =  paste0("X", 1950:2020), v.names = c("value"), timevar = "year", times = 1950:2020)
+          varying =  paste0("X", 1950:2020), v.names = c("value"), 
+          timevar = "year", times = 1950:2020)
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != "NULL",]
 lpi_subset_rsh$value <- as.numeric(lpi_subset_rsh$value)
 
@@ -376,8 +383,15 @@ The values in the database are not necessarily in the same units, so we subset t
 ```{r units}
 #| eval: true
 #| layout-nrow: 2
+#| fig-height: 4
+#| fig-width: 7
 
-units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)", "Individual", "individuals", "Individuals", "Number of adults", "number of individuals", "Number of individuals", "Number of Individuals", "Number of rhinos", "numbers of indviduals", "population estimate", "Population estimate", "Population estimate (individuals)", "Population estimates", "Total population size")
+units_to_keep <- c("Estimate - entire population", "Estimate - entire population (August)", 
+                   "Individual", "individuals", "Individuals", "Number of adults", 
+                   "number of individuals", "Number of individuals", "Number of Individuals", 
+                   "Number of rhinos", "numbers of indviduals", "population estimate", 
+                   "Population estimate", "Population estimate (individuals)", 
+                   "Population estimates", "Total population size")
 
 lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$Units %in% units_to_keep,]
 
@@ -405,13 +419,21 @@ Now, we make a few final adjustments and fit the model:
 
 ```{r fitdata}
 #| eval: true
+#| fig-height: 4
+#| fig-width: 7
 
 runmodel <- FALSE
 
-lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,] # We now also find we have counts of 0, which is tricky for our approach (as we cannot evaluate log(0)), we would also flag this to return. As we iteratively improve the model, we would need to consider what processes generate these zeroes, and include them in our model.
+# We now also find we have counts of 0, which is tricky for our approach 
+#(as we cannot evaluate log(0)), we would also flag this to return. 
+# As we iteratively improve the model, we would need to consider what 
+# processes generate these zeroes, and include them in our model.
+lpi_subset_rsh <- lpi_subset_rsh[lpi_subset_rsh$value != 0,] 
 
-popids <- data.frame(ID = unique(lpi_subset_rsh$ID), popid_num = 1:length(unique(lpi_subset_rsh$ID)))
-spids <- data.frame(genus_species = unique(lpi_subset_rsh$genus_species), spid_num = 1:length(unique(lpi_subset_rsh$genus_species)))
+popids <- data.frame(ID = unique(lpi_subset_rsh$ID), 
+                     popid_num = 1:length(unique(lpi_subset_rsh$ID)))
+spids <- data.frame(genus_species = unique(lpi_subset_rsh$genus_species), 
+                    spid_num = 1:length(unique(lpi_subset_rsh$genus_species)))
 
 lpi_subset_rsh <- merge(lpi_subset_rsh, spids)
 lpi_subset_rsh <- merge(lpi_subset_rsh, popids)
@@ -457,14 +479,14 @@ ggplot(data = lpi_subset_rsh[lpi_subset_rsh$value != 0 & lpi_subset_rsh$genus_sp
 
 Our model may accommodate this, as we have allowed different populations to have different intercepts (starting population sizes), but the scale of this variation is much larger than we simulated so we would again want to flag this and check how our model performs with these data.
 
-## Step 5: Retrodictive and related checks
+# Step 5: Retrodictive and related checks
 
 Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data step above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
 
 Here we start by visually comparing the posterior predictive distribution (red line) to observed data (black dashed line):
 ```{r}
-#| fig-height: 5
-#| fig-width: 5
+#| fig-height: 3
+#| fig-width: 3
 #| echo: false
 
 names <- paste0('logy_pred[', 1:data$N, ']')
@@ -476,6 +498,29 @@ ggplot() +
   theme_bw() +
   labs(y = 'Density', x = 'Counts (log-scale)')
 
+
+```
+
+We can also look at some posterior replications separately:
+
+```{r}
+#| fig-height: 5
+#| fig-width: 5
+#| echo: false
+
+n <- sample(1:4000, 9)
+retrodictions <- (extract(fit, pars = names))
+retrodictions_sub <- sapply(names, function(x){retrodictions[[x]][n]})
+
+retrodictions_sub_df <- data.frame(ret = as.numeric(t(retrodictions_sub)), chain = rep(n, each = data$N))
+
+ggplot() +
+  facet_wrap(~ chain) +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.5, linetype = 'dashed') +
+  geom_density(data = retrodictions_sub_df, aes(x = ret), alpha = 0.5, col = 'darkred') +
+  theme_bw() +
+  labs(y = 'Density', x = 'Counts (log-scale)') +
+  theme(strip.text.x.top = element_blank())
 
 ```
 
@@ -609,7 +654,7 @@ ggplot(data = retrodata_wildebeest) +
 ```
 The four populations are also measured in the same basic units, but represent likely represent very different populations, spanning ones in small parks that cannot migrate to the large migrating herds (e.g., Serengeti Masai-Mara), though gathering additional metadata to fully check this would be another important component to add to our workflow for these data. 
 
-## Inference
+# Inference
 
 Once we are confident with our model (which is not truly the case here), we can look at the parameter values and check what the overall and species trends appear to be:
 
@@ -642,7 +687,7 @@ ggplot() +
 
 ```
 
-## Feedbacks
+# Feedbacks
 
 At this point, we would have a lot of ideas of ways to improve this model that we would want to follow up on, including (but not limited to) questioning our assumption of one observational error $\sigma$ for all populations, how we model population trends (e.g., there are many ways to model abundance), and (relatedly) our linearity assumption. One possibility would be to move to a non-linear regression, and use a more flexible model that would allow population numbers to stabilize, such as shown using a logistic model for one wildbeest population in Tanzania:
 
@@ -653,7 +698,9 @@ At this point, we would have a lot of ideas of ways to improve this model that w
 subset_wildebeest <- lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]
 subset_wildebeest$year <- subset_wildebeest$year-1980
 gompodel <- nls(log(value) ~ SSlogis(year, Asym, b2, b3), data=subset_wildebeest)
-logisfit <-data.frame(pred = predict(gompodel, newdata = data.frame(year = seq(-25,30,1))), year = seq(-25,30,1))
+logisfit <-data.frame(pred = predict(gompodel, 
+                                     newdata = data.frame(year = seq(-25,30,1))), 
+                      year = seq(-25,30,1))
 
 ggplot(data = lpi_subset_rsh[lpi_subset_rsh$ID == 5589,]) +
   facet_wrap( ~ ID, scales = "free_y") +
@@ -674,6 +721,6 @@ We expect scaling up to more countries, species and populations may cause us to 
 
 This may lead us to realize we really don't have great data for this question and we would then need to prioritize better data collection efforts if we want good estimates to answer this question. 
 
-## The full process
+# The full process
 
 The small workflow we show here may seem like extra work to those who have not used it, and it is compared to many ecological workflows in practice. We argue that the extra effort is worth it given the critical questions we are addressing, and also that the process becomes much quicker with practice. The first time may be slow, but the resulting model will be better for it (even if it is still arguably simple, as the one we show here is), but the following uses of this iterative workflow will go faster and very likely yield improved models. 
