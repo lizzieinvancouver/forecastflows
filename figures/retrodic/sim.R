@@ -8,10 +8,10 @@ library(rstan)
 set.seed(12345)
 
 phytree <- readRDS(file.path(wd, 'input', 'phytree.rds'))
-
-lambda <- 0.8
-broot <- -0.1
-sigma <- 5e-2
+phytree[["edge.length"]] <- 200*phytree[["edge.length"]]
+lambda <- 0.9
+broot <- -1
+sigma <- 5e-3
 scaledtree_slope <- rescale(phytree, model = "lambda", lambda)
 
 speciesnum <- as.numeric(gsub("sp", "", phytree[["tip.label"]]))
@@ -20,29 +20,41 @@ plot.phylo(scaledtree_slope,
            cex = 1, 
            tip.color = c("#FF7601", "#00809D")[as.numeric(as.numeric(gsub("sp", "", phytree[["tip.label"]])) %in% 1:6)+1])
 slopes <- fastBM(scaledtree_slope, a = broot, mu = 0, sig2 = sigma ^ 2)
+# sigmas <- abs(fastBM(scaledtree_slope, a = 0, mu = 0, sig2 = sigma ^ 2))
+
 ggplot(data = data.frame(sp = speciesnum, slopes)) +
   geom_boxplot(aes(x = sp, y = slopes, group = sp, color =  sp %in% 1:6)) +
   scale_color_manual(values = c("#FF7601", "#00809D")) +
   theme_classic() +
   theme(legend.position = 'none')
 
+phylosig(phytree, slopes, method = 'lambda')
+
+# ggplot(data = data.frame(sp = speciesnum, sigmas)) +
+#   geom_boxplot(aes(x = sp, y = sigmas, group = sp, color =  sp %in% 1:6)) +
+#   scale_color_manual(values = c("#FF7601", "#00809D")) +
+#   theme_classic() +
+#   theme(legend.position = 'none')
+
 
 
 
 nspecies <- phytree[["Nnode"]] # no. of species
-alphapois <- c(rep(1,6), rep(6,nspecies-6))
+alphapois <- c(rep(1,6), rep(10,nspecies-6))
 npops_persp <- sapply(rpois(nspecies, alphapois), function(x) max(1,x)) # no. of different populations per species
 npops <- sum(npops_persp) # total no. of different populations
 
-nobs_perpop <- sapply(rpois(npops, 10), function(x) max(5,x))
-
 spid_perpop <- rep(1:nspecies, times = npops_persp)
+
+alphapois <- ifelse(spid_perpop %in% 1:6, 6, 100)
+nobs_perpop <- sapply(rpois(npops, alphapois), function(x) min(length(1900:2020),x))
+
 spid_perobs <- rep(spid_perpop, times = nobs_perpop)
 popid_perobs <- rep(1:npops, times = nobs_perpop)
 
 years <- c()
 for(np in nobs_perpop){
-  years_p <- sample(1950:2020, size = np, replace = FALSE)
+  years_p <- sample(1900:2020, size = np, replace = FALSE)
   years <- c(years, years_p)
 }
 
@@ -59,10 +71,12 @@ alpha_pop_sp <- rnorm(n = npops, mean = mu_alpha_sp[spid_perpop],
 
 # nested slopes, with phylogenetic structure
 mu_beta_sp <- slopes
+
 mu_beta2 <- 0
 sigma_beta2 <- 0.2/2.57
-sig_species_beta <- abs(rnorm(n = nspecies, mean = mu_beta2, 
+sig_species_beta <- abs(rnorm(n = nspecies, mean = mu_beta2,
                               sd = sigma_beta2))
+
 beta_pop_sp <- rnorm(n = npops, mean = mu_beta_sp[spid_perpop], 
                      sd = sig_species_beta[spid_perpop]) 
 
@@ -86,7 +100,7 @@ for(sp in 1:nspecies){
 pops_fit$int <- alpha_pop_sp
 pops_fit$slp <- beta_pop_sp
 
-sigma_obs <- 0.75 # common observational error
+sigma_obs <- 5 # common observational error
 
 y <- c()
 for(p in 1:npops){
@@ -145,7 +159,7 @@ data <- list(
 
 fit <- stan(file = "~/projects/forecastflows/analyses/stan/model1_nc2.stan",
             data = data,  iter=2024, warmup=1000, cores = 4, seed = 20012029)
-saveRDS(fit, file = file.path(wd, "output/fit_withoutphylo.rds"))
+# saveRDS(fit, file = file.path(wd, "output/fit_withoutphylo.rds"))
 
 
 summ_fit <- data.frame(summary(fit)$summary)
