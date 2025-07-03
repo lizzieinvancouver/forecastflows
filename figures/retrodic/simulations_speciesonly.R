@@ -2,7 +2,7 @@ rm(list = ls());gc()
 wd <- "/home/victor/projects/forecastflows"
 library(ggplot2)
 library(rstan)
-set.seed(123456)
+set.seed(1234567)
 
 phytree <- readRDS(file.path(wd, 'figures/input', 'phytree.rds'))
 
@@ -11,12 +11,12 @@ phytree <- readRDS(file.path(wd, 'figures/input', 'phytree.rds'))
 # ------------- #
 nspecies <- phytree[["Nnode"]]+1 # no. of species
 nobs_perspecies <- round(runif(nspecies, 5,10)) # no. of different observations per population
-nobs_perspecies[c(18,21)] <- round(runif(2, 50,70)) # some bias
+nobs_perspecies[c(18,21)] <- round(runif(2, 90,120)) # some bias
 spid_perobs <- rep(1:nspecies, times = nobs_perspecies)
 
 years <- c()
 for(np in nobs_perspecies){
-  years_p <- sample(1950:2020, size = np, replace = FALSE)
+  years_p <- sample(1900:2020, size = np, replace = FALSE)
   years <- c(years, years_p)
 }
 
@@ -31,9 +31,9 @@ sigma_beta1 <- 0.25/2.57
 mu_beta_sp <- rnorm(n = nspecies, mean = mu_beta1, sd = sigma_beta1)
 
 ## simulate some slopes with phylogenetic structure
-lambda <- 0.8
+lambda <- 0.9
 broot <- 0
-sigma <- 1e-2
+sigma <- 5e-3
 scaledtree_slope <- rescale(phytree, model = "lambda", lambda)
 speciesnum <- as.numeric(gsub("sp", "", phytree[["tip.label"]]))
 plot.phylo(scaledtree_slope,
