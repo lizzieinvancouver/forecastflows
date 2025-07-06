@@ -1,10 +1,22 @@
 rm(list = ls());gc()
-wd <- "/home/victor/projects/forecastflows"
+if(length(grep("victor", getwd()) > 0)) {
+  wd <- "/home/victor/projects/forecastflows"
+} else if(length(grep("lizzie", getwd()) > 0)) {
+  wd <- "/Users/lizzie/Documents/git/projects/misc/miscmisc/workflowsPhilTrans"
+}  
 library(ggplot2)
 library(rstan)
 set.seed(1234567)
 
-phytree <- readRDS(file.path(wd, 'figures/input', 'phytree.rds'))
+phytree <- readRDS(file.path(wd, 'figures/input', 'phytree.rds')) # Lizzie does not have, right?
+
+if(length(grep("lizzie", getwd()) > 0)){
+  require(ape)
+  require(geiger)
+  require(phytools) 
+  nspecies = 40
+  phytree <- pbtree(n=nspecies, nsim=1, b=1, complete=FALSE,scale=1)
+}
 
 # ------------- #
 # Simulate data #
@@ -120,6 +132,12 @@ ggplot() +
   theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         panel.grid.minor.y = element_blank(), panel.grid.major.y = element_blank())
 
+logy_pred <- unlist(extract(fit, pars = 'logy_pred'))
+# green is observed data
+ggplot() +
+  geom_density(aes(x = log(data$y)), alpha = 0.2, color = '#009d6c') +
+  geom_density(aes(x = logy_pred), alpha = 0.2)
+
 
 # ----------------------------------------------- #
 # Fit the model against data WITH phylo structure #
@@ -158,8 +176,5 @@ logy_pred <- unlist(extract(fit, pars = 'logy_pred'))
 ggplot() +
   geom_density(aes(x = log(data$y)), alpha = 0.2, color = '#009d6c') +
   geom_density(aes(x = logy_pred), alpha = 0.2)
-
-
-
 
 
