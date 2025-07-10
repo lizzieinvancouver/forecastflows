@@ -10,6 +10,7 @@
 \usepackage{todonotes}
 \usepackage[font=sf]{caption}
 \usepackage{hyperref}
+\newcommand{\llabel}[1]{\hypertarget{lintarget:#1}{}\linelabel{lin:#1}}
 
 \usepackage{lineno}
 \renewcommand\linenumberfont{\normalfont\tiny\color{gray}}
@@ -66,7 +67,7 @@ But this idealized method often does not apply to the reality of ecological rese
 
 \begin{figure}[h]
 	\centering
-	\includegraphics{figures/modeldataspaces_rotation}
+	\includegraphics{../figures/modeldataspaces_rotation}
 	\caption{Different trajectories through model-data space during model development. Ideally, this begins in the pre-model/pre-data quadrant, where the research question is defined. The next step moves to the post-model/pre-data quadrant, where a model is build---independently of the data. This is where we should spend a good deal of time evaluating model behavior using simulated data. Once we are satisfied with our model, we can move to the post-model/post-data quadrant, where the model is fitted to real data. Then, we perform retrodictive checks to compare model predictions to observations, which likely give us some feedbacks to refine our model.}
 	\label{fig:modeldata}
 \end{figure}
@@ -76,14 +77,14 @@ Trend estimation has focused mostly on fitting a model to empirical data in a un
 Addressing these problems while accounting for the realities of working with ecological data requires a more comprehensive workflow.
 
 We argue a workflow that moves along the data-model space in a coherent sequence of steps (figure \ref{fig:modeldata}c) could reduce many of these problems and thus improve ecological science.
-The first step of this workflow is to define an explicit research question and formulate hypotheses (step 1, figure \ref{fig:workflow}). This involves making clear assumptions about the most influential drivers, within the specific context of our study. This step should guide the construction of a narrative model of how we believe the system works, focusing on the mechanisms that could generate the data we observe, including the observational error. 
-From this narrative, we can then develop a mathematical model---an ensemble of equations that encapsulates our knowledge and is designed to answer our research question (step 2, figure \ref{fig:workflow}). The general idea is to start with a relatively simple model that we could refine later (see example worklow we provide). At this stage, prioritizing biologically meaningful parameters is crucial, as it allows us to have a sense of plausible parameter values. This means choosing a model formulation where each parameter corresponds to an interpretable behavior (which sometimes requires considering alternative parameterizations). 
+The first step of this workflow is to define an explicit research question and formulate hypotheses (step 1, figure \ref{fig:workflow}). This involves making clear assumptions about the most influential drivers, within the specific context of our study. This should guide the construction of a narrative model of how we believe the system works, focusing on the mechanisms that could generate the data we observe, including the observational error.  
+\llabel{causalinf}This step of carefully formulating hypotheses has gained increasing attention in the ecological literature \citep{Grace2020}. From this narrative, we can then develop a mathematical model---an ensemble of equations that encapsulates our knowledge and is designed to answer our research question (step 2, figure \ref{fig:workflow}). The general idea is to start with a relatively simple model that we could refine later (see example worklow we provide). At this stage, prioritizing biologically meaningful parameters is crucial, as it allows us to have a sense of plausible parameter values. This means choosing a model formulation where each parameter corresponds to an interpretable behavior (which sometimes requires considering alternative parameterizations). 
 
-With a model in place, the next step focuses on testing and understanding it via data simulation (step 3, figure \ref{fig:workflow}). `Fake' or `test' data are generated directly from the model by fixing parameters to some reasonable range of values (which is straightforward if the parameters are interpretable) and from fake predictor data. 
-We then fit our model to this simulated dataset and evaluate its ability to recover the prescribed values. At this stage, the focus is on understanding the model, so we may need to spend time thinking about whether each parameter is reasonable or not. This is also a step for making sure the model is working as expected (see example worklow). 
+With a model in place, the next step focuses on testing and understanding it via data simulation (step 3, figure \ref{fig:workflow}). `Fake' or `test' data are generated directly from the model by fixing parameters to some reasonable values (which is straightforward if the parameters are interpretable) and from fake predictor data. 
+We then fit our model to this simulated dataset and evaluate its ability to recover the prescribed values. At this stage, the focus is on understanding the model, so we may need to spend time thinking about whether each parameter is reasonable or not. This is also a step for making sure the model is working as expected (see example worklow). \llabel{datasimforall}Ideally, this data simulation step should be repeated several times with different parameter values, sampled within a reasonable range (or, in a Bayesian framework, from the prior distribution).
 
 Once we are confident about our model structure, we can introduce real data as part of an initial model fitting step (step 4, figure \ref{fig:workflow}). This way, we obtain parameter estimates constrained by observations. 
-These parameter estimates lead to the second data simulation step, this time using our fitted model parameters to generate predictions (step 5, figure \ref{fig:workflow}). This---which we call a retrodictive check (\citealp{betanworkflow}, also sometimes called a posterior predictive check, \citealp{Gelman2020})---allows model output to be compared to observations. 
+These parameter estimates lead to the second data simulation step, this time using our fitted model parameters to generate predictions (step 5, figure \ref{fig:workflow}). This---which we call a retrodictive check (\citealp{betanworkflow}, also called a \llabel{PPC}posterior predictive check in a Bayesian workflow,  \citealp{Gelman2020})---allows model output to be compared to observations. 
 It's only once all steps have been completed that we can interpret parameter values with respect to our research question.
 The workflow encourages a focus on the full model, where any parameter (such as a trend estimate) must be carefully interpreted alongside others, as all are fundamental components that shape both inference and forecasting. 
 
@@ -100,7 +101,7 @@ Discrepancies here may indicate a missing key driver, and suggest the current mo
 	\centering
 	\vspace*{-0.1cm}
     \hspace*{-1.5cm}
-	\includegraphics{figures/figure_worflow_wsteps}
+	\includegraphics{../figures/figure_worflow_wsteps}
 	\caption{The workflow we propose here \citep[which builds from recent advances in workflows,][]{betanworkflow,Gelman2020,Schad2020,grinsztajn2021,vandeschoot2021,Wolkovich2024} focuses on iterative feedbacks between the research question, model and data. Most research should start at Step 1, with the research question, followed by extensive model building and evaluation using simulated data (Steps 2 and 3) before proceeding to fitting the model on empirical data and examining it through retrodictive checks (Steps 4 and 5). Within this workflow, forecasting is a natural output of the process and not a separate process or one available for only certain modeling approaches.  The integration of observations (the data stream) occurs at Step 4---only after the model has been thoroughly evaluated---and can also highlight opportunities to collect new data and enrich the data stream.}
 	\vspace*{-0.5cm}
 	\label{fig:workflow}
@@ -155,7 +156,7 @@ fontupper=\footnotesize
 \centerline{\bf Trend estimation}
 \vspace*{2mm}
 \begin{minipage}[t]{\linewidth}
-    \includegraphics[width=\linewidth]{figures/trendestimation_details}
+    \includegraphics[width=\linewidth]{../figures/trendestimation_details}
 
     % \vspace{-0.5cm}\captionsetup{font=footnotesize}\captionof{figure}{Caption}\label{fig:trends}
     \vspace*{1mm}
@@ -174,7 +175,7 @@ With updated data released semi-annually alongside new datasets and new estimate
 \centerline{\bf Mechanistic forecasting}
 \vspace*{2mm}
 \begin{minipage}[t]{\linewidth}
-    \includegraphics[width=\linewidth]{figures/forecasting_details}
+    \includegraphics[width=\linewidth]{../figures/forecasting_details}
 
     % \vspace{-0.5cm}\captionsetup{font=footnotesize}\captionof{figure}{Caption}\label{fig:trends}
     \vspace*{1mm}
@@ -193,7 +194,7 @@ Model development is the central step of the process-based workflow, typically r
 {\begin{multicols}{2}
 \begin{minipage}[t]{\linewidth}
 	\vfill
-\includegraphics[width=\linewidth]{figures/iterativeworkflow_details}
+\includegraphics[width=\linewidth]{../figures/iterativeworkflow_details}
 \vfill
 % \vspace{-0.5cm}\captionsetup{font=footnotesize}\captionof{figure}{Caption}\label{fig:trends}
 \vspace*{3mm}
@@ -201,7 +202,7 @@ Model development is the central step of the process-based workflow, typically r
 
 \columnbreak
 \vspace*{1mm}
-A universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge. It would be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community, potentially improving trend estimates. For both trend estimation and forecasting, the workflow would refocus attention on the research question, highlighting the ecological hypotheses that justify the use and design of the model.
+A universal workflow offers an opportunity to bridge statistical and process-based frameworks, integrating mechanistic knowledge and leveraging robust statistical approaches \citep[e.g.][]{rounce2020quantifying}. Process-based models would no longer be perceived as deterministic black boxes by other researchers but rather as robust statistical frameworks encapsulating both data structure and mechanistic knowledge---and where the full model is fitted jointly. It would be an opportunity to spread the incorporation of mechanistic assumptions beyond the process-based modeling community, potentially improving trend estimates. For both trend estimation and forecasting, the workflow would refocus attention on the research question, highlighting the ecological hypotheses that justify the use and design of the model.
 
 \end{multicols}}
 
@@ -239,6 +240,6 @@ As ecologists are increasingly expanding their computational toolkits, many fiel
 % This shift would present a significant challenge---as it would likely reveal many issues related to non-identifiability in models and data limitations before achieving robust inference. But ultimately, it would prevent modelers from making biased inferences and unfounded assumptions beyond what the data can support.
 
 \clearpage
-\bibliography{forecastflows}
+\bibliography{../forecastflows.bib}
 
 \end{document}
