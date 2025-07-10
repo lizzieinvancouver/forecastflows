@@ -81,7 +81,7 @@ Response.
 Simulating data and fitting models is key to the step-by-step workflow but I think the MS lacks sufficient detail and motivation. The methods described come from the Bayesian literature, where simulating parameters from priors (prior predictive/pushforward) or posterior (posterior predictive or retrodictive) and then data, are natural. But a quick peek at the cited literature suggests that Bayesian models are not used. So how would one adapt them?}
 \end{mybox}
 
-While Bayesian models are more and more frequently (we cite for example ), we clarified that---despite some Bayesian-specific terms---data simulation apply for all (\href{file:forecastflows_r1\#lintarget:datasimforall}{line \ref*{lin:datasimforall}}, \href{file:forecastflows_r1\#lintarget:PPC}{line \ref*{lin:PPC}}).
+While Bayesian models are more and more frequently (we cite for example ), we clarified that some terms are specific to Bayesian inference but that data simulation still apply for all (\href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}, \href{file:forecastflows_r1\#lintarget:PPC}{line \ref*{lin:PPC}}, \href{file:forecastflows_r1\#lintarget:broadcontext}{line \ref*{lin:broadcontext}}).
 
 % Below, AG says not relevant
 \begin{mybox}
@@ -127,33 +127,47 @@ Response.
 Page 1, Line 40 in abstract: what is “unified” about the workflow?}
 \end{mybox}
 
+We removed this word.
+
 \begin{mybox}
 \emph{Page 1, Line 45 in abstract: drop “for”}
 \end{mybox}
+
+Done, thank you.
 
 \begin{mybox}
 \emph{L6: “date, alongside”}
 \end{mybox}
 
+Done.
+
 \begin{mybox}
 \emph{L36: These workflow citations are all unpublished (arXiv). I’m fine with that, but consider citing some from other fields that have gone through peer review. The caption of Figure 2 includes more, suggest putting them here too.}
 \end{mybox}
+
+Done.
 
 \begin{mybox}
 \emph{L103: What does “change the model structure” mean here? Adding constraints and priors? Removing or adding complexity?}
 \end{mybox}
 
+
 \begin{mybox}
 \emph{L110: delete “then”}
 \end{mybox}
+
+Done. % there were two 'then", I removed both...
 
 \begin{mybox}
 \emph{Fig 2: Caption should mention this is expanded from Fig. 1C.}
 \end{mybox}
 
+
 \begin{mybox}
 \emph{L116, L168: I disagree that “reduce uncertainties” is the goal – instead it is to more accurately quantify it. See L 257 “properly accounting for their uncertainty” for instance.}
 \end{mybox}
+
+We have modified ``reduce" to ``quantify" (\href{file:forecastflows_r1\#lintarget:quant1}{line \ref*{lin:quant1}}, \href{file:forecastflows_r1\#lintarget:quant2}{line \ref*{lin:quant2}}).
 
 \begin{mybox}
 \emph{L143: FYI the fisheries literature has used the terms pre-data post-model etc. for decades now and have implemented this simulation approach. E.g., https://journal.iwc.int/index.php/jcrm/article/view/239/17. I don’t think it’s necessary to cite this but worth being aware of. You might want to re-cite Hilborn and Mangel (1997) here as they explicitly call for more simulation testing in ecology.}
@@ -164,20 +178,35 @@ Page 1, Line 40 in abstract: what is “unified” about the workflow?}
 \end{mybox}
 
 \begin{mybox}
-\emph{Box A: Please check the logic of the first sentence. More papers because of less time confronting their models? Is that what you meant to say? “For examples” should be “For example”?}
+\emph{Box A: Please check the logic of the first sentence. More papers because of less time confronting their models? Is that what you meant to say?}
 \end{mybox} 
+
+\begin{mybox}
+\emph{“For examples” should be “For example”?}
+\end{mybox} 
+
+% Hmm, not sure? "For examples using LPI data" and then we talk about several examples right?
 
 \begin{mybox}
 \emph{Box B: Please clarify the last sentence if possible. I’m not sure what “inappropriate way to accommodate their complexity” means here.}
 \end{mybox}
 
+We have claried this sentence:
+\begin{quote}
+``The way models are currently calibrated is likely not a coincidence, but rather a workaround to avoid confronting the full complexity of the model. Calibrating submodels separately allows to avoid the fact that, if the model were fitted as a whole, many parameters would compensate for one another---revealing structural degeneracies and making the model far more difficult to use."
+\end{quote}
+
 \begin{mybox}
 \emph{L225: I like this paragraph and it makes a point that I hadn’t seen written out so clearly.}
 \end{mybox}
 
+Thank you!
+
 \begin{mybox}
 \emph{L245: I feel like section 4.2 is slightly out of place. I’d rather see more text devoted to retrodictive checks than this. Consider dropping it and focusing on just a conclusion here}
 \end{mybox}
+
+Response. %hmm, he's making a good point, maybe we should at least change the section title?
 
 {\bf Reviewer 2}
 
@@ -195,17 +224,10 @@ is no example application to data. I have outlined these areas under “Major co
 \begin{mybox}
 \emph{\textbf{Major comments}\\
 1. Clarity on inferential goals of “disconnected paradigms”\\
- When the paper discusses “harmonizing both trend estimation and forecasting” what is meant by this? The
-title of the paper suggests the inferential goals from both approaches to be predictive
-in nature (i.e., “forecasting trends”), but it seems plausible that the simpler models are
-developed for more of an explanatory purpose (e.g., investigating relationships between
-covariates and mean response) rather than predicting or forecasting future trends, which
-would make the questions being asked by each modeling approach fundamentally dif-
-ferent (see, Shmueli 2010). The paper could be improved if more clarity was provided
-on the inferential goals of both types of modeling paradigms it discusses, and perhaps
-provide some discussion why they need to be (or if they should be) harmonized if they
-are in pursuit of different types of inference.}
+ When the paper discusses “harmonizing both trend estimation and forecasting” what is meant by this? The title of the paper suggests the inferential goals from both approaches to be predictive in nature (i.e., “forecasting trends”), but it seems plausible that the simpler models are developed for more of an explanatory purpose (e.g., investigating relationships between covariates and mean response) rather than predicting or forecasting future trends, which would make the questions being asked by each modeling approach fundamentally different (see, Shmueli 2010). The paper could be improved if more clarity was provided on the inferential goals of both types of modeling paradigms it discusses, and perhaps provide some discussion why they need to be (or if they should be) harmonized if they are in pursuit of different types of inference.}
 \end{mybox}
+
+Thank you for this suggestion. We added a paragraph in the introduction to discuss the inferential goals of these two approachs (\href{file:forecastflows_r1\#lintarget:inferentialgoal}{line \ref*{lin:inferentialgoal}}). We also changed the title to reflect the broader inferential goals.
 
 \begin{mybox}
 \emph{2. Can this workflow be applied to non-Bayesian models\\
@@ -213,69 +235,102 @@ The emphasis on simulation-based investigation of model components is highlighte
 the workflow, so it seems a generative (or at least partially generative) model is assumed. Does this model need to be Bayesian? Explicit connections to posterior predictive checks and more discussion for how both prior- and posterior-predictive assessment could be used in a non-Bayesian context would strengthen this work. (Also note that prior predictive checks should be made explicit too – see minor comments).}
 \end{mybox}
 
+We clarified that some terms are specific to Bayesian inference but that this workflow can be applied more broadly (\href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}, \href{file:forecastflows_r1\#lintarget:PPC}{line \ref*{lin:PPC}}, \href{file:forecastflows_r1\#lintarget:broadcontext}{line \ref*{lin:broadcontext}}).
+
 \begin{mybox}
 \emph{3. Discussion of Calibration:\\
-Lines 98-104 seem to be referring to a check on estimating “the model” using synthetic data that are generated from the model (either through optimization or McMC), but there is no mention of various computational approaches that may be taken to fit “the model.” How does the chosen computational strategy fit into the workflow if at all? Further, is the proposed workflow to conduct a full-blown simulation calibration study (i.e., simulate-fit-check for capture) many times and across all possible parameter values? Assuming yes, I’d be interested in how something like that would scale for the types of models that are the focus of the paper? Could the authors provide more guidance on how to conduct such a study in this context?}
+Lines 98-104 seem to be referring to a check on estimating “the model” using synthetic data that are generated from the model (either through optimization or McMC), but there is no mention of various computational approaches that may be taken to fit “the model.” How does the chosen computational strategy fit into the workflow if at all?}
 \end{mybox}
+
+While we agree that this is an interesting question, we believe it falls outside the scope of this manuscript.
+
+\begin{mybox}
+\emph{Further, is the proposed workflow to conduct a full-blown simulation calibration study (i.e., simulate-fit-check for capture) many times and across all possible parameter values? Assuming yes, I’d be interested in how something like that would scale for the types of models that are the focus of the paper? Could the authors provide more guidance on how to conduct such a study in this context?}
+\end{mybox}
+
+We have clarified the data simulaton step. We believe a first step would be to simulate from one parameter set (\href{file:forecastflows_r1\#lintarget:firstsim}{line \ref*{lin:firstsim}}), and then to repeat the simulations with several parameter sets (\href{file:forecastflows_r1\#lintarget:repeatsim}{line \ref*{lin:repeatsim}}, \href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}).
 
 \begin{mybox}
 \emph{4. Gaps in the workflow\\
-A big argument in the paper is that the proposed workflow
-could lessen discrepancies in results between studies of trends (lines 123-128). However, in the workflow there is no mention of transparent communication of study design, which if ignored in analysis, could result in discrepancies in results for studies with similar research questions. Differences in sampling designs must also be considered prior tointegrating different data sources (if integration is even possible). The importance of study design/sampling design and its ties to appropriate modeling is not discussed. Is itimplicitly assumed that there is alignment between design, question, and model in this workflow? Some mention of the importance of study design would strengthen the work.}
+A big argument in the paper is that the proposed workflow could lessen discrepancies in results between studies of trends (lines 123-128). However, in the workflow there is no mention of transparent communication of study design, which if ignored in analysis, could result in discrepancies in results for studies with similar research questions. Differences in sampling designs must also be considered prior tointegrating different data sources (if integration is even possible). The importance of study design/sampling design and its ties to appropriate modeling is not discussed. Is itimplicitly assumed that there is alignment between design, question, and model in this workflow? Some mention of the importance of study design would strengthen the work.}
 \end{mybox}
+
+Response.
 
 \begin{mybox}
 \emph{Additionally, the choice of prior and posterior predictive checks (PPC) is non-trivial and depends on the context of the study. There is discussion of these types of simulation-based investigations, but no mention of the importance of developing checks that assess key features of the observed data that are tied to the research question. Acknowledging the complexity of this step, and including some ideas for how to do this in the context of the types of problems discussed in the paper could strengthen the paper.}
 \end{mybox}
+
+Thank you for this suggestion. We now say that the checks should be developped specifically for the research question (\href{file:forecastflows_r1\#lintarget:howtoPPC}{line \ref*{lin:howtoPPC}}). 
 
 \begin{mybox}
 \emph{5. Theoretical examples provided, but no data application of the proposed workflow\\
 Sections 3.1 and 3.2 and the Box outline theoretical examples of how the workflow could be applied for trend estimation and forecasting in the context of types of data, but there are no concrete data examples. A comment on how the proposed workflow could be applied to real data and how it would scale with complexity of data and research questions would be a good addition to the paper if it is not feasible to include real-data examples with the general discussion.}
 \end{mybox}
 
+Response.
+
 \begin{mybox}
 \emph{6. Adopting the workflow\\
 Recommendations are made to train ecologists more quantitatively, but there is no suggestion or encouragement of collaboration with statisticians. These types of workflows are generally part of statistical practice, so could an alternative to more quantitative training (which would have to come at the cost of some other aspect of training) be more cross-disciplinary collaboration with statisticians?}
 \end{mybox}
+
+Response.
 
 \begin{mybox}
 \emph{\textbf{Minor comments}\\
 Abstract, line 45: remove “for” in, “could transform for ecological modeling.”}
 \end{mybox}
 
+Sorry for this typo.
+
 \begin{mybox}
 \emph{Line 52: change “in term” to “in terms”}
 \end{mybox}
+
+Done.
 
 \begin{mybox}
 \emph{Figure 1 caption, line 34: change “where a model is build” to “where a model is built”}
 \end{mybox}
 
+Done.
+
 \begin{mybox}
 \emph{Lines 75-81, the paper discusses a form of prior predictive checking without explicitly mentioning the connection. The connection should be mentioned and perhaps}
 \end{mybox}
+
+We now mention that this step can allow to check our prior assumptions (\href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}).
 
 \begin{mybox}
 \emph{Line 80: typo in “workflow” in “(see example worklow)”}
 \end{mybox}
 
+Sorry for this typo.
+
 \begin{mybox}
 \emph{Line 86: change “also sometimes called a posterior predictive check” to “in a Bayesian workflow this is called a posterior predictive check.”}
 \end{mybox}
+
+...
 
 \begin{mybox}
 \emph{Line 87: could be more specific about “model output” as typically a PPC investigates how the entire posterior predictive distribution for the response or some summary statistic that is a function of the response and parameters compares to the observed data (or observed summary stat computed from observed data).}
 \end{mybox}
 
+We now mention that the summary statistics should be developped specifically for the research question (\href{file:forecastflows_r1\#lintarget:howtoPPC}{line \ref*{lin:howtoPPC}}). % I already said this above...
+
 \begin{mybox}
 \emph{Line 117: should “hypothesis” be “hypotheses”?}
 \end{mybox}
 
+Corrected.
+
 \begin{mybox}
-\emph{Lines 198-201: if the goal is accurate and relatively-precise forecasts, do all of the nuisance
-parameters need to be identifiable for a model to be useful? That is, does identifiability
-of all parameters matter for process-based models with a goal of forecasting?}
+\emph{Lines 198-201: if the goal is accurate and relatively-precise forecasts, do all of the nuisance parameters need to be identifiable for a model to be useful? That is, does identifiability of all parameters matter for process-based models with a goal of forecasting?}
 \end{mybox}
+
+We believe that the strength of process-based models (as compared to machine learning for example, \href{file:forecastflows_r1\#lintarget:MLvsPBM}{line \ref*{lin:MLvsPBM}}) is their interpretability. Their parameters should represent biological processes, and their values are of interest. The inferential goal of process-based models is both predictive and explanatory (\href{file:forecastflows_r1\#lintarget:inferentialgoal}{line \ref*{lin:inferentialgoal}}), and poor identifiability could reduce this.
 
 \bibliography{forecastflows}
 
