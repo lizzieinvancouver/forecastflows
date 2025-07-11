@@ -22,7 +22,7 @@
 \hypersetup{hidelinks,breaklinks=true}
 \usepackage{cleveref}
 \usepackage[labelfont=bf]{caption}
-\bibliographystyle{../amnat}
+\bibliographystyle{besjournals}
 
 \RequirePackage[labelfont={bf,sf},%
                 font={small, sf}]{caption}
@@ -81,7 +81,8 @@ Response.
 Simulating data and fitting models is key to the step-by-step workflow but I think the MS lacks sufficient detail and motivation. The methods described come from the Bayesian literature, where simulating parameters from priors (prior predictive/pushforward) or posterior (posterior predictive or retrodictive) and then data, are natural. But a quick peek at the cited literature suggests that Bayesian models are not used. So how would one adapt them?}
 \end{mybox}
 
-While Bayesian models are more and more frequently (we cite for example ), we clarified that some terms are specific to Bayesian inference but that data simulation still apply for all (\href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}, \href{file:forecastflows_r1\#lintarget:PPC}{line \ref*{lin:PPC}}, \href{file:forecastflows_r1\#lintarget:broadcontext}{line \ref*{lin:broadcontext}}).
+Bayesian models are more and more frequently used in ecology (we cite for example \citealp{Johnson2024}). % I think this one is Bayesian right?
+We clarified that some terms are specific to Bayesian inference but that data simulation still apply for all (\href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}, \href{file:forecastflows_r1\#lintarget:PPC}{line \ref*{lin:PPC}}, \href{file:forecastflows_r1\#lintarget:broadcontext}{line \ref*{lin:broadcontext}}).
 
 % Below, AG says not relevant
 \begin{mybox}
@@ -94,6 +95,7 @@ Response.
 \emph{Furthermore, I think the authors should include a simple illustration of how these retrodiction checks can flag the need for model changes. For instance, I imagine they could take a fitted model from one of the key cited papers like the LPI trend, and simulate data given spatial/phylogenetic structure, but then refit a model without that and show how the model fails to fit the data and how the analysts would identify (visually, with a new figure) and resolve that by adding model structure/complexity. I am a big proponent of prior/posterior predictive checking and do not disagree with their recommended usage, rather I think more detail is needed for the MS. I think a judicious, simple example here could really help the reader interpret the recommendations and start thinking about how to apply it in their studies. Given the importance of this step in the overall thesis of the MS I believe more detail on how an analyst would do this would be worthwhile.}
 \end{mybox}
 
+% here I hope we will have a PPC figure
 Response.
 
 \begin{mybox}
@@ -115,12 +117,15 @@ Thank you for this reference. We added it and now mention that the conceptualiza
 I like this figure but improving the caption would really help the reader take in the material more efficiently. I suggest moving the upper right panel to the upper left, as it serves as a sort of legend of the three other panels and should be read first. I would label this one A as well. What is the significance of the figure-8 in B? How is that different than a circle? This caption does not define or discuss the panels A,B,C, and I think that it should. Why are the terms “pre-data” and “pre-model” only used in the capture and nowhere else in the MS? “Retrodictive checks” may need to be further clarified in the caption.}
 \end{mybox}
 
-Response.
+We have reorganized the figure based on your suggestions, and we now explain more clearly the different panels in the caption.
+We also now used the pre- and post-data/model in the main text (\href{file:forecastflows_r1\#lintarget:quad1}{lines \ref*{lin:quad1}}, \href{file:forecastflows_r1\#lintarget:quad2}{\ref*{lin:quad2}}, \href{file:forecastflows_r1\#lintarget:quad3}{\ref*{lin:quad3}}, \href{file:forecastflows_r1\#lintarget:quad4}{\ref*{lin:quad4}}, \href{file:forecastflows_r1\#lintarget:quad5}{\ref*{lin:quad5}}, \href{file:forecastflows_r1\#lintarget:quad6}{line \ref*{lin:quad6}}, and \href{file:forecastflows_r1\#lintarget:quad7}{\ref*{lin:quad7}}).
 
 \begin{mybox}
 \emph{“..where a model is built..”\\
 “..some feedback to..”}
 \end{mybox}
+
+Thank you for spotting these mistakes.
 
 \begin{mybox}
 \emph{\textbf{Minor}\\
@@ -152,6 +157,7 @@ Done.
 \end{mybox}
 
 
+
 \begin{mybox}
 \emph{L110: delete “then”}
 \end{mybox}
@@ -180,6 +186,8 @@ We have modified ``reduce" to ``quantify" (\href{file:forecastflows_r1\#lintarge
 \begin{mybox}
 \emph{Box A: Please check the logic of the first sentence. More papers because of less time confronting their models? Is that what you meant to say?}
 \end{mybox} 
+
+Response.
 
 \begin{mybox}
 \emph{“For examples” should be “For example”?}
@@ -332,6 +340,7 @@ Corrected.
 
 We believe that the strength of process-based models (as compared to machine learning for example, \href{file:forecastflows_r1\#lintarget:MLvsPBM}{line \ref*{lin:MLvsPBM}}) is their interpretability. Their parameters should represent biological processes, and their values are of interest. The inferential goal of process-based models is both predictive and explanatory (\href{file:forecastflows_r1\#lintarget:inferentialgoal}{line \ref*{lin:inferentialgoal}}), and poor identifiability could reduce this.
 
-\bibliography{forecastflows}
+\clearpage
+\bibliography{../forecastflows.bib}
 
 \end{document}
