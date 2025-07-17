@@ -74,7 +74,8 @@ We are happy to hear that both reviewers recognized the value of our work and we
 \emph{This opinion manuscript (MS) argues that adapting a modern statistical workflow will help resolve some key issues in forecasting models used in ecology to inform policy about biodiversity loss and climate changes impacts. Specifically, the authors identity two specific “disconnected paradigms” for making such forecasts and argue that a workflow adopted from the Bayesian literature, and that emphasizes data simulation, would help unify these paradigms and make for a better scientific understanding of these important issues. I found the MS well-written, concise and easy to read, and well-organized with clearly laid out challenges and understandable solutions. I agree with the central proposal that the adoption of a “principled” workflow would be beneficial in many areas of ecology, and these types of studies in particular. I have no experience with these specific types of ecological models, but I do have experience with the Bayesian workflow underlying their key recommendation. So, I will focus my review on the recommendation and not the challenge. Below I outline several major concerns/questions, and below that minor comments and corrections.}
 \end{mybox}
 
-Response.
+We thank the reviewer for their positive comments regarding our manuscript. 
+We have worked to clarify the points raised by the reviewer in this new version.
 
 \begin{mybox}
 \emph{\textbf{Inadequate justification of simulation.}\\
@@ -89,14 +90,14 @@ We clarified that some terms are specific to Bayesian inference but that data si
 \emph{On L76 they say “... by fixing parameters to some reasonable range of values (which is straightforward if the parameters are interpretable)” but I disagree with this. Do you suggest analysts develop priors (using, e.g., Betancourt’s cited workflow case study), and then simulate parameters from those, but ignore them in the subsequent fitting to empirical data? Or take a range for each parameter and simulate parameters across N equal steps for each one? Posterior predictive checks (retrodiction) are known to be conservative due to the double-use of the data (see Conn et al. 2018 [https://doi.org/10.1002/ecm.1314]). How does that affect your recommendations and how the analyst should use this tool?}
 \end{mybox}
 
-Response.
+Thank you for this interesting point. We have work to clarify the data simulaton step (\href{file:forecastflows_r1\#lintarget:firstsim}{line \ref*{lin:firstsim}}, \href{file:forecastflows_r1\#lintarget:repeatsim}{line \ref*{lin:repeatsim}}, \href{file:forecastflows_r1\#lintarget:priorPC}{line \ref*{lin:priorPC}}), and now highlight one should develop specific posterior predictive checks for the question of interest (\href{file:forecastflows_r1\#lintarget:howtoPPC}{line \ref*{lin:howtoPPC}}). However, we believe an extended discussion of the PPC advantages and inconvenients is outside the word limit we have.
 
 \begin{mybox}
 \emph{Furthermore, I think the authors should include a simple illustration of how these retrodiction checks can flag the need for model changes. For instance, I imagine they could take a fitted model from one of the key cited papers like the LPI trend, and simulate data given spatial/phylogenetic structure, but then refit a model without that and show how the model fails to fit the data and how the analysts would identify (visually, with a new figure) and resolve that by adding model structure/complexity. I am a big proponent of prior/posterior predictive checking and do not disagree with their recommended usage, rather I think more detail is needed for the MS. I think a judicious, simple example here could really help the reader interpret the recommendations and start thinking about how to apply it in their studies. Given the importance of this step in the overall thesis of the MS I believe more detail on how an analyst would do this would be worthwhile.}
 \end{mybox}
 
 % here I hope we will have a PPC figure
-Response.
+[Waiting for a nice PPC figure] Response.
 
 \begin{mybox}
 \emph{\textbf{Resolving process-based model issues.}\\
@@ -156,7 +157,7 @@ Done.
 \emph{L103: What does “change the model structure” mean here? Adding constraints and priors? Removing or adding complexity?}
 \end{mybox}
 
-
+...
 
 \begin{mybox}
 \emph{L110: delete “then”}
@@ -168,6 +169,7 @@ Done. % there were two 'then", I removed both...
 \emph{Fig 2: Caption should mention this is expanded from Fig. 1C.}
 \end{mybox}
 
+Done.
 
 \begin{mybox}
 \emph{L116, L168: I disagree that “reduce uncertainties” is the goal – instead it is to more accurately quantify it. See L 257 “properly accounting for their uncertainty” for instance.}
@@ -185,6 +187,8 @@ Done.
 \emph{L201: “..workflow, non…” This sentence partially answers my question about L103 above}
 \end{mybox}
 
+...
+
 \begin{mybox}
 \emph{Box A: Please check the logic of the first sentence. More papers because of less time confronting their models? Is that what you meant to say?}
 \end{mybox} 
@@ -196,6 +200,7 @@ Response.
 \end{mybox} 
 
 % Hmm, not sure? "For examples using LPI data" and then we talk about several examples right?
+...
 
 \begin{mybox}
 \emph{Box B: Please clarify the last sentence if possible. I’m not sure what “inappropriate way to accommodate their complexity” means here.}
@@ -221,8 +226,7 @@ Response. %hmm, he's making a good point, maybe we should at least change the se
 {\bf Reviewer 2}
 
 \begin{mybox}
-\emph{The paper is well written and in a style that is accessible to a wide audience. The topic fits under the theme of “workflow for applied data analysis” by proposing a workflow that if used thoughtfully could lead to less divergence in forecasts and therefore more trust in the scientific process. The proposed workflow is similar to the Bayesian workflow outlined in Gelman et al. (2020) and is translated to two different approaches to ecological forecasting. I think the proposed workflow could be applied or modified to be used with a wide range of research questions within ecological forecasting if careful attention is paid to nuances and idiosyncrasies associated with each unique research question, and I think this necessary attention to question-specific nuances could be highlighted more in the paper. There are places where I feel more specificity (or clarity) with respect to these nuances could improve the manuscript and its potential for impact with respect to building trust in the scientific process. There is also a lack of specificity in how, exactly, this type of workflow could be implemented because there
-is no example application to data. I have outlined these areas under “Major comments” and provided minor editorial comments in “Minor Comments.”}
+\emph{The paper is well written and in a style that is accessible to a wide audience. The topic fits under the theme of “workflow for applied data analysis” by proposing a workflow that if used thoughtfully could lead to less divergence in forecasts and therefore more trust in the scientific process. The proposed workflow is similar to the Bayesian workflow outlined in Gelman et al. (2020) and is translated to two different approaches to ecological forecasting. I think the proposed workflow could be applied or modified to be used with a wide range of research questions within ecological forecasting if careful attention is paid to nuances and idiosyncrasies associated with each unique research question, and I think this necessary attention to question-specific nuances could be highlighted more in the paper. There are places where I feel more specificity (or clarity) with respect to these nuances could improve the manuscript and its potential for impact with respect to building trust in the scientific process. There is also a lack of specificity in how, exactly, this type of workflow could be implemented because there is no example application to data. I have outlined these areas under “Major comments” and provided minor editorial comments in “Minor Comments.”}
 \end{mybox}
 
 % Note: I am an applied statistician with experience collaborating with ecologists and developing
@@ -230,6 +234,9 @@ is no example application to data. I have outlined these areas under “Major co
 % is more concerned with explanatory than predictive inference and my knowledge of building
 % ecological forecasting models for inference on a global scale is limited. I reviewed the paper
 % through this lens.
+
+We are glad that the reviewer found our manuscript well-written. 
+We thank them for the feedback, which has improved the manuscript.
 
 \begin{mybox}
 \emph{\textbf{Major comments}\\
@@ -278,7 +285,8 @@ Thank you for this suggestion. We now say that the checks should be developped s
 Sections 3.1 and 3.2 and the Box outline theoretical examples of how the workflow could be applied for trend estimation and forecasting in the context of types of data, but there are no concrete data examples. A comment on how the proposed workflow could be applied to real data and how it would scale with complexity of data and research questions would be a good addition to the paper if it is not feasible to include real-data examples with the general discussion.}
 \end{mybox}
 
-Response.
+% Real-data examples... not do-able!
+...
 
 \begin{mybox}
 \emph{6. Adopting the workflow\\
