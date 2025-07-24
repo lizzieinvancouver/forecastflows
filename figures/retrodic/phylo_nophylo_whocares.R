@@ -11,8 +11,8 @@ library(geiger)
 rstan_options(auto_write = TRUE)
 
 phytree <- readRDS(file.path(wd, 'figures/input', 'phytree.rds')) # Lizzie does not have, right?
-# phytree[["edge.length"]][39:40] <- phytree[["edge.length"]][39:40]*100
-# phytree <- force.ultrametric(phytree)
+phytree[["edge.length"]][39:40] <- phytree[["edge.length"]][39:40]*10
+phytree <- force.ultrametric(phytree)
 plot(phytree)
 
 if(length(grep("lizzie", getwd()) > 0)){
@@ -25,14 +25,14 @@ if(length(grep("lizzie", getwd()) > 0)){
 # Simulate data #
 # ------------- #
 
-set.seed(1234567)
+set.seed(12345678)
 seeds <- round(runif(100, 1, 9999999),0)
 
 for(s in seeds){
   set.seed(s)
   
   nspecies <- phytree[["Nnode"]]+1 # no. of species
-  nobs_perspecies <- round(runif(nspecies, 5,10)) # no. of different observations per population
+  nobs_perspecies <- round(runif(nspecies, 20,30)) # no. of different observations per population
   nobs_perspecies[c(14,20)] <- round(runif(2, 180,221)) # some bias
   # nobs_perspecies[c(1)] <- round(runif(1, 90,120)) # some bias
   spid_perobs <- rep(1:nspecies, times = nobs_perspecies)
@@ -60,9 +60,9 @@ for(s in seeds){
     theme(legend.position = 'none')
   
   ## slopes with phylogenetic structure
-  lambda <- 0.95
+  lambda <- 0.99999
   broot <- -0.1
-  sigma <- 5e-3
+  sigma <- 1e-3
   scaledtree_slope <- rescale(phytree, model = "lambda", lambda)
   speciesnum <- as.numeric(gsub("sp", "", phytree[["tip.label"]]))
   plot.phylo(scaledtree_slope,

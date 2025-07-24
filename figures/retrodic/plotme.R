@@ -28,4 +28,4 @@ plotslopes <- ggplot(data = rbind(slopes, slopesphylo)) +
   theme_classic() +
   theme(legend.position = 'none')
 
-ggsave(plotslopes, file = file.path(wd, 'figures','retrodic', 'multisim', paste0(s, '.pdf')))
+ggsave(plotslopes, file = file.path(wd, 'figures','retrodic', 'multisim', paste0(s, '.png')))
