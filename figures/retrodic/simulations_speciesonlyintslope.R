@@ -31,11 +31,12 @@ plot(phytree)
 # ------------- #
 # whichspp <- c(8,15,17,21,28,32,35) # seed(1111) with second trees
 
-whichspp <- c(4, 15:17,20, 25)
+whichphyspp <- c(4, 15:17,20, 25)
+whichspp <- which(as.numeric(gsub("t", "", phytree[["tip.label"]])) %in% whichphyspp)
 
 nspecies <- phytree[["Nnode"]]+1 # no. of species
 nobs_perspecies <- round(runif(nspecies, 5, 15)) # no. of different observations per population
-nobs_perspecies[whichspp] <- round(runif(length(whichspp), 90, 140)) # some bias
+nobs_perspecies[whichspp] <- round(runif(length(whichspp), 90, 140)) # some bias 
 spid_perobs <- rep(1:nspecies, times = nobs_perspecies)
 
 years <- c()
@@ -52,7 +53,7 @@ scaledtree_int <- rescale(phytree, model = "lambda", lambdaint)
 speciesnum <- as.numeric(gsub("t", "", phytree[["tip.label"]]))
 plot.phylo(scaledtree_int,
            cex = 1, 
-           tip.color = c("#FF7601", "#00809D")[as.numeric(as.numeric(gsub("t", "", phytree[["tip.label"]])) %in% whichspp)+1])
+           tip.color = c("#FF7601", "#00809D")[as.numeric(as.numeric(gsub("t", "", phytree[["tip.label"]])) %in% whichphyspp)+1])
 
 mu_alpha_sp_wphylogeny <- fastBM(scaledtree_int, a = brootint, mu = 0, sig2 = sigmaint ^ 2)
 
@@ -99,16 +100,26 @@ datasim <- data.frame(
 )
 
 datasim$logyphylo <- log(datasim$yphylo)
+datasim$whichspp <- NA
+datasim$whichspp[which(datasim$species %in% whichspp)] <- "special"
+datasim$whichspp[which(!datasim$species %in% whichspp)] <- "notspecial"
 
+ggplot() +
+  geom_histogram(aes(x = log(datasim$logyphylo), color=datasim$whichspp), alpha = 0.2)
+
+ggplot(datasim, aes(x=year, y=logyphylo, color=whichspp, group=species)) +
+  geom_point() +
+  facet_wrap(.~species)
+
+if(FALSE){
 dropspp <- c(1:20)
-
 datasimdrop <- data.frame(
   yphylo[which(!spid_perobs %in% dropspp)],
   year = years[which(!spid_perobs %in% dropspp)] - 1980,
   species = as.character(spid_perobs)[which(!spid_perobs %in% dropspp)]
 )
-
 datasimdrop$logyphylo <- log(datasim$yphylo)[which(!spid_perobs %in% dropspp)]
+}
 
 # -------------------------------------------------- #
 # Fit the model against data without phylo structure #
@@ -161,11 +172,11 @@ logy_pred <- unlist(extract(fit, pars = 'logy_pred'))
 # green is observed data
 ggplot() +
   geom_density(aes(x = log(data$y)), alpha = 0.2, color = '#009d6c') +
-  geom_density(aes(x = logy_pred), alpha = 0.2)
+  geom_density(aes(x = logy_pred), alpha = 0.3)
 
 par(mfrow=c(1,2))
-hist(log(data$y), n=20)
-hist(logy_pred, n=20)
+hist(log(data$y), n=20, xlim=c(0,20))
+hist(logy_pred, n=20, xlim=c(0,20))
 
 
 datame <- data.frame(spid = spid_perobs, y =yphylo)
@@ -175,7 +186,7 @@ datame$whichspp[which(datame$spid %in% whichspp)] <- "special"
 datame$whichspp[which(!datame$spid %in% whichspp)] <- "notspecial"
 
 ggplot() +
-  geom_histogram(aes(x = log(datame$y), color=datame$whichspp), alpha = 0.2)
+  geom_histogram(aes(x = log(datame$y), color=datame$whichspp, fill=datame$whichspp, group = datame$whichspp), alpha = 0.2)
 
 test <- datame[which(log(datame$y) < 10),]
 unique(test$spid)
