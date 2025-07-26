@@ -3,7 +3,11 @@ What the ... is going on here? (By Lizzie for now.)
 
 This folder was started by Lizzie (on 17 April 2025) to scratch out the beginnings of a workflow example using LPI for the Phil Trans workflow paper. 
 
-What's in here?
+### What code is NOT in here? 
+
+Code for the retrodictive figure is in ..//figures
+
+### What's in here?
 
 * input/ currently has one file (LPD2022_public.csv) which is the LPI data file (it's also in LivingPlanetIndex/LPD2022_public)
 
