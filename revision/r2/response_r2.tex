@@ -1,0 +1,190 @@
+\documentclass[11pt,letter]{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor} 
+\definecolor{darkgrey}{HTML}{4d4d4d}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{xr-hyper}
+\makeatletter
+  \long\def\myempty{}
+  \def\XR@addURL#1{\XR@@dURL#1\myempty{}{}{}{}{}\\}
+  \def\XR@@dURL#1#2#3#4#5#6#7\\{%
+    {#1}{#2}%
+    \ifx\myempty#6\@empty
+      {#3}{#4}{\XR@URL}%
+    \else
+    \fi
+}
+\makeatother
+\usepackage{hyperref}
+\hypersetup{hidelinks,breaklinks=true}
+\usepackage{cleveref}
+\usepackage[labelfont=bf]{caption}
+\bibliographystyle{besjournals}
+
+\RequirePackage[labelfont={bf,sf},%
+                font={small, sf}]{caption}
+
+\RequirePackage[labelfont={bf,sf},%
+                font={small, sf}]{caption}
+
+
+\externaldocument{forecastflows_r1}
+\newcommand{\lref}[1]{}
+% (\href{file:forecastflows_r1\#lintarget:SOMELABEL}{line \ref*{lin:SOMELABEL}})
+
+\DeclareEmphSequence{\itshape\color{darkgrey}}
+\usepackage[most]{tcolorbox}
+% \newtcolorbox{mybox}[1][]{%
+%     blanker, 
+%     left skip=0em,
+%     left=1em,
+%     borderline west={1pt}{2pt}{darkgrey},
+%     breakable,
+%     #1}
+\newtcolorbox{mybox}[1][]{%
+    blanker, 
+    left skip=0em,
+    left=0em,
+    borderline west={0pt}{0pt}{white},
+    breakable,
+    #1}
+
+\begin{document}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{7pt}
+
+Editor and reviewer comments (we provide below the full context of the two reviewers' comments) are in \emph{italics}, while our responses are in regular text. \\ 
+
+{\bf Response to editor's comments:} 
+
+We are happy to hear that the three reviewers recognized the value of our work and that the manuscript is ready for publication. We have worked to fix the last small points raised by the reviewers, and we would like to thank them again for their careful reading. Furthermore, we also particularly appreciate the really interesting perspective on the policy implications from M. Authier, and...
+
+{\bf Response to reviewers' comments:} 
+
+{\bf Reviewer 1}
+
+\begin{mybox}
+\emph{The authors have addressed all of my concerns and I believe the MS is
+(nearly) ready for publication. I suggest one more pass for copy editing
+to fix small mistakes like inconistencies for example in "figure"
+"Figure" and "e.g." "e.g.,".}
+\end{mybox}
+
+We thank the reviewer for their positive comments regarding our manuscript. 
+We have worked to correct these inconsistencies.
+
+{\bf Reviewer 2}
+
+\begin{mybox}
+\emph{All of my major comments were sufficiently addressed in this revision of
+the manuscript. I appreciate that the supplement is now referenced in
+the main document (I missed it on my last round of review). I have a few
+editorial comments for the main text and a few minor comments about the
+supplement, but I feel this manuscript is almost ready for publication.}
+\end{mybox}
+
+...
+
+\begin{mybox}
+\emph{\textbf{Manuscript Minor comments:}\\
+Abstract: potential typo in second-to-last sentence. Should "where
+forecasting a natural output" be "where forecasting is a natural output"?}
+\end{mybox}
+% vvdm18sept: is really a typo? I thought it was just a way to say it 
+...
+
+\begin{mybox}
+\emph{Line 39: should "ignore" be "ignores"}
+\end{mybox}
+
+Thanks for catching this, it is fixed now. 
+
+\begin{mybox}
+\emph{Line 51: "hypotheses" or "a hypothesis" rather than "hypothesis"}
+\end{mybox}
+
+Corrected.
+
+\begin{mybox}
+\emph{Line 138: there appears to be an extra "in" in "in only in"}
+\end{mybox}
+
+Corrected.
+
+
+\begin{mybox}
+\emph{Line 215: comma after parameters}
+\end{mybox}
+
+Added.
+
+\begin{mybox}
+\emph{A couple typos in Box e.g., "calibrating submodes separately allows to
+avoid" missing "us"?}
+\end{mybox}
+
+
+% vvdm18sept: I'm not sure about this one? "Calibrating submodels separately allows to avoid the fact that, if the model were fitted as a whole, many parameters would compensate for one another" seems fine to me...
+...
+
+\begin{mybox}
+\emph{\textbf{Supplement Minor comments:}\\
+Although the supplement works through an example far simpler than the
+types of research questions discussed in the main text, it serves as a
+reasonable (and accessible) example of how the workflow could be
+implemented. There is a brief discussion towards the end of the
+supplement about the "scalability" of the proposed workflow, but it
+leaves something to be desired. Have the authors applied this workflow
+(or pieces of it) to examples that are more complex that could be cited,
+or is that future work?}
+\end{mybox}
+
+... 
+
+\begin{mybox}
+\emph{First green box: typo in RQ.."What is global trend..." should read
+"what is the global trend..."}
+\end{mybox}
+
+Thank you, corrected.
+
+\begin{mybox}
+\emph{Step 2: so assuming populations are exchangeable? Is this reasonable?}
+\end{mybox}
+
+We have edited the text here to clarify this assumption:
+\begin{quote}
+``In this first hierarchical model, we thus assume that populations are exchangeable---an assumption we might refine later."
+\end{quote}
+
+
+\begin{mybox}
+\emph{Step 2: priors on sigma\_alpha,sp and sigma\_beta\_sp do not seem
+appropriate, these parameters have positive support, so should these be
+half-normals (folded normals)?}
+\end{mybox}
+
+...
+
+\begin{mybox}
+\emph{Stan model not included so could not be assessed (model1\_nc2.stan), I
+recommend sharing for transparency.}
+\end{mybox}
+
+Sorry we forgot to share the Stan code. We added the code in the workflow example.
+
+\begin{mybox}
+\emph{Figure 15, unclear what the posterior predictive distribution is of,
+this detail could be added for transparency. Could also add many
+posterior predictive datasets to the same plot and then overlay the
+observed data to facilitate easier comparisons between y-tilde and y-obs.}
+\end{mybox}
+
+% hmm
+
+
+
+\end{document}
