@@ -35,7 +35,7 @@
 \newcommand{\lref}[1]{}
 % (\href{file:forecastflows_r1\#lintarget:SOMELABEL}{line \ref*{lin:SOMELABEL}})
 
-\DeclareEmphSequence{\itshape\color{darkgrey}}
+% \DeclareEmphSequence{\itshape\color{darkgrey}}
 \usepackage[most]{tcolorbox}
 % \newtcolorbox{mybox}[1][]{%
 %     blanker, 
@@ -50,6 +50,7 @@
     left=0em,
     borderline west={0pt}{0pt}{white},
     breakable,
+    coltext=darkgrey
     #1}
 
 \begin{document}
@@ -69,8 +70,8 @@ We are happy to hear that the three reviewers recognized the value of our work a
 \begin{mybox}
 \emph{The authors have addressed all of my concerns and I believe the MS is
 (nearly) ready for publication. I suggest one more pass for copy editing
-to fix small mistakes like inconistencies for example in "figure"
-"Figure" and "e.g." "e.g.,".}
+to fix small mistakes like inconistencies for example in ``figure"
+``Figure" and ``e.g." ``e.g.,".}
 \end{mybox}
 
 We thank the reviewer for their positive comments regarding our manuscript. 
@@ -91,10 +92,10 @@ Thank you for this last feedback.
 
 \begin{mybox}
 \emph{\textbf{Manuscript Minor comments:}\\
-Abstract: potential typo in second-to-last sentence. Should "where
-forecasting a natural output" be "where forecasting is a natural output"?}
+Abstract: potential typo in second-to-last sentence. Should ``where
+forecasting a natural output" be ``where forecasting is a natural output"?}
 \end{mybox}
-% vvdm18sept: is really a typo? I thought it was just a way to say it 
+% vvdm18sept: is really a typo? I thought it was just a way to say it. Lizzie?
 ...
 
 \begin{mybox}
@@ -104,13 +105,13 @@ forecasting a natural output" be "where forecasting is a natural output"?}
 Thanks for catching this, it is fixed now. 
 
 \begin{mybox}
-\emph{Line 51: "hypotheses" or "a hypothesis" rather than "hypothesis"}
+\emph{Line 51: ``hypotheses" or ``a hypothesis" rather than ``hypothesis"}
 \end{mybox}
 
 Corrected.
 
 \begin{mybox}
-\emph{Line 138: there appears to be an extra "in" in "in only in"}
+\emph{Line 138: there appears to be an extra ``in" in ``in only in"}
 \end{mybox}
 
 Corrected.
@@ -122,7 +123,7 @@ Corrected.
 Added.
 
 \begin{mybox}
-\emph{A couple typos in Box e.g., "calibrating submodes separately allows to
+\emph{A couple typos in Box e.g., ``calibrating submodes separately allows to
 avoid" missing "us"?}
 \end{mybox}
 
@@ -140,7 +141,7 @@ leaves something to be desired. Have the authors applied this workflow
 or is that future work?}
 \end{mybox}
 
-... 
+... % Lizzie?
 
 \begin{mybox}
 \emph{First green box: typo in RQ..``What is global trend..." should read
@@ -165,7 +166,7 @@ appropriate, these parameters have positive support, so should these be
 half-normals (folded normals)?}
 \end{mybox}
 
-...
+We now mention that sigmas are bounded to zero.
 
 \begin{mybox}
 \emph{Stan model not included so could not be assessed (model1\_nc2.stan), I
@@ -181,7 +182,8 @@ posterior predictive datasets to the same plot and then overlay the
 observed data to facilitate easier comparisons between y-tilde and y-obs.}
 \end{mybox}
 
-% Hmm I don't understand?
+% Hmm I'm not sure to understand what he wants?
+We now specify that the first posterior predictive distribution we show corresponds to the predicted counts across all species and populations.
 
 {\bf Reviewer 3}
 
@@ -189,7 +191,7 @@ observed data to facilitate easier comparisons between y-tilde and y-obs.}
 \emph{First, I would like to congratulate the authors for a very clear and well written manuscript. The main thesis of the authors is to outline modelling workflows and illustrate in broad brush strikes how to bridge the current gap in ecological forecasting with simulations of synthetic data among the several steps of model building (the pre-data/post-model third corner in their Fig. 1) to improve confidence in modelling, inference and prediction. This is an important contribution, one that echoes many early calls (e.g. Thomas 1997): our community in ecology, despite its beefing up with respect to quantitative skills, remains fragmented and disjoint. I thus wholeheartedly endorse the main thesis of the authors and agree with it about research. There remains one concern that I would like to discuss with the authors, and possibly hear back from them although it is somewhat minor with respect to research but more problematic with respect to policy. It should not deflect from publication of the article in Philosophical Transactions of the Royal Society A.}
 \end{mybox}
 
-We are glad that the reviewer found our manuscript well-written, and that he endorses our main messages. We are particularly grateful for his detailed comments, with much broader perspectives than just our manuscript. We have tried to address most of the comments, but we believe that they deserve longer discussions and could constitute in themselves another paper.
+We are glad that the reviewer found our manuscript well-written, and that he endorses our main messages. We are particularly grateful for his detailed comments, with much broader perspectives than just our manuscript. We believe that they deserve longer discussions (and could constitute in themselves another paper!), so we will reach out directly to M. Authier to share our detailed perspective on this.
 
 \begin{mybox}
 \emph{The authors have addressed comments from the first round of reviewing. Figure 1 is central to their thesis: it is clear and well explained. However, I feel the lower left corner, corresponding to the pre-model/post-data area should be some darker grey to highlight that this corner is not overlooked but simply does not make a lot of sense in the current proposal (and in the idealized view of the current scientific process). It may sometimes correspond to mindless monitoring if one is uncharitable (Yoccoz et al. 2001, Legga \& Nagy 2006). I believe it should not be greyed out the same colour as the other corners.}  
@@ -407,8 +409,13 @@ time or taxonomy and its consequences in modelling results. Preferential samplin
 descriptive than bias, which also has a prescriptive meaning, esp. in policy8. Also, a well-
 designed survey at some spatial scale may become an instance of preferential geographic
 sampling when collated with other surveys and data. This sort of data collation is often the
-case with global trend analyses that the authors seem to have in mind. Also, taxonomic
-biases are bound to happen in global analyses. How do we redress those? That is, what can
+case with global trend analyses that the authors seem to have in mind.}  
+\end{mybox}
+
+...
+
+\begin{mybox}
+\emph{Also, taxonomic biases are bound to happen in global analyses. How do we redress those? That is, what can
 we say about data-poor species? How a richly-parametrized workflow calibrated on data
 collected on a few very well-studied species is going to help the majority of data-poor
 species? Taxonomic gaps have been identified without workflows and how to address
@@ -437,7 +444,10 @@ Sorry it was not clear. Our point here was not to share any enthusiasm for machi
 these methods should be robust against what more precisely?}  
 \end{mybox}
 
-...
+We have made this point clearer (\href{file:forecastflows_r2\#lintarget:robust}{line \ref*{lin:robust}}):
+\begin{quote}
+``This reality should drive researchers to use more coherent methods that remain robust for the intended inferential goals, even with imperfect data and knowledge gaps.''
+\end{quote}
 
 \begin{mybox}
 \emph{- typo on line 138: “These feedback loops are applied currently in only in Bayesian
@@ -461,6 +471,6 @@ research to better policy decisions remains to be charted: scientific workflows 
 necessary step, yet one that may not be sufficient.}
 \end{mybox}
 
-...
+We would like to thank the reviewer once again for all these very interesting avenues for discussion---beyond the community of researchers (to whom this paper was primarily addressed).
 
 \end{document}

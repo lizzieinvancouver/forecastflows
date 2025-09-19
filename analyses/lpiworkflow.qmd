@@ -46,7 +46,7 @@ Here we need to focus on exactly what question we are trying to answer, which wi
 
 ::: {.callout-tip appearance="simple" icon=false}
 
-What is global trend over time in vertebrate species population numbers, both overall and how does it vary across species and populations?
+What is the global trend over time in vertebrate species population numbers, both overall and how does it vary across species and populations?
 
 :::
 
@@ -68,19 +68,21 @@ lpi_data <- read.csv(file.path(wd, "input", "LPD_2024_public.csv"), header=T)
 
 Next we need to think about how we would build a model to address this question, with the goal to build the model and evaluate it using simulated data. There are a lot of demographic models in population ecology, so we might revisit those and consider a discrete time model based on population size and stepping through each year of data. We might also start with a simple linear model, where populations can go up, down or do nothing. 
 
-Using a simple linear gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. We also need to make sure our model yields one global estimate; for this we decide to model species trends over time as part of larger distribution. Our resulting model would then be:
+Using a simple linear gets us started, but now we need to consider how we will model species and populations. Populations usually are nested in species in ecological models, so we might consider that to start. In this first hierarchical model, we thus assume that populations are exchangeable---an assumption we might refine later. We also need to make sure our model yields one global estimate; for this we decide to model species trends over time as part of larger distribution. Our resulting model would then be:
 
-$$\log(y_i) \sim \text{normal}(\mu_i, \sigma)$$
+$$\log(y_i) \sim \text{normal}(\mu_i, \ \sigma)$$
 
 $$\mu_i = \alpha_{\text{pop}[\text{sp}[i]]} + \beta_{\text{pop}[\text{sp}[i]]} * \text{year}_i$$
 
-$$\alpha_{\text{pop}[\text{sp}]}  \sim \text{normal}(\mu_{\alpha, \text{sp}} \ , \ \sigma_{\alpha, \text{sp}}) \\
-\mu_{\alpha,\text{sp}} \sim \text{normal}(\mu_{\alpha_1} \ , \ \sigma_{\alpha_1}) \\
-\sigma_{\alpha,\text{sp}} \sim \text{normal}(\mu_{\alpha_2} \ , \ \sigma_{\alpha_2}) $$
+$$\alpha_{\text{pop}[\text{sp}]}  \sim \text{normal}(\mu_{\alpha, \text{sp}}, \ \sigma_{\alpha, \text{sp}})
+\quad \mu_{\alpha,\text{sp}} \sim \text{normal}(\mu_{\alpha_1}, \ \sigma_{\alpha_1}) 
+\quad \sigma_{\alpha,\text{sp}} \sim \text{normal}(\mu_{\alpha_2}, \ \sigma_{\alpha_2}) $$
 
-$$\beta_{\text{pop}[\text{sp}]}  \sim \text{normal}(\mu_{\beta, \text{sp}} \ , \ \sigma_{\beta, \text{sp}}) \\
-\mu_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_1} \ , \ \sigma_{\beta_1}) \\
-\sigma_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_2} \ , \ \sigma_{\beta_2}) $$
+$$\beta_{\text{pop}[\text{sp}]}  \sim \text{normal}(\mu_{\beta, \text{sp}}, \ \sigma_{\beta, \text{sp}}) 
+\quad \mu_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_1}, \ \sigma_{\beta_1}) 
+\quad \sigma_{\beta,\text{sp}} \sim \text{normal}(\mu_{\beta_2}, \ \sigma_{\beta_2}) $$
+
+(where all the $\sigma$ parameters are greater than zero)
 
 # Step 3: Model evaluation 
 
@@ -226,6 +228,122 @@ ggplot(data = datasim) +
 ## Fit and check model on simulated data!
 
 Now we code the model from our mathematical notation (above) and fit it to our simulated data (also built from our mathematical model). 
+
+```{stan output.var = "compiled_model"}
+
+data {
+  int<lower=1> N;
+  int<lower=1> Nsp;
+  int<lower=1> Npop;
+  vector[N] y;
+  vector[N] year;
+  array[Npop] int<lower=1,upper=Nsp> spid_perpop;
+  array[N] int<lower=1,upper=Npop> popid;
+}
+
+transformed data{
+  vector[N] logy = log(y);
+}
+
+parameters {
+  real mu_alpha1; // overall species intercept
+  real<lower=0> sigma_alpha1; 
+  
+  real mu_alpha2;
+  real<lower=0> sigma_alpha2;
+  
+  array[Nsp] real mu_alpha_sp; // species-level intercepts
+  array[Nsp] real<lower=0> sig_species_alpha;
+  
+  array[Npop] real alpha_tilde_pop_sp; // non-centered population intercepts
+  
+  real mu_beta1; // overall species trend
+  real<lower=0> sigma_beta1;
+  
+  real mu_beta2;
+  real<lower=0> sigma_beta2;
+  
+  array[Nsp] real mu_beta_sp; // species-level slopes
+  array[Nsp] real<lower=0> sig_species_beta;
+  
+  array[Npop] real beta_tilde_pop_sp; // non-centered population slopes
+  
+  real<lower=0> sigma;
+   
+}
+
+transformed parameters{
+  
+  array[Npop] real alpha_pop_sp;
+  array[Npop] real beta_pop_sp;
+  
+  for (p in 1:Npop) {
+    
+      alpha_pop_sp[p] = mu_alpha_sp[spid_perpop[p]] 
+      + sig_species_alpha[spid_perpop[p]] *  alpha_tilde_pop_sp[p];
+      beta_pop_sp[p] = mu_beta_sp[spid_perpop[p]] 
+      + sig_species_beta[spid_perpop[p]] *  beta_tilde_pop_sp[p];
+
+  }
+  
+}
+
+model {
+  
+  vector[N] mu;
+  
+  mu_alpha_sp ~ normal(mu_alpha1, sigma_alpha1);
+  sig_species_alpha ~ normal(mu_alpha2, sigma_alpha2);
+  
+  mu_beta_sp ~ normal(mu_beta1, sigma_beta1);
+  sig_species_beta ~ normal(mu_beta2, sigma_beta2);
+  
+  for (p in 1:Npop) {
+    
+    alpha_tilde_pop_sp[p] ~ normal(0,1);
+    beta_tilde_pop_sp[p] ~ normal(0,1);
+    
+  }
+  
+  for(i in 1:N){
+    
+    mu[i] = alpha_pop_sp[popid[i]] + beta_pop_sp[popid[i]] * (year[i] - 1980);
+    logy[i] ~ normal(mu[i], sigma);
+    
+  }
+  
+  mu_alpha1 ~ normal(0, log(500) / 2.57); // -log(500) < mu_alpha1 < log(500)
+  sigma_alpha1 ~ normal(0, log(100) / 2.57); // 0 < sigma_alpha1 < log(100)
+  
+  mu_alpha2 ~ normal(0, log(500) / 2.57); // -log(500) < mu_alpha1 < log(500)
+  sigma_alpha2 ~ normal(0, log(50) / 2.57); // 0 < sigma_alpha1 < log(50)
+  
+  mu_beta1 ~ normal(0, 2 / 2.57); // -2 < mu_beta1 < 2
+  sigma_beta1 ~ normal(0, 2 / 2.57); // 0 < sigma_beta1 < 2
+  
+  mu_beta2 ~ normal(0, 2 / 2.57); //-2 < mu_beta1 < 2
+  sigma_beta2 ~ normal(0, 2 / 2.57); // 0 < sigma_beta1 < 2
+  
+  sigma ~ normal(0, log(100) / 2.57);
+  
+}
+
+generated quantities {
+  
+  vector[N] logy_pred;
+  
+  for(i in 1:N){
+    
+    real mu = alpha_pop_sp[popid[i]] 
+    + beta_pop_sp[popid[i]] * (year[i] - 1980);
+    logy_pred[i] = normal_rng(mu, sigma);
+    
+  }
+  
+}
+
+```
+
 
 ```{r fit sim data}
 
@@ -483,7 +601,7 @@ Our model may accommodate this, as we have allowed different populations to have
 
 Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data step above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
 
-Here we start by visually comparing the posterior predictive distribution (red line) to observed data (black dashed line):
+Here we start by visually comparing the posterior predictive distribution of the predicted counts (across all species and populations, red line) to observed data (black dashed line):
 ```{r}
 #| fig-height: 3
 #| fig-width: 3
