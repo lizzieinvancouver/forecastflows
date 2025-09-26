@@ -57,15 +57,16 @@
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{7pt}
 
-Editor and reviewer comments (we provide below the full context of the two reviewers' comments) are in \emph{italics}, while our responses are in regular text. \\ 
+Editor and reviewer comments are in \emph{gray italics} (we provide below the full context of the reviewers 1-2 comments below, and extract the parts of reviewer 3' comments that required changes to this manuscript), while our responses are in regular text. \\ 
 
 {\bf Response to editor's comments:} 
 
-We are happy to hear that the three reviewers recognized the value of our work and that the manuscript is ready for publication. We have worked to fix the last small points raised by the reviewers, and we would like to thank them again for their careful reading. Furthermore, we also particularly appreciate the really interesting perspective on the policy implications from M. Authier, and...
+We are happy to hear that the three reviewers recognized the value of our work and that the manuscript is ready for publication. We have worked to fix the last small points raised by the reviewers, and we would like to thank them again for their careful reading. Furthermore, we also particularly appreciate the perspective on the policy implications from M. Authier, and will reach out to him to discuss further directly (as both he and we appear to agree that this is perhaps the topic for another paper). 
 
 {\bf Response to reviewers' comments:} 
 
 {\bf Reviewer 1}
+% emwSep22: Go through and fix " -> `` 
 
 \begin{mybox}
 \emph{The authors have addressed all of my concerns and I believe the MS is
@@ -127,7 +128,8 @@ Added.
 avoid" missing "us"?}
 \end{mybox}
 
-Changed to: ``Calibrating submodels separately makes possible to avoid the fact that [...]''
+% emwSep22: I changed this in the text and here; your previous version needs an 'it' (makes it possible) but I wanted to remove 'fact' so adjusted more. 
+Changed to: ``Calibrating submodels separately makes it easier to avoid the likely reality that [...]''
 
 \begin{mybox}
 \emph{\textbf{Supplement Minor comments:}\\
@@ -141,7 +143,7 @@ leaves something to be desired. Have the authors applied this workflow
 or is that future work?}
 \end{mybox}
 
-... % Lizzie?
+... % emwSep22:  I actually hate the idea that a model needs to be complex, but it seems common among ecologists reviewing our workflow papers .... I might just say: We disagree that if the model is not sufficiently complex it leaves `something to be desired.' As we want this workflow to be approachable and leave room for readers to think through how they would advance upon it (to whatever degree of complexity they see as biological relevant), we have left it as is. 
 
 \begin{mybox}
 \emph{First green box: typo in RQ..``What is global trend..." should read
@@ -166,14 +168,14 @@ appropriate, these parameters have positive support, so should these be
 half-normals (folded normals)?}
 \end{mybox}
 
-We now mention that sigmas are bounded to zero.
+We understand this confusion and now mention that sigmas are bounded to zero.
 
 \begin{mybox}
 \emph{Stan model not included so could not be assessed (model1\_nc2.stan), I
 recommend sharing for transparency.}
 \end{mybox}
 
-Sorry we forgot to share the Stan code. We added the code in the workflow example.
+Apologies that we forgot to share the Stan code. We have now added the code in the workflow example.
 
 \begin{mybox}
 \emph{Figure 15, unclear what the posterior predictive distribution is of,
@@ -182,10 +184,11 @@ posterior predictive datasets to the same plot and then overlay the
 observed data to facilitate easier comparisons between y-tilde and y-obs.}
 \end{mybox}
 
-% Hmm I'm not sure to understand what he wants?
 We now specify that the first posterior predictive distribution we show corresponds to the predicted counts across all species and populations.
+% Hmm I don't understand?
+% emwSep22:  I think this must be the figure on pg 15 -- we show just one draw of the PPC (red), we could overlap more (like 10-30) in a lighter shade. And put the observed data black ON TOP so easier to see. I think this would be good to do.... just one draw of a PPC is okay, but not greatI IMHO.
 
-{\bf Reviewer 3}
+{\bf Reviewer 3} % emwSep22:  I think you should extract only the parts that require a change to the current text. I will read the below once you have that done and am happy to read a separate letter to MA. 
 
 \begin{mybox}
 \emph{First, I would like to congratulate the authors for a very clear and well written manuscript. The main thesis of the authors is to outline modelling workflows and illustrate in broad brush strikes how to bridge the current gap in ecological forecasting with simulations of synthetic data among the several steps of model building (the pre-data/post-model third corner in their Fig. 1) to improve confidence in modelling, inference and prediction. This is an important contribution, one that echoes many early calls (e.g. Thomas 1997): our community in ecology, despite its beefing up with respect to quantitative skills, remains fragmented and disjoint. I thus wholeheartedly endorse the main thesis of the authors and agree with it about research. There remains one concern that I would like to discuss with the authors, and possibly hear back from them although it is somewhat minor with respect to research but more problematic with respect to policy. It should not deflect from publication of the article in Philosophical Transactions of the Royal Society A.}
