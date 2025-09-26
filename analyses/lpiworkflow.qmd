@@ -601,31 +601,42 @@ Our model may accommodate this, as we have allowed different populations to have
 
 Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data step above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
 
-Here we start by visually comparing the posterior predictive distribution of the predicted counts (across all species and populations, red line) to observed data (black dashed line):
+Here we start by visually comparing the 9 draws from the posterior predictive distribution of counts (across all species and populations, red line) to observed data (black dashed line):
 ```{r}
 #| fig-height: 3
 #| fig-width: 3
 #| echo: false
+#| eval: false
 
 names <- paste0('logy_pred[', 1:data$N, ']')
-retrodictions <- unlist(extract(fit, pars = names))
+retrodictions <- extract(fit, pars = names)
+m <- t(sapply(names, function(n) retrodictions[[n]][1:10]))
 
 ggplot() +
-  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.5, linetype = 'dashed') +
-  geom_density(data = data.frame(retrodictions), aes(x = retrodictions), alpha = 0.5, col = 'darkred') +
+  geom_density(data = data.frame(retro = m[,1]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,2]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,3]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,4]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,5]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,6]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,7]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,8]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,9]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
+  geom_density(data = data.frame(retro = m[,10]), aes(x = retro), alpha = 0.2, col = 'darkred') +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.2, linetype = 'solid', color = 'white', linewidth = 1.5) +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 1, linetype = 'dashed') +
   theme_bw() +
   labs(y = 'Density', x = 'Counts (log-scale)')
 
 
 ```
 
-We can also look at some posterior replications separately:
-
 ```{r}
 #| fig-height: 5
 #| fig-width: 5
 #| echo: false
 
+names <- paste0('logy_pred[', 1:data$N, ']')
 n <- sample(1:4000, 9)
 retrodictions <- (extract(fit, pars = names))
 retrodictions_sub <- sapply(names, function(x){retrodictions[[x]][n]})
@@ -634,8 +645,8 @@ retrodictions_sub_df <- data.frame(ret = as.numeric(t(retrodictions_sub)), chain
 
 ggplot() +
   facet_wrap(~ chain) +
-  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.5, linetype = 'dashed') +
   geom_density(data = retrodictions_sub_df, aes(x = ret), alpha = 0.5, col = 'darkred') +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.5, linetype = 'dashed') +
   theme_bw() +
   labs(y = 'Density', x = 'Counts (log-scale)') +
   theme(strip.text.x.top = element_blank())

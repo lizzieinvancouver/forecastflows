@@ -245,7 +245,7 @@ likely realize we don't want just that, we actually want to understand
 the variation across different species and perhaps populations and also
 have a global estimate. So we might refine the question to:
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, toprule=.15mm, leftrule=.75mm, rightrule=.15mm, breakable, colframe=quarto-callout-tip-color-frame, colback=white, opacityback=0, arc=.35mm, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, opacityback=0, breakable, bottomrule=.15mm, toprule=.15mm, leftrule=.75mm, left=2mm, arc=.35mm, rightrule=.15mm, colframe=quarto-callout-tip-color-frame]
 
 What is the global trend over time in vertebrate species population
 numbers, both overall and how does it vary across species and
@@ -327,7 +327,7 @@ fundamental problems (or potentially missing them).
 
 So here we refine our question to:
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, toprule=.15mm, leftrule=.75mm, rightrule=.15mm, breakable, colframe=quarto-callout-tip-color-frame, colback=white, opacityback=0, arc=.35mm, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, opacityback=0, breakable, bottomrule=.15mm, toprule=.15mm, leftrule=.75mm, left=2mm, arc=.35mm, rightrule=.15mm, colframe=quarto-callout-tip-color-frame]
 
 What is trend in mammal species population numbers in southern Africa,
 both overall and how does it vary across species and populations?
@@ -802,13 +802,9 @@ coming up with them based on our expert knowledge) and (2) we need to
 check across many predictions from the model to understand the full
 uncertainty of the model (and not just one draw from the model).
 
-Here we start by visually comparing the posterior predictive
-distribution of the predicted counts (across all species and
-populations, red line) to observed data (black dashed line):
-
-\includegraphics{lpiworkflow_files/figure-pdf/unnamed-chunk-5-1.pdf}
-
-We can also look at some posterior replications separately:
+Here we start by visually comparing the 9 draws from the posterior
+predictive distribution of counts (across all species and populations,
+red line) to observed data (black dashed line):
 
 \includegraphics{lpiworkflow_files/figure-pdf/unnamed-chunk-6-1.pdf}
 
