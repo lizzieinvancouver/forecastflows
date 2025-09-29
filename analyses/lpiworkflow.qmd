@@ -601,40 +601,12 @@ Our model may accommodate this, as we have allowed different populations to have
 
 Now we use our fitted model parameters to generate predictions, and compare them to observations. This is similar to the simulating data step above, but differs in two major ways: (1) we simulate from the parameters estimated by the model fit to the empirical data (versus coming up with them based on our expert knowledge) and (2) we need to check across many predictions from the model to understand the full uncertainty of the model (and not just one draw from the model). 
 
-Here we start by visually comparing the 9 draws from the posterior predictive distribution of counts (across all species and populations, red line) to observed data (black dashed line):
-```{r}
-#| fig-height: 3
-#| fig-width: 3
-#| echo: false
-#| eval: false
-
-names <- paste0('logy_pred[', 1:data$N, ']')
-retrodictions <- extract(fit, pars = names)
-m <- t(sapply(names, function(n) retrodictions[[n]][1:10]))
-
-ggplot() +
-  geom_density(data = data.frame(retro = m[,1]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,2]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,3]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,4]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,5]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,6]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,7]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,8]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,9]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .5) +
-  geom_density(data = data.frame(retro = m[,10]), aes(x = retro), alpha = 0.2, col = 'darkred') +
-  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.2, linetype = 'solid', color = 'white', linewidth = 1.5) +
-  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 1, linetype = 'dashed') +
-  theme_bw() +
-  labs(y = 'Density', x = 'Counts (log-scale)')
-
-
-```
-
+Here we start by visually comparing 9 draws from the posterior predictive distribution of counts (across all species and populations, red line) to observed data (black dashed line):
 ```{r}
 #| fig-height: 5
 #| fig-width: 5
 #| echo: false
+#| eval: true
 
 names <- paste0('logy_pred[', 1:data$N, ']')
 n <- sample(1:4000, 9)
@@ -652,6 +624,58 @@ ggplot() +
   theme(strip.text.x.top = element_blank())
 
 ```
+
+We may also overlay several draws (here, 30) on the same plot:
+```{r}
+#| fig-height: 3
+#| fig-width: 3
+#| echo: false
+#| eval: true
+
+names <- paste0('logy_pred[', 1:data$N, ']')
+retrodictions <- extract(fit, pars = names)
+m <- t(sapply(names, function(n) retrodictions[[n]][1:30]))
+
+ggplot() +
+  geom_density(data = data.frame(retro = m[,1]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,2]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,3]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,4]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,5]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,6]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,7]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,8]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,9]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,10]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,11]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,12]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,13]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,14]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,15]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,16]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,17]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,18]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,19]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,20]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,21]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,22]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,23]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,24]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,25]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,26]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,27]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,28]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,29]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(retro = m[,30]), aes(x = retro), alpha = 0.2, col = 'darkred', linewidth = .1) +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 0.2, linetype = 'solid', color = 'white', linewidth = 1.5) +
+  geom_density(data = data.frame(obs = log(data$y)), aes(x = obs), alpha = 1, linetype = 'solid') +
+  theme_bw() +
+  labs(y = 'Density', x = 'Counts (log-scale)')
+
+
+```
+
+
 
 We then examine, by species, how well predictions from the model compare to the observed data; this is similar to many plots where we simply want to see how well the model seems to predict the data. 
 
