@@ -4,16 +4,16 @@ data {
   int<lower=1> Nsp;
   // int<lower=1> Npop;
   vector[N] y;
-  vector[N] year;
+  vector[N] x;
   // array[Npop] int<lower=1,upper=Nsp> spid_perpop;
   // array[N] int<lower=1,upper=Npop> popid;
   
   array[N] int<lower=1,upper=Nsp> spid;
 }
 
-transformed data{
+/*transformed data{
   vector[N] logy = log(y);
-}
+}*/
 
 parameters {
   real mu_alpha1; // overall species intercept
@@ -76,37 +76,33 @@ model {
   for(i in 1:N){
     
     // mu[i] = alpha_pop_sp[popid[i]] + beta_pop_sp[popid[i]] * (year[i] - 1980);
-    mu[i] = mu_alpha_sp[spid[i]] + mu_beta_sp[spid[i]] * (year[i] - 1980);
-    logy[i] ~ normal(mu[i], sigma);
+    mu[i] = mu_alpha_sp[spid[i]] + mu_beta_sp[spid[i]] * (x[i]);
+    y[i] ~ normal(mu[i], sigma);
     
   }
   
-  mu_alpha1 ~ normal(0, log(500) / 2.57); // -log(500) < mu_alpha1 < log(500)
-  sigma_alpha1 ~ normal(0, log(100) / 2.57); // 0 < sigma_alpha1 < log(100)
+  mu_alpha1 ~ normal(0, 5 / 2.57); // -log(500) < mu_alpha1 < log(500)
+  sigma_alpha1 ~ normal(0, 2 / 2.57); // 0 < sigma_alpha1 < log(100)
   
-  // mu_alpha2 ~ normal(0, log(500) / 2.57); // -log(500) < mu_alpha1 < log(500)
-  // sigma_alpha2 ~ normal(0, log(50) / 2.57); // 0 < sigma_alpha1 < log(50)
-  
-  mu_beta1 ~ normal(0, 2 / 2.57); // -2 < mu_beta1 < 2
+  mu_beta1 ~ normal(0, 5 / 2.57); // -2 < mu_beta1 < 2
   sigma_beta1 ~ normal(0, 2 / 2.57); // 0 < sigma_beta1 < 2
   
   // mu_beta2 ~ normal(0, 2 / 2.57); //-2 < mu_beta1 < 2
   // sigma_beta2 ~ normal(0, 2 / 2.57); // 0 < sigma_beta1 < 2
   
-  sigma ~ normal(0, log(100) / 2.57);
+  sigma ~ normal(0, 5 / 2.57);
   
 }
 
 generated quantities {
   
-  vector[N] logy_pred;
+  vector[N] y_pred;
   
   for(i in 1:N){
     
     // real mu = alpha_pop_sp[popid[i]] + beta_pop_sp[popid[i]] * (year[i] - 1980);
-    real mu = mu_alpha_sp[spid[i]] + mu_beta_sp[spid[i]] * (year[i] - 1980);
-    logy_pred[i] = normal_rng(mu, sigma);
-    
+    real mu = mu_alpha_sp[spid[i]] + mu_beta_sp[spid[i]] * (x[i]);
+    y_pred[i] = normal_rng(mu, sigma);
   }
   
   
